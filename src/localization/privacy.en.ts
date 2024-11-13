@@ -1,7 +1,7 @@
 export default `
 **Last Updated: September 13, 2024**
 
-This Privacy Policy (the “Policy”) governs your use of the website at https://app.govgen.io, the associated tools and services, and any public source code repository offered by the operator of this site (collectively, the “Services”). All in Bits (AiB), Inc., a Delaware corporation, operates the Services. AiB and its affiliates are referred to in this document as the “operator,” “we,” or “us.” The Services do not include outside websites or platforms which may be linked or interconnected to the Services. Such outside platforms may have their own privacy policy, which controls all transactions on such platforms.
+This Privacy Policy (the “Policy”) governs your use of the website at https://gov.atom.one, the associated tools and services, and any public source code repository offered by the operator of this site (collectively, the “Services”). All in Bits (AiB), Inc., a Delaware corporation, operates the Services. AiB and its affiliates are referred to in this document as the “operator,” “we,” or “us.” The Services do not include outside websites or platforms which may be linked or interconnected to the Services. Such outside platforms may have their own privacy policy, which controls all transactions on such platforms.
 
 If you do not want us to collect, use, or disclose your personal data in the ways described in this Policy, please do not use or otherwise interact with the Services, provide us with your personal data, or authorize any third party to make your personal data available to us. By using or interacting with the Services, you acknowledge that you understand that we may use your personal data as described in this Policy.
 
@@ -9,7 +9,7 @@ Please note, as described in this Policy, we may receive your personal data from
 
 **1. Scope and Applicability**
 
-This Privacy Policy explains how All in Bits, Inc. collects, uses, discloses, and protects your information when you access or use the GovGen Governance decentralized application (“GovGen dApp”) and related web-hosted user interface at app.govgen.io (collectively, the “Interface”). By accessing or using the Interface, you consent to the collection and use of your information as described in this Privacy Policy.
+This Privacy Policy explains how All in Bits, Inc. collects, uses, discloses, and protects your information when you access or use the AtomOne Governance decentralized application (AtomOne dApp”) and related web-hosted user interface at gov.atom.one (collectively, the “Interface”). By accessing or using the Interface, you consent to the collection and use of your information as described in this Privacy Policy.
 
 This Policy also describes how we handle both personally identifiable information (“Personal Information”) and non-personally identifiable information, and how we protect your privacy when using decentralized services. It applies to information collected through the Interface and related services provided by All in Bits, Inc.
 
@@ -33,7 +33,7 @@ You are responsible for transacting on the blockchain and sharing your public wa
 
    1. **Contact Information:** Name, email address, phone number, and other contact details when you interact with us or use our services.
 
-   2. **Transaction Data:** When using the GovGen dApp, we may collect details about the proposals you submit, votes you cast, and other governance-related actions. However, we do not collect your private keys or wallet seed phrases.
+   2. **Transaction Data:** When using the AtomOne dApp, we may collect details about the proposals you submit, votes you cast, and other governance-related actions. However, we do not collect your private keys or wallet seed phrases.
 
    3. **Verification Information (if applicable):** In some cases, we may collect Know Your Customer (KYC) information, such as government-issued IDs, utility bills, or other documents, to comply with applicable laws, including U.S. Bank Secrecy Act or anti-money laundering laws.
 
@@ -89,7 +89,7 @@ We use your personal data for the following purposes:
 
    4. **Ads and Sponsored Content:** We may use information about your interests, actions, and connections to select and personalize ads and sponsored content shown to you.
 
-2. **Compliance and Legal Obligations:** We may use your information to comply with legal requirements such as KYC/AML procedures, detecting and preventing fraud or illegal activities, and enforcing our [Terms of Service](https://app.govgen.io/terms).
+2. **Compliance and Legal Obligations:** We may use your information to comply with legal requirements such as KYC/AML procedures, detecting and preventing fraud or illegal activities, and enforcing our [Terms of Service](https://gov.atom.one/terms).
 
 3. **Communications and Marketing:** We use the information we have to send you marketing communications, respond to your inquiries, and let you know about updates to our policies, Services, and important notices.
 
@@ -99,7 +99,7 @@ We use your personal data for the following purposes:
 
 We may share your personal data with others under the following circumstances:
 
-1. **Public Blockchain Data:** Interactions with the GovGen dApp are recorded on the blockchain and are publicly visible. Data such as your public wallet address, transaction details, and voting actions may be disclosed in this way. Blockchain data cannot be erased or altered.
+1. **Public Blockchain Data:** Interactions with the AtomOne dApp are recorded on the blockchain and are publicly visible. Data such as your public wallet address, transaction details, and voting actions may be disclosed in this way. Blockchain data cannot be erased or altered.
 
 2. **Third-Party Service Providers:** We engage vendors and service providers to perform functions on our behalf, including web hosting, KYC/AML services, and payment processing. These service providers are bound by confidentiality obligations and are prohibited from using your data for purposes other than providing services to us.
 
@@ -177,5 +177,5 @@ Las Vegas, NV 89146
 
 This Privacy Policy is governed by and construed in accordance with the laws of the State of Delaware. Any disputes arising from this Policy will be resolved according to the arbitration provisions in our Terms of Service.
 
-By using the **GovGen Interface**, you acknowledge that you have read, understood, and agreed to this Privacy Policy.
+By using the **AtomOne Interface**, you acknowledge that you have read, understood, and agreed to this Privacy Policy.
 `;

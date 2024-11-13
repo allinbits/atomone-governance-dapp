@@ -408,7 +408,7 @@ function showBreakdown(type: BreakdownType) {
 }
 
 const title = useTitle();
-onMounted(() => (title.value = `GovGen — #${proposal.value?.proposal[0].id} ${proposal.value?.proposal[0].title}`));
+onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} ${proposal.value?.proposal[0].title}`));
 </script>
 
 <template>
@@ -504,8 +504,8 @@ onMounted(() => (title.value = `GovGen — #${proposal.value?.proposal[0].id} ${
           <div v-else
             class="justify-center px-6 py-4 rounded link-gradient text-dark text-300 text-center cursor-pointer w-full"
             @click="() => {
-                bus.emit('open');
-              }
+              bus.emit('open');
+            }
               ">
             {{ $t("components.ProposalVote.cta") }}
           </div>
@@ -522,8 +522,8 @@ onMounted(() => (title.value = `GovGen — #${proposal.value?.proposal[0].id} ${
           <div v-else
             class="justify-center px-6 py-4 rounded link-gradient text-dark text-300 text-center cursor-pointer w-full"
             @click="() => {
-                bus.emit('open');
-              }
+              bus.emit('open');
+            }
               ">
             {{ $t("components.ProposalDeposit.cta") }}
           </div>
@@ -628,7 +628,7 @@ onMounted(() => (title.value = `GovGen — #${proposal.value?.proposal[0].id} ${
                 <div class="text-light text-300 md:text-500 text-left mb-8 font-medium">
                   {{ $t("proposalpage.labels.messages") }}
                 </div>
-                <div v-if="proposal?.proposal[0].proposal_type == '/govgen.gov.v1beta1.TextProposal'"
+                <div v-if="proposal?.proposal[0].proposal_type == '/atomone.gov.v1beta1.TextProposal'"
                   class="flex w-full flex-wrap">
                   <div class="grow w-full md:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposalType") }}</div>

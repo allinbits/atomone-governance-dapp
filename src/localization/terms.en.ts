@@ -4,13 +4,13 @@ export default `
 
 # **1.**  **Scope**
 
-These Terms of Service (the “Terms”) govern your use of the GovGen Governance decentralized application (“GovGen dApp”), access to our web-hosted user interface located at https://app.govgen.io (the “Site”) and related tools, trademarks, intellectual property, services, and software provided by All in Bits, Inc., a Delaware corporation (the “operator,” “we,” or “us”). These Terms apply to all users of the GovGen dApp (collectively, the “Services”). For simplicity, the Site and our Services are collectively referred to as the “Interface.”
+These Terms of Service (the “Terms”) govern your use of the AtomOne Governance decentralized application (AtomOne dApp”), access to our web-hosted user interface located at https://gov.atom.one (the “Site”) and related tools, trademarks, intellectual property, services, and software provided by All in Bits, Inc., a Delaware corporation (the “operator,” “we,” or “us”). These Terms apply to all users of the AtomOne dApp (collectively, the “Services”). For simplicity, the Site and our Services are collectively referred to as the “Interface.”
 
 The Interface is intended to provide decentralized governance tools and a forum for user-generated content through which individuals and decentralized autonomous organizations (“**_DAOs_**”) and their members may conduct certain on-chain governance functionalities. Due to the decentralized nature of the Interface, we do not monitor or control all interactions. By using this Interface, you acknowledge that we are not responsible for any third-party actions or transactions that occur outside of our direct control. Certain services may only be available in specific jurisdictions, and nothing herein grants you access to services in jurisdictions where they are prohibited.
 
 The Interface does not include any outside websites or platforms linked to it. Such external platforms have their own terms of service, which govern transactions on those platforms. We disclaim any liability for transactions conducted outside the Interface.
 
-These Terms expressly cover your rights and obligations, and our disclaimers and limitations of legal liability,  relating to your use of, and access to, the Interface. By accessing or using the Interface, you agree to be bound by these Terms. Before using the Interface, make sure that you read and understand the accompanying [Privacy Policy](https://app.govgen.io/privacy).
+These Terms expressly cover your rights and obligations, and our disclaimers and limitations of legal liability,  relating to your use of, and access to, the Interface. By accessing or using the Interface, you agree to be bound by these Terms. Before using the Interface, make sure that you read and understand the accompanying [Privacy Policy](https://gov.atom.one/privacy).
 
 THESE TERMS SET FORTH THE LEGALLY BINDING TERMS AND CONDITIONS, YOUR RIGHTS AND OBLIGATIONS, OUR DISCLAIMERS AND LIMITATIONS OF LEGAL LIABILITY THAT GOVERN YOUR USE OF THE INTERFACE. BY SIGNING MESSAGE TO BE RECORDED ON-CHAIN THAT INCLUDES A LINK TO THESE TERMS ACCESSING OR USING THE INTERFACE, YOU ARE ACCEPTING THESE TERMS (ON BEHALF OF YOURSELF OR THE ENTITY THAT YOU REPRESENT), INCLUDING, WITHOUT LIMITATION, THE MANDATORY ARBITRATION PROVISION IN SECTION 17 AND WAIVER OF JURY TRIAL. IF YOU DO NOT AGREE WITH ALL OF THE PROVISIONS OF THESE TERMS, DO NOT ACCESS OR USE THE INTERFACE.
 
@@ -21,15 +21,15 @@ THESE TERMS SET FORTH THE LEGALLY BINDING TERMS AND CONDITIONS, YOUR RIGHTS AND 
 
 # **2.**  **The Interface**
 
-GovGen dApp is a decentralized governance platform allowing users to participate in the governance processes of decentralized autonomous organizations (DAOs) within the AtomOne Hub and Cosmos ecosystem. The dApp provides access to the decentralized network and enables users to submit proposals, vote on governance matters, and perform other governance-related actions. Participation in GovGen requires interaction with compatible wallet and blockchain transactions, including staking and voting. All transactions performed through the GovGen dApp are irreversible and publicly recorded on the blockchain.
+AtomOne dApp is a decentralized governance platform allowing users to participate in the governance processes of decentralized autonomous organizations (DAOs) within the AtomOne Hub and Cosmos ecosystem. The dApp provides access to the decentralized network and enables users to submit proposals, vote on governance matters, and perform other governance-related actions. Participation in AtomOne requires interaction with compatible wallet and blockchain transactions, including staking and voting. All transactions performed through the AtomOne dApp are irreversible and publicly recorded on the blockchain.
 
 1. **Wallets and Security:**
 
-To use the GovGen Interface, you must connect a compatible third-party wallet (e.g., Keplr, Leap, Cosmostation). The Interface does not store private keys or have access to your funds. You are solely responsible for safeguarding your wallet credentials, including private keys and seed phrases, which are essential for accessing your wallet and digital assets.
+To use the AtomOne Interface, you must connect a compatible third-party wallet (e.g., Keplr, Leap, Cosmostation). The Interface does not store private keys or have access to your funds. You are solely responsible for safeguarding your wallet credentials, including private keys and seed phrases, which are essential for accessing your wallet and digital assets.
 
 The operator will never request your private keys, seed phrases, or recovery phrases. Any such request should be considered fraudulent and reported immediately. Failing to safeguard this information may result in the permanent loss of access to your wallet and digital assets.
 
-For enhanced security, users have the option to [generate command-line interface (CLI)](https://github.com/atomone-hub/govgen-proposals/blob/main/submit-tx-securely.md) commands for executing transactions in an offline, air-gapped environment. This method allows users to create and sign transactions on a device that is not connected to the internet, significantly reducing the risk of unauthorized access, hacking, or malware attacks. Once the transaction is signed offline, it can be securely transmitted to the network using an internet-connected device. This adds an extra layer of protection when performing sensitive actions such as transferring funds or managing governance operations.
+For enhanced security, users have the option to [generate command-line interface (CLI)](https://github.com/atomone-hub/atom.one/blob/main/submit-tx-securely.md) commands for executing transactions in an offline, air-gapped environment. This method allows users to create and sign transactions on a device that is not connected to the internet, significantly reducing the risk of unauthorized access, hacking, or malware attacks. Once the transaction is signed offline, it can be securely transmitted to the network using an internet-connected device. This adds an extra layer of protection when performing sensitive actions such as transferring funds or managing governance operations.
 
 It is crucial that users strictly follow best practices for secure transaction processing, including keeping private keys secure and ensuring that the air-gapped environment is free from vulnerabilities. Failure to adhere to these best practices could lead to compromised security, resulting in the loss of assets or unauthorized actions being taken on the user's behalf.
 
@@ -68,7 +68,7 @@ Your permission to use the Interface is contingent upon the following conditions
 
 # **5.**  **Acceptable Use and Content Standards**
 
-By using the Interface, you agree to adhere to the following conditions, ensuring your use of the GovGen dApp remains lawful, respectful, and does not compromise the integrity of the decentralized governance process:
+By using the Interface, you agree to adhere to the following conditions, ensuring your use of the AtomOne dApp remains lawful, respectful, and does not compromise the integrity of the decentralized governance process:
 
 1. **Legal Compliance:**
 
@@ -318,7 +318,7 @@ You agree to reimburse the operator for all costs, damages, and legal claims ari
 
 12) **Forward-Looking Statements:** Certain statements on this website (or in linked materials) may be forward-looking in nature. Forward-looking statements can often be identified by terms such as “intend,” “plan,” “estimate,” “believe,” “anticipate,” “expect,” “predict,” “project,” “propose,” “assume,” “forecast,” “outlook,” “future,” “goal,” “potential,” “continue,” “may,” “can,” “will,” “should,” “could,” and similar expressions. These statements are predictions based on current expectations and assumptions regarding future events. However, they do not guarantee any specific outcomes or achievements, and actual results may differ materially due to various known and unknown risks, uncertainties, and other factors. Readers are cautioned against placing undue reliance on these forward-looking statements.
 
-13. **Private Key Security:** Participation in GovGen requires only the sharing of public keys, never your private keys or seed phrases. You will never be contacted by the operator asking for your private key, seed phrase, or recovery phrase. Any such request should be considered fraudulent and reported immediately. Safeguarding your private keys and seed phrases is your responsibility, and failure to do so may result in theft of your digital identity and assets.
+13. **Private Key Security:** Participation in AtomOne requires only the sharing of public keys, never your private keys or seed phrases. You will never be contacted by the operator asking for your private key, seed phrase, or recovery phrase. Any such request should be considered fraudulent and reported immediately. Safeguarding your private keys and seed phrases is your responsibility, and failure to do so may result in theft of your digital identity and assets.
 
 14) **Use of Blockchain and Decentralized Services:** By using the Interface, you acknowledge the inherent risks of decentralized blockchain technology, including the irreversibility of transactions, potential software bugs or exploits, market volatility, and lack of recourse in the event of unauthorized access to your wallet. The operator is not liable for any losses or damages arising from these risks.
 

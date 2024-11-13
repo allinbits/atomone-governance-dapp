@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 
 const links = [
-  { title: "Twitter", url: "https://twitter.com/_govgen", icon: "twitter" },
+  { title: "Twitter", url: "https://twitter.com/_atomone", icon: "twitter" },
   { title: "Discord", url: "https://discord.com/invite/atomone", icon: "discord" },
   { title: "Github", url: "https://github.com/atomone-hub", icon: "github" },
   { title: "Forum", url: "https://commonwealth.im/govgen", icon: "commonwealth" },
@@ -22,13 +22,8 @@ const links = [
           <RouterLink to="/privacy" class="flex items-center hover:text-grey-50">Privacy Policy</RouterLink>
         </div>
         <div class="flex gap-4">
-          <a
-            v-for="(linkData, index) in links"
-            :key="index"
-            class="flex items-center"
-            :href="linkData.url"
-            target="_blank"
-          >
+          <a v-for="(linkData, index) in links" :key="index" class="flex items-center" :href="linkData.url"
+            target="_blank">
             <Icon :icon="linkData.icon" class="hover:text-grey-50 hover:cursor-pointer" />
           </a>
         </div>

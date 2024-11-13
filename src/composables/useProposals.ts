@@ -11,7 +11,7 @@ export const useProposals = () => {
   const { sendTx, address } = useWallet();
   const createTextProposalContent = (proposal: TextProposal): EncodeObject => {
     return {
-      typeUrl: "/govgen.gov.v1beta1.TextProposal",
+      typeUrl: "/atomone.gov.v1beta1.TextProposal",
       value: TextProposal.encode({
         description: proposal.description,
         title: proposal.title,
@@ -50,7 +50,7 @@ export const useProposals = () => {
       //TODO : CommandBuilder + proposal JSON Generation
     } else {
       const SubmitProposal: EncodeObject = {
-        typeUrl: "/govgen.gov.v1beta1.MsgSubmitProposal",
+        typeUrl: "/atomone.gov.v1beta1.MsgSubmitProposal",
         value: {
           initialDeposit: proposalMeta.initialDeposit,
           proposer: address.value,
@@ -73,7 +73,7 @@ export const useProposals = () => {
       return command;
     } else {
       const Deposit: EncodeObject = {
-        typeUrl: "/govgen.gov.v1beta1.MsgDeposit",
+        typeUrl: "/atomone.gov.v1beta1.MsgDeposit",
         value: {
           proposalId: deposit.proposalId,
           depositor: address.value,
@@ -108,7 +108,7 @@ export const useProposals = () => {
       return command;
     } else {
       const Vote: EncodeObject = {
-        typeUrl: "/govgen.gov.v1beta1.MsgVote",
+        typeUrl: "/atomone.gov.v1beta1.MsgVote",
         value: {
           proposalId: vote.proposalId,
           voter: address.value,
@@ -151,7 +151,7 @@ export const useProposals = () => {
       return command;
     } else {
       const VoteWeighted: EncodeObject = {
-        typeUrl: "/govgen.gov.v1beta1.MsgVoteWeighted",
+        typeUrl: "/atomone.gov.v1beta1.MsgVoteWeighted",
         value: {
           proposalId: voteWeighted.proposalId,
           voter: address.value,
