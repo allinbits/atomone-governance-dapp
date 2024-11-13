@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
-import CreateProposalView from "@/views/CreateProposalView.vue";
 import ProposalView from "@/views/ProposalView.vue";
 import HistoryView from "@/views/HistoryView.vue";
 import FaqView from "@/views/FaqView.vue";
