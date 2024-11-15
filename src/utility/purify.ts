@@ -1,3 +1,4 @@
+import { JSDOM } from 'jsdom';
 import DOMPurify from "dompurify";
 
 export function purifyHtml(html: string) {
@@ -29,5 +30,6 @@ export function purifyHtml(html: string) {
 }
 
 export function purifyForLinks(html: string) {
-  return DOMPurify().sanitize(html, { ALLOWED_TAGS: ["a"] });
+  const window = new JSDOM('').window;
+  return DOMPurify(window).sanitize(html, { ALLOWED_TAGS: ["a"] });
 }
