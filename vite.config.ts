@@ -24,5 +24,7 @@ export default defineConfig({
       "~": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  define: { __INTLIFY_JIT_COMPILATION__: true },
+  define: {
+    __INTLIFY_JIT_COMPILATION__: true,
+  },
 });

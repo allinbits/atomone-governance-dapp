@@ -62,18 +62,15 @@ importers:
       dayjs:
         specifier: ^1.11.10
         version: 1.11.13
-      dompurify:
-        specifier: ^3.1.4
-        version: 3.1.6
       graphql:
         specifier: ^16.8.1
         version: 16.9.0
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.9.0)
-      jsdom:
-        specifier: ^25.0.1
-        version: 25.0.1
+      isomorphic-dompurify:
+        specifier: ^2.16.0
+        version: 2.16.0
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
@@ -2999,6 +2996,10 @@ packages:
 
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
+
+  isomorphic-dompurify@2.16.0:
+    resolution: {integrity: sha512-cXhX2owp8rPxafCr0ywqy2CGI/4ceLNgWkWBEvUz64KTbtg3oRL2ZRqq/zW0pzt4YtDjkHLbwcp/lozpKzAQjg==}
+    engines: {node: '>=18'}
 
   isomorphic-timers-promises@1.0.1:
     resolution: {integrity: sha512-u4sej9B1LPSxTGKB/HiuzvEQnXH0ECYkSVQU39koSwmFAxhlEAFl9RdTvLv4TOTQUgBS5O3O5fwUxk6byBZ+IQ==}
@@ -8175,6 +8176,17 @@ snapshots:
   isarray@1.0.0: {}
 
   isexe@2.0.0: {}
+
+  isomorphic-dompurify@2.16.0:
+    dependencies:
+      '@types/dompurify': 3.0.5
+      dompurify: 3.1.6
+      jsdom: 25.0.1
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - utf-8-validate
 
   isomorphic-timers-promises@1.0.1: {}
 

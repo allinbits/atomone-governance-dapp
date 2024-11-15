@@ -1,5 +1,4 @@
-import { JSDOM } from 'jsdom';
-import DOMPurify from "dompurify";
+import DOMPurify from 'isomorphic-dompurify';
 
 export function purifyHtml(html: string) {
   return DOMPurify.sanitize(html, {
@@ -30,6 +29,5 @@ export function purifyHtml(html: string) {
 }
 
 export function purifyForLinks(html: string) {
-  const window = new JSDOM('').window;
-  return DOMPurify(window).sanitize(html, { ALLOWED_TAGS: ["a"] });
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS: ["a"] });
 }
