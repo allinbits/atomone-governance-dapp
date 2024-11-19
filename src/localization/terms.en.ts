@@ -3,7 +3,7 @@ export default `
 
 # **1.**  **Introduction**
 
-By accessing and/or using the features available via [https://www.gov.atom.one](https://www.gov.atom.one) (the “Interface”), User (“you”) agree(s) that: (i) User has read and understood these Governance Terms; and (ii) User has read and agrees to be bound to these Terms, the [Atom.One Website Terms](https://docs.google.com/document/d/1o7rM8tdXvCp4_CNaMIYO4OzYKBgHRmGk38CCLDfCfN0/edit?tab=t.0), the [Atom.One Staking Terms](https://docs.google.com/document/d/1Nc7_8D0xxy7C5FIqDqDR14Suj3paqTrIPnj9vasIuks/edit?tab=t.0), the accompanying [Privacy Policy](https://docs.google.com/document/d/1pVWLm5A5fKLoHqG4nBEoeeZHKTT6ADviJs53zNgruKw/edit?tab=t.0) (collectively the “AtomOne Terms”), which set forth the legally binding terms and conditions governing User's use of any Site, Interface or Services provided by provided by All in Bits, Inc., a Delaware corporation (the “operator,” “we,” or “us”).
+By accessing and/or using the features available via [https://www.gov.atom.one](https://www.gov.atom.one) (the “Interface”), User (“you”) agree(s) that: (i) User has read and understood these Governance Terms; and (ii) User has read and agrees to be bound to these Terms, the [Atom.One Website Terms](https://atom.one/terms), the [Atom.One Staking Terms](https://staking.atom.one/terms), the accompanying [Privacy Policy](https://gov.atom.one/privacy) (collectively the “AtomOne Terms”), which set forth the legally binding terms and conditions governing User's use of any Site, Interface or Services provided by provided by All in Bits, Inc., a Delaware corporation (the “operator,” “we,” or “us”).
 
 We reserve the right to modify or amend these Governance Terms or the AtomOne Terms at our sole discretion from time to time. The “Date Effective” specified on any AtomOne Terms indicates the date on which the Terms were last modified. Please review these Terms periodically to ensure you are aware of and in compliance with the most current version. Any revision to the Terms shall take effect immediately upon such revised Terms being made accessible via the Interface. Such revised Terms shall be binding on the User, and by continuing to access and/or use the features of the Interface, the User shall be deemed to agree to and accept the revised Terms. These Terms are intended to work in conjunction with the AtomOne Terms that govern your use of the Services as a whole. Please ensure that you have read all the AtomOne Terms. 
 
@@ -205,7 +205,8 @@ Carolyn Pehrson ACP \# 153281
 3395 South Jones Blvd. \# 153  
 Las Vegas, NV 89146  
 Phone: 661-388-6953  
-Email: [legal@allinbits.com](mailto:legal@allinbits.com)
+Email: <legal{'@'}allinbits.com>
+
 
 **Counter-Notification Process**  
 If your content is removed or disabled based on a DMCA notification, you have the right to submit a counter-notification if you believe the removal or disabling was the result of an error or misidentification of the material.  
@@ -321,7 +322,7 @@ Either party may terminate this agreement at any time. Upon termination, your pe
 
 # **19.**  **Contact**
 
-You may contact the operator regarding any questions, concerns, or notices related to these terms by emailing the operator at legal@allinbits.com. Any notices or communications sent to the operator under these terms should be directed to this email address.
+You may contact the operator regarding any questions, concerns, or notices related to these terms by emailing the operator at <legal{'@'}allinbits.com>. Any notices or communications sent to the operator under these terms should be directed to this email address.
 
 The operator may contact you regarding these terms or any matter related to your account through the email address you provide upon registration. Additionally, the operator may deliver notices by posting them on the homepage of the Interface, in your account page, or through other visible locations on the Interface as necessary.
 
