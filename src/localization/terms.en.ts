@@ -12,7 +12,7 @@ THESE ATOMONE TERMS SET FORTH THE LEGALLY BINDING TERMS AND CONDITIONS, YOUR RIG
 ---
  **The Interface, Services and any other features offered or made available by us are not offered to U.S. Persons or Restricted Persons (each as further defined below), and any such use is prohibited. Any use of a virtual private network (VPN) or any other privacy or anonymization tools or techniques to circumvent, or attempt to circumvent, any restrictions that apply are prohibited.** WE RESERVE ALL RIGHTS TO TAKE ACTION AGAINST ANY PERSON VIOLATING, CIRCUMVENTING OR ATTEMPTING TO CIRCUMVENT SUCH RESTRICTIONS, INCLUDING LEGAL ACTION AND/OR TEMPORARILY OR PERMANENTLY RESTRICT ACCESS TO THE INTERFACE AND THE SERVICES.“**U.S. Person**” shall mean any natural person or legal entity who (i) resides, (ii) is located (iii) is incorporated, or (iv) has a registered office, in the United States of America.“**Restricted Person**” shall mean any natural person or legal entity who (i) resides, (ii) is located (iii) is incorporated, or (iv) has a registered office, in any Restricted Jurisdiction (as further defined in Section 2.3 below).
  
- ---
+---
 
 
 # **2.**  **The Interface**
