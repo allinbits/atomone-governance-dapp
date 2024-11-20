@@ -222,11 +222,7 @@ function setTypeFilterIndex(idx: number) {
           <p
             class="text-grey-100 text-300 lg:w-[656px] font-normal text-left text-pretty after:absolute after:block after:left-0 after:w-full after:bg-grey-300 after:h-px"
           >
-            <i18n-t keypath="homepage.intro" tag="span" class="block pb-8 lg:pb-[72px]">
-              <a href="https://commonwealth.im/govgen" class="text-light text-300" target="_blank">{{
-                $t("homepage.forumLinkText")
-              }}</a>
-            </i18n-t>
+            {{ $t("homepage.intro") }}
           </p>
         </div>
       </div>

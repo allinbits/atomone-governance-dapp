@@ -17,12 +17,6 @@ import WalletConnect from "@/components/popups/WalletConnect.vue";
           <router-link active-class="text-light" to="/faq" class="text-300 py-4 hover:text-light text-grey-100">{{
             $t("homepage.viewFaq")
           }}</router-link>
-          <a
-            target="_blank"
-            href="https://commonwealth.im/govgen"
-            class="text-300 py-4 hover:text-light text-grey-100"
-            >{{ $t("homepage.viewForums") }}</a
-          >
         </div>
       </div>
       <WalletConnect class="hidden md:block" />
