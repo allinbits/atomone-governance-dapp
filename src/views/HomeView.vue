@@ -220,7 +220,7 @@ function setTypeFilterIndex(idx: number) {
           </div>
           <!-- Chain Description -->
           <p
-            class="text-grey-100 text-300 lg:w-[656px] font-normal text-left text-pretty after:absolute after:block after:left-0 after:w-full after:bg-grey-300 after:h-px"
+            class="text-grey-100 text-300 lg:w-[656px] font-normal text-left text-pretty block pb-8 lg:pb-[72px] after:absolute after:block after:left-0 after:w-full after:bg-grey-300 after:h-px"
           >
             {{ $t("homepage.intro") }}
           </p>
