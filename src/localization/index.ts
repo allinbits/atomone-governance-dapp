@@ -7,7 +7,7 @@ export const messages = {
     homepage: {
       title: "AtomOne",
       intro:
-        "Explore the Governance dApp—a seamlessly integrated interface empowering secure and efficient governance interactions with the AtomOne chain. Engage in collaborative discussions in the {0} and actively participate in the governance processes to shape the potential future of AtomOne.",
+        "Explore the Governance dApp—a seamlessly integrated interface empowering secure and efficient governance interactions with the AtomOne chain.",
       proposalsHeader: "All Proposals",
       forumLinkText: "forum",
       website: "Website",
