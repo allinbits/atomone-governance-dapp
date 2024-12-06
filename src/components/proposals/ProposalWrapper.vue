@@ -34,7 +34,7 @@ import PopupBox from "@/components/popups/PopupBox.vue";
 import { VCodeBlock } from "@wdns/vue-code-block";
 import { onMounted } from "vue";
 
-const voteTypes = ["yes", "no", "veto", "abstain"] as const;
+const voteTypes = ["yes", "no", "abstain"] as const;
 type BreakdownType = "voters" | "validators" | null;
 type TabNames = "Description" | "Info" | "Voters" | "Discussions" | "Links";
 type VoteTypes = (typeof voteTypes)[number];
@@ -94,7 +94,6 @@ const validatorTallies = computed<{ [key in VoteTypes]: number }>(() => {
   const tally = {
     yes: 0,
     no: 0,
-    veto: 0,
     abstain: 0,
   };
 
@@ -110,9 +109,6 @@ const validatorTallies = computed<{ [key in VoteTypes]: number }>(() => {
         case "VOTE_OPTION_NO":
           tally.no = tally.no + optionTally;
           break;
-        case "VOTE_OPTION_NO_WITH_VETO":
-          tally.veto = tally.veto + optionTally;
-          break;
         case "VOTE_OPTION_ABSTAIN":
           tally.abstain = tally.abstain + optionTally;
           break;
@@ -127,7 +123,6 @@ const validatorVoteCounts = computed(() => {
   const tally = {
     yes: 0,
     no: 0,
-    veto: 0,
     abstain: 0,
   };
 
@@ -140,9 +135,6 @@ const validatorVoteCounts = computed(() => {
           break;
         case "VOTE_OPTION_NO":
           tally.no = tally.no + 1;
-          break;
-        case "VOTE_OPTION_NO_WITH_VETO":
-          tally.veto = tally.veto + 1;
           break;
         case "VOTE_OPTION_ABSTAIN":
           tally.abstain = tally.abstain + 1;
@@ -165,7 +157,6 @@ function getValidatorVotes(voteType: VoteTypes) {
     const tally = {
       yes: 0,
       no: 0,
-      veto: 0,
       abstain: 0,
     };
 
@@ -176,9 +167,6 @@ function getValidatorVotes(voteType: VoteTypes) {
           break;
         case "VOTE_OPTION_NO":
           tally.no = tally.no + 1;
-          break;
-        case "VOTE_OPTION_NO_WITH_VETO":
-          tally.veto = tally.veto + 1;
           break;
         case "VOTE_OPTION_ABSTAIN":
           tally.abstain = tally.abstain + 1;
@@ -243,15 +231,15 @@ const totalDeposit = computed(() => {
   return proposal.value?.proposal[0].proposal_deposits.reduce(depositReducer, 0) ?? 0;
 });
 const minDeposit = computed(() => {
-  return params.value?.gov_params[0].deposit_params.min_deposit[0].amount;
+  return params.value?.gov_params[0].params.min_deposit[0].amount;
 });
 const depositDenom = computed(() => {
-  return params.value?.gov_params[0].deposit_params.min_deposit[0].denom;
+  return params.value?.gov_params[0].params.min_deposit[0].denom;
 });
 
 const tally_params = computed(() => {
   try {
-    return params.value?.gov_params[0].tally_params;
+    return params.value?.gov_params[0].params;
   } catch (e) {
     return {};
   }
@@ -265,19 +253,13 @@ const threshold = computed(() => {
   return parseFloat(tally_params.value?.threshold ?? "0");
 });
 
-const veto_threshold = computed(() => {
-  return parseFloat(tally_params.value?.veto_threshold ?? "0");
-});
-
 const yesCount = getVoteOption(props.proposalId, "VOTE_OPTION_YES");
 const noCount = getVoteOption(props.proposalId, "VOTE_OPTION_NO");
-const nwvCount = getVoteOption(props.proposalId, "VOTE_OPTION_NO_WITH_VETO");
 const abstainCount = getVoteOption(props.proposalId, "VOTE_OPTION_ABSTAIN");
 const allVoteCounts = computed(() => {
   return {
     yes: yesCount.value?.proposal_vote_aggregate.aggregate?.count ?? 0,
     no: noCount.value?.proposal_vote_aggregate.aggregate?.count ?? 0,
-    veto: nwvCount.value?.proposal_vote_aggregate.aggregate?.count ?? 0,
     abstain: abstainCount.value?.proposal_vote_aggregate.aggregate?.count ?? 0,
   };
 });
@@ -287,10 +269,6 @@ const yesVotes = computed(() => {
 
 const noVotes = computed(() => {
   return parseFloat(proposalTallies.value?.proposal_tally_result[0]?.no ?? "0");
-});
-
-const nwvVotes = computed(() => {
-  return parseFloat(proposalTallies.value?.proposal_tally_result[0]?.no_with_veto ?? "0");
 });
 
 const abstainVotes = computed(() => {
@@ -309,19 +287,14 @@ const abstain = computed(() => {
   return abstainVotes.value / parseFloat(staking.value?.staking_pool[0]?.bonded_tokens ?? "0");
 });
 
-const nwv = computed(() => {
-  return nwvVotes.value / parseFloat(staking.value?.staking_pool[0]?.bonded_tokens ?? "0");
-});
-
 const turnout = computed(() => {
-  return nwv.value + no.value + yes.value + abstain.value;
+  return no.value + yes.value + abstain.value;
 });
 
 const tokenTallies = computed(() => {
   return {
     yes: yesVotes.value,
     no: noVotes.value,
-    veto: nwvVotes.value,
     abstain: abstainVotes.value,
   };
 });
@@ -330,14 +303,10 @@ const expectedResult = computed(() => {
   if (turnout.value < quorum.value) {
     return false;
   } else {
-    if (nwv.value > veto_threshold.value) {
-      return false;
+    if (yes.value > threshold.value) {
+      return true;
     } else {
-      if (yes.value > threshold.value) {
-        return true;
-      } else {
-        return false;
-      }
+      return false;
     }
   }
 });
@@ -557,14 +526,6 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
           <div class="text-300 md:text-500 text-neg-200 mb-1">{{ $t("voteOptions.no") }}: {{ decToPerc(no, 2) }}%</div>
           <div class="text-100 text-grey-100">
             {{ formatAmount(noVotes, stakingDenomDecimals) }} {{ stakingDenomDisplay }}
-          </div>
-        </div>
-        <div class="w-full sm:w-1/2 lg:w-25 text-center lg:flex-1">
-          <div class="text-300 md:text-500 text-accent-200 mb-1">
-            {{ $t("voteOptions.nwvShort") }}: {{ decToPerc(nwv, 2) }}%
-          </div>
-          <div class="text-100 text-grey-100">
-            {{ formatAmount(nwvVotes, stakingDenomDecimals) }} {{ stakingDenomDisplay }}
           </div>
         </div>
         <div class="w-full sm:w-1/2 lg:w-25 text-center lg:flex-1">
