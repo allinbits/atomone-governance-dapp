@@ -13,24 +13,21 @@ type Props = {
     yes: number;
     no: number;
     abstain: number;
-    veto: number;
   };
   tokenTallies: {
     yes: number;
     no: number;
     abstain: number;
-    veto: number;
   };
 };
 
 const props = defineProps<Props>();
 const emits = defineEmits<{ (e: "onBreakdown"): void }>();
 const pcts = computed(() => {
-  const sum = props.tokenTallies.yes + props.tokenTallies.no + props.tokenTallies.veto + props.tokenTallies.abstain;
+  const sum = props.tokenTallies.yes + props.tokenTallies.no + props.tokenTallies.abstain;
   return {
     yes: sum > 0 ? props.tokenTallies.yes / sum : 0,
     no: sum > 0 ? props.tokenTallies.no / sum : 0,
-    veto: sum > 0 ? props.tokenTallies.veto / sum : 0,
     abstain: sum > 0 ? props.tokenTallies.abstain / sum : 0,
   };
 });
@@ -58,12 +55,7 @@ const totalVoteText = computed(() => {
     <!-- Lower Section -->
     <div v-if="voters >= 1" class="flex flex-col sm:flex-row gap-6 md:gap-12 w-full sm:items-center">
       <div class="flex items-center w-28 h-28 pb-1 mr-6">
-        <VoteChart
-          :yes="voteTallies.yes"
-          :no="voteTallies.no"
-          :abstain="voteTallies.abstain"
-          :veto="voteTallies.veto"
-        />
+        <VoteChart :yes="voteTallies.yes" :no="voteTallies.no" :abstain="voteTallies.abstain" />
       </div>
       <div class="flex flex-col gap-6">
         <div class="flex flex-col gap-1">
@@ -72,14 +64,6 @@ const totalVoteText = computed(() => {
             ><span class="sm:block md:inline-block">{{ formatAmount(tokenTallies.yes, precision) }} {{ denom }} </span>
             <span class="sm:hidden md:inline-block">&nbsp;|&nbsp;</span
             ><span> {{ decToPerc(pcts.yes, 2) }}%</span></span
-          >
-        </div>
-        <div class="flex flex-col gap-1">
-          <span class="text-accent-200 text-300 start-6">{{ $t("voteOptions.nwvShort") }}: {{ voteTallies.veto }}</span>
-          <span class="text-grey-100 text-100"
-            ><span class="sm:block md:inline-block">{{ formatAmount(tokenTallies.veto, precision) }} {{ denom }}</span>
-            <span class="sm:hidden md:inline-block">&nbsp;|&nbsp;</span
-            ><span> {{ decToPerc(pcts.veto, 2) }}%</span></span
           >
         </div>
       </div>

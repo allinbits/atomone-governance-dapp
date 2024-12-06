@@ -18,7 +18,7 @@ const documents = {
     "query BlockHeight($timestamp: timestamp!) {\n  block(where: {timestamp: {_gte: $timestamp}}, order_by: {height: asc}, limit: 1) {\n    timestamp\n    height\n  }\n}": types.BlockHeightDocument,
     "query BlockTime($height: bigint) {\n  block(where: {height: {_lte: $height}}, order_by: {height: desc}, limit: 1) {\n    timestamp\n    height\n  }\n}": types.BlockTimeDocument,
     "query Delegated($where: staked_balances_bool_exp = {}) {\n  staked_balances(\n    distinct_on: validator\n    order_by: {validator: desc, height: desc_nulls_last}\n    where: $where\n  ) {\n    amount\n    height\n  }\n}": types.DelegatedDocument,
-    "query Params {\n  gov_params {\n    tally_params\n    deposit_params\n    voting_params\n  }\n}": types.ParamsDocument,
+    "query Params {\n  gov_params {\n    params\n  }\n}": types.ParamsDocument,
     "query Proposal($id: Int!) {\n  proposal(where: {id: {_eq: $id}}) {\n    content\n    deposit_end_time\n    description\n    proposal_route\n    proposal_type\n    proposal_votes {\n      voter_address\n      option\n      weight\n      height\n    }\n    id\n    proposer_address\n    status\n    submit_time\n    title\n    voting_end_time\n    voting_start_time\n    proposal_tally_results(order_by: {height: desc}, limit: 1) {\n      abstain\n      height\n      no\n      no_with_veto\n      yes\n    }\n    proposal_deposits {\n      amount\n      depositor_address\n      proposal_id\n      timestamp\n    }\n  }\n}": types.ProposalDocument,
     "query ProposalTallies($id: Int!) {\n  proposal_tally_result(\n    where: {proposal_id: {_eq: $id}}\n    order_by: {height: desc}\n    limit: 1\n  ) {\n    abstain\n    no\n    height\n    no_with_veto\n    yes\n    proposal_id\n  }\n}": types.ProposalTalliesDocument,
     "query ProposalsActive($limit: Int!, $offset: Int!, $where: proposal_bool_exp = {}) {\n  all_proposals: proposal(\n    order_by: [{active_first_order: asc}, {id: desc}]\n    limit: $limit\n    offset: $offset\n    where: $where\n  ) {\n    content\n    deposit_end_time\n    description\n    id\n    proposal_type\n    proposal_deposits {\n      amount\n      depositor_address\n    }\n    proposal_votes_aggregate(where: {is_valid: {_eq: true}}) {\n      aggregate {\n        count\n      }\n    }\n    proposer_address\n    status\n    submit_time\n    title\n    voting_end_time\n    voting_start_time\n  }\n  proposal_aggregate(where: $where) {\n    aggregate {\n      count\n    }\n  }\n}": types.ProposalsActiveDocument,
@@ -71,7 +71,7 @@ export function graphql(source: "query Delegated($where: staked_balances_bool_ex
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query Params {\n  gov_params {\n    tally_params\n    deposit_params\n    voting_params\n  }\n}"): (typeof documents)["query Params {\n  gov_params {\n    tally_params\n    deposit_params\n    voting_params\n  }\n}"];
+export function graphql(source: "query Params {\n  gov_params {\n    params\n  }\n}"): (typeof documents)["query Params {\n  gov_params {\n    params\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

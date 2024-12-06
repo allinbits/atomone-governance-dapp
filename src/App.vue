@@ -13,7 +13,7 @@ useGithubDiscussions().setup();
 </script>
 
 <template>
-  <div class="w-full max-w-[90rem] px-6 md:px-14 lg:px-20 mx-auto">
+  <div class="w-full max-w-[90rem] px-6 md:px-14 lg:px-20 mx-auto overflow-x-hidden">
     <HeaderSection />
     <div class="flex flex-col w-full min-h-screen">
       <ErrorBox />
