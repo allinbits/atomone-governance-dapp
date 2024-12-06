@@ -211,8 +211,8 @@ const tabOptions = reactive<UiTabOption[]>([
   { title: "Description" },
   { title: "Info" },
   { title: "Voters" },
-  { title: "Discussions", link: "https://commonwealth.im/govgen/proposal/" + props.proposalId },
-  //   { title: "Links", link: "https://commonwealth.im/govgen/proposal/" + props.proposalId },
+  // { title: "Discussions", link: "https://commonwealth.im/atomone/proposal/" + props.proposalId },
+  // { title: "Links", link: "https://commonwealth.im/atomone/proposal/" + props.proposalId },
 ]);
 
 const breakdownType = ref<("validators" | "voters") | null>(null);
