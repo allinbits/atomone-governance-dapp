@@ -416,7 +416,6 @@ onMounted(async () => {
   const json = await fetchResult.json() as { proposal: { proposal_id: string, status: string, voting_start_time: string, voting_end_time: string }};
 
   if (proposal.value && proposal.value.proposal[0]) {
-    console.log(json);
     const props = [...proposal.value.proposal];
     const newProp = {...props[0]};
 
