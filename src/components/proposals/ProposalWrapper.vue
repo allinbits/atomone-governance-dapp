@@ -408,7 +408,26 @@ function showBreakdown(type: BreakdownType) {
 }
 
 const title = useTitle();
-onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} ${proposal.value?.proposal[0].title}`));
+onMounted(async () => {
+  (title.value = `AtomOne — #${proposal.value?.proposal[0].id} ${proposal.value?.proposal[0].title}`)
+
+  // Temporary patch, probably should remove
+  const fetchResult = await fetch(`https://atomone-api.allinbits.com/atomone/gov/v1beta1/proposals/${props.proposalId}`);
+  const json = await fetchResult.json() as { proposal: { proposal_id: string, status: string, voting_start_time: string, voting_end_time: string }};
+
+  if (proposal.value && proposal.value.proposal[0]) {
+    console.log(json);
+    const props = [...proposal.value.proposal];
+    const newProp = {...props[0]};
+
+    newProp.voting_start_time = json.proposal.voting_start_time;
+    newProp.voting_end_time = json.proposal.voting_end_time;
+    newProp.status = json.proposal.status;
+
+    props[0] = newProp
+    proposal.value = { proposal: props };
+  }
+});
 </script>
 
 <template>
