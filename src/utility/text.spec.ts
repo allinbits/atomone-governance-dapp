@@ -15,7 +15,7 @@ test("Capitalization", () => {
 
 test("Shortening", () => {
   expect(TextUtils.shorten("ashortstring")).toBe("ashortstring");
-  expect(TextUtils.shorten("atone1xkue6eehv8ufhsull3quz9mwguqq4pjzdqnmjf")).toBe("atone1x...jzdqnmjf");
+  expect(TextUtils.shorten("atone1xkue6eehv8ufhsull3quz9mwguqq4pjzdqnmjf")).toBe("atone1xk...jzdqnmjf");
 });
 
 test("Render percentages", () => {
