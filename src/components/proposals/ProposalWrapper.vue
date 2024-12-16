@@ -303,10 +303,14 @@ const expectedResult = computed(() => {
   if (turnout.value < quorum.value) {
     return false;
   } else {
-    if (yes.value > threshold.value) {
-      return true;
-    } else {
+    if (yes.value == 0) {
       return false;
+    } else {
+      if (yes.value / (yes.value + no.value) > threshold.value) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 });
