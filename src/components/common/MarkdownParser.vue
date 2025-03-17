@@ -2,6 +2,7 @@
 import { onMounted, ref, computed } from "vue";
 import markdownit from "markdown-it";
 import MarkdownItMermaid from "@agoose77/markdown-it-mermaid";
+import MarkdownItMathJax3 from "markdown-it-mathjax3";
 import { alertPlugin } from "markdown-it-github-alert";
 
 import * as Utility from "@/utility/index";
@@ -13,7 +14,8 @@ const md = markdownit({
   typographer: true,
 })
   .use(MarkdownItMermaid)
-  .use(alertPlugin);
+  .use(alertPlugin)
+  .use(MarkdownItMathJax3);
 
 const props = defineProps<{ limit?: number }>();
 const content = defineModel<string>();
@@ -65,6 +67,7 @@ const getClasses = computed(() => {
     "prose-th:text-center",
     "prose-th:text-light",
     "prose-th:border",
+    "text-light",
   ];
 });
 
