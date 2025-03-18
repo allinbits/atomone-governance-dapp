@@ -25,4 +25,15 @@ export default defineConfig({
     },
   },
   define: { __INTLIFY_JIT_COMPILATION__: true },
+  build: {
+    target: "es2022"
+  },
+  esbuild: {
+    target: "es2022"
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "es2022"
+    }
+  },
 });
