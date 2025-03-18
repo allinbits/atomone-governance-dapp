@@ -2,7 +2,7 @@
 import { onMounted, ref, computed } from "vue";
 import markdownit from "markdown-it";
 import MarkdownItMermaid from "@agoose77/markdown-it-mermaid";
-import MarkdownItMathJax3 from "markdown-it-mathjax3";
+import MarkdownItKatex from "markdown-it-katex";
 import { alertPlugin } from "markdown-it-github-alert";
 
 import * as Utility from "@/utility/index";
@@ -15,7 +15,7 @@ const md = markdownit({
 })
   .use(MarkdownItMermaid)
   .use(alertPlugin)
-  .use(MarkdownItMathJax3);
+  .use(MarkdownItKatex);
 
 const props = defineProps<{ limit?: number }>();
 const content = defineModel<string>();

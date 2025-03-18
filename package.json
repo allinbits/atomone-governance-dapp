@@ -41,7 +41,7 @@
     "graphql-tag": "^2.12.6",
     "markdown-it": "^14.1.0",
     "markdown-it-github-alert": "^1.0.6",
-    "markdown-it-mathjax3": "^4.3.2",
+    "markdown-it-katex": "^2.0.3",
     "mitt": "^3.0.1",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vue": "^3.5.6",
