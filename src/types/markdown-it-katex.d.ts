@@ -1,4 +1,5 @@
 declare module "markdown-it-katex" {
-  const markdownItKatex: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const markdownItKatex: any;
   export default markdownItKatex;
 }
