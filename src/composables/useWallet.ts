@@ -15,9 +15,7 @@ export enum Wallets {
 chainInfo.chainId = import.meta.env.VITE_CHAIN_ID;
 chainInfo.rpc = import.meta.env.VITE_RPC;
 chainInfo.rest = import.meta.env.VITE_API;
-chainInfo.chainName = (import.meta.env.VITE_ENVIRONMENT as string) == "staging"
-  ? "AtomOne Testnet"
-  : "AtomOne Mainnet";
+chainInfo.chainName = (import.meta.env.VITE_ENVIRONMENT as string) == "staging" ? "AtomOne Testnet" : "AtomOne Mainnet";
 
 export const getWalletHelp = (wallet: Wallets) => {
   switch (wallet) {

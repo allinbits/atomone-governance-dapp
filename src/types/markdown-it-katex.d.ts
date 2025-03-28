@@ -1,4 +1,4 @@
-declare module 'markdown-it-katex' {
-    const markdownItKatex: any;
-    export default markdownItKatex;
-  }
+declare module "markdown-it-katex" {
+  const markdownItKatex: unknown;
+  export default markdownItKatex;
+}
