@@ -20,7 +20,7 @@
   https://avatars.githubusercontent.com
   '''
   Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-  Content-Security-Policy = "default-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; img-src 'self' data: https:; connect-src https://graphql-atomone-mainnet.allinbits.services/v1/graphql https://atomone-rpc.allinbits.com https://plausible.io/api/event githubusercontent.com *.githubusercontent.com"
+  Content-Security-Policy = "default-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; img-src 'self' data: https:; connect-src https://graphql-atomone-mainnet.allinbits.services/v1/graphql https://graphql-atomone-testnet-1.allinbits.services/v1/graphql https://https://atomone-testnet-1-rpc.allinbits.services/ https://atomone-rpc.allinbits.com https://plausible.io/api/event githubusercontent.com *.githubusercontent.com"
   X-Frame-Options = "SAMEORIGIN"
   X-Content-Type-Options = "nosniff"
   Referrer-Policy = "strict-origin"
