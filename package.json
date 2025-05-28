@@ -92,6 +92,11 @@
   "pnpm": {
     "overrides": {
       "dompurify": "3.1.6"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "protobufjs",
+      "vue-demi"
+    ]
   }
 }

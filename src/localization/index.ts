@@ -182,6 +182,7 @@ export const messages = {
         otherWallet: "or connect your Wallet. Make sure you have a wallet browser extension enabled.",
         enterAddress: "Enter your AtomOne wallet address",
         addressPlaceholder: "e.g. atone32423488234934d2423...",
+        noPhoton: "You currently have 0 PHOTON. Soon you will only be able to pay with TXs with PHOTON. Click here to learn more and find out how to mint PHOTON.",
       },
       Breakdown: {
         moniker: "Moniker",
