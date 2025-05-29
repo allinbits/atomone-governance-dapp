@@ -50,7 +50,7 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
-    "@atomone/atomone-types": "^1.0.2",
+    "@atomone/atomone-types": "^1.0.3",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-operations": "^4.2.3",

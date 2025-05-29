@@ -100,8 +100,8 @@ importers:
         version: 4.4.5(vue@3.5.6(typescript@5.6.2))
     devDependencies:
       '@atomone/atomone-types':
-        specifier: ^1.0.2
-        version: 1.0.2
+        specifier: ^1.0.3
+        version: 1.0.3
       '@graphql-codegen/cli':
         specifier: ^5.0.2
         version: 5.0.2(@types/node@20.16.5)(graphql@16.9.0)(typescript@5.6.2)
@@ -258,8 +258,8 @@ packages:
     resolution: {integrity: sha512-xhlTqH0m31mnsG0tIP4ETgfSB6gXDaYYsUWTrlUV93fFQPI9dd8hE0Ot6MHLCtqgB32hwJAC3YZMWlXZw7AleA==}
     engines: {node: '>=14'}
 
-  '@atomone/atomone-types@1.0.2':
-    resolution: {integrity: sha512-nQ44Bi/ZMsX0gKZ5rjd+LoDVuql++UDN3ygLU24chhVaBndCutxKiSInhi8PJthPt+HosFHfsPAsthhk35UwpQ==}
+  '@atomone/atomone-types@1.0.3':
+    resolution: {integrity: sha512-ictgTV2o9JvmJ2NIy19xNDsG9ff8HtYwPYbH0x19LYkLdIH0wrrEzYzlvq388rnK49Vt0PSl18btJXk8i2gyJw==}
 
   '@babel/code-frame@7.24.7':
     resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
@@ -4659,7 +4659,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@atomone/atomone-types@1.0.2': {}
+  '@atomone/atomone-types@1.0.3': {}
 
   '@babel/code-frame@7.24.7':
     dependencies:
