@@ -6,6 +6,7 @@ import { shorten } from "@/utility";
 import UserBalance from "@/components/helper/UserBalance.vue";
 import { bus } from "@/bus";
 import { useTelemetry } from "@/composables/useTelemetry";
+import { useChainData } from "@/composables/useChainData";
 
 const isOpen = ref(false);
 const isConnecting = ref(false);
@@ -95,6 +96,18 @@ const cancelConnect = () => {
 
 bus.on("open", () => {
   isOpen.value = true;
+});
+
+const { getBalance } = useChainData();
+
+const photonBalance = computed(() => {
+  const all = getBalance(address.value);
+  const photon = all.value?.action_account_balance[0].coins.find((x) => x.denom === "uphoton");
+  if (photon) {
+    return photon.amount;
+  } else {
+    return "0";
+  }
 });
 
 const { logEvent } = useTelemetry();
@@ -238,7 +251,16 @@ const { logEvent } = useTelemetry();
               </div>
             </div>
             <div class="text-200 text-grey-100 pt-6 pb-2">{{ $t("components.WalletConnect.balance") }}</div>
-            <div class="text-300 text-light"><UserBalance :address="address" :denom="'uatone'" /> ATONE</div>
+            <div class="text-300 text-light">
+              <UserBalance :address="address" :denom="'uatone'" /> ATONE
+              <br />
+              <UserBalance :address="address" :denom="'uphoton'" /> PHOTON
+            </div>
+            <div v-if="photonBalance == '0'" class="rounded-sm text-100 text-grey-100 bg-grey-400 p-3 mt-2">
+              <a href="https://atom.one/#photon" target="_blank" rel="noopener">{{
+                $t("components.WalletConnect.noPhoton")
+              }}</a>
+            </div>
             <div class="buttons">
               <ConnectButton
                 class="my-4 justify-center"
