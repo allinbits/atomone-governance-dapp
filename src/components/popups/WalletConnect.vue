@@ -257,7 +257,7 @@ const { logEvent } = useTelemetry();
               <UserBalance :address="address" :denom="'uphoton'" /> PHOTON
             </div>
             <div v-if="photonBalance == '0'" class="rounded-sm text-100 text-grey-100 bg-grey-400 p-3 mt-2">
-              <a href="" target="_blank">{{ $t("components.WalletConnect.noPhoton") }}</a>
+              <a href="https://atom.one/#photon" target="_blank" rel="noopener">{{ $t("components.WalletConnect.noPhoton") }}</a>
             </div>
             <div class="buttons">
               <ConnectButton
