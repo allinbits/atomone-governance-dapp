@@ -20,6 +20,6 @@ const balance = computed(() => {
   }
 });
 </script>
-<template>  
-    <span>{{ formatAmount(balance.amount, 6) }}</span>
+<template>
+  <span>{{ formatAmount(balance.amount, 6) }}</span>
 </template>
