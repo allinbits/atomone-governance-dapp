@@ -607,8 +607,11 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                   {{ $t("proposalpage.labels.messages") }}
                 </div>
                 <div
-                  v-if="proposal?.proposal[0].proposal_type == '/atomone.gov.v1beta1.TextProposal'"
-                  class="flex w-full flex-wrap"
+                  v-if="
+                    proposal?.proposal[0].proposal_type == '/atomone.gov.v1beta1.TextProposal' ||
+                    proposal?.proposal[0].proposal_type == ''
+                  "
+                  class="flex w-full flex-wrap2"
                 >
                   <div class="grow w-full md:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposalType") }}</div>
@@ -683,6 +686,17 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                     <div class="text-light text-100">
                       <VCodeBlock
                         :code="JSON.stringify(proposal?.proposal[0].content.plan, null, '\t')"
+                        prismjs
+                        :theme="false"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="flex w-full flex-wrap">
+                  <div class="grow w-full mb-10">
+                    <div class="text-light text-100">
+                      <VCodeBlock
+                        :code="JSON.stringify(proposal?.proposal[0].content, null, '\t')"
                         prismjs
                         :theme="false"
                       />
