@@ -151,7 +151,7 @@ const typeToReadable = (content: { "@type": string }) => {
   return type.join(" ");
 };
 const extractTags = (content: { "@type": string }[]) => {
-  if (!content || content.length === 0) {
+  if (!content || content.length === 0 || !Array.isArray(content)) {
     return ["Text Proposal"];
   } else {
     return content.map(typeToReadable);
