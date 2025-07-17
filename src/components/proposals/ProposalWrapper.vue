@@ -368,7 +368,24 @@ const timeTo = (dateString: string) => {
 function isTabSelected(tabName: TabNames) {
   return tabSelected.value.toLowerCase() == tabName.toLowerCase();
 }
-
+const typeToReadable = (content: { "@type": string }) => {
+  const type =
+    content["@type"]
+      ?.split(".")
+      ?.pop()
+      ?.split(/(?=[A-Z])/) ?? [];
+  if (type[0] == "Msg") {
+    type.shift();
+  }
+  return type.join(" ");
+};
+const proposalTypes = computed(() => {
+  if (proposal.value?.proposal[0].content.length > 0) {
+    return proposal.value?.proposal[0].content.map(typeToReadable);
+  } else {
+    return ["Text Proposal"];
+  }
+});
 const displayBreakdown = ref(false);
 const { logEvent } = useTelemetry();
 function showBreakdown(type: BreakdownType) {
@@ -550,10 +567,16 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
             <div class="flex flex-col md:flex-row gap-4 lg:gap-6">
               <SimpleCard class="w-full md:w-1/2 flex-grow">
                 <div class="flex w-full flex-wrap">
-                  <div class="w-full flex-2 mb-10">
+                  <div class="grow w-full lg:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposer") }}</div>
                     <div class="text-light text-200 md:text-300 break-words leading-normal">
                       {{ proposal?.proposal[0].proposer_address }}
+                    </div>
+                  </div>
+                  <div class="w-full lg:w-1/2 mb-10">
+                    <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposalType") }}</div>
+                    <div class="text-light text-200 md:text-300 break-words leading-normal">
+                      {{ proposalTypes.join(", ") }}
                     </div>
                   </div>
                   <div class="grow w-full lg:w-1/2 mb-10">
@@ -601,14 +624,17 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                 </div>
               </SimpleCard>
             </div>
-            <div class="flex">
+            <div v-if="proposal?.proposal[0].content && proposal?.proposal[0].content.length > 0" class="flex">
               <SimpleCard class="w-full">
                 <div class="text-light text-300 md:text-500 text-left mb-8 font-medium">
                   {{ $t("proposalpage.labels.messages") }}
                 </div>
                 <div
-                  v-if="proposal?.proposal[0].proposal_type == '/atomone.gov.v1beta1.TextProposal'"
-                  class="flex w-full flex-wrap"
+                  v-if="
+                    proposal?.proposal[0].proposal_type == '/atomone.gov.v1beta1.TextProposal' ||
+                    proposal?.proposal[0].proposal_type == ''
+                  "
+                  class="flex w-full flex-wrap2"
                 >
                   <div class="grow w-full md:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposalType") }}</div>
@@ -683,6 +709,17 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                     <div class="text-light text-100">
                       <VCodeBlock
                         :code="JSON.stringify(proposal?.proposal[0].content.plan, null, '\t')"
+                        prismjs
+                        :theme="false"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="flex w-full flex-wrap">
+                  <div class="grow w-full mb-10">
+                    <div class="text-light text-100">
+                      <VCodeBlock
+                        :code="JSON.stringify(proposal?.proposal[0].content, null, '\t')"
                         prismjs
                         :theme="false"
                       />
