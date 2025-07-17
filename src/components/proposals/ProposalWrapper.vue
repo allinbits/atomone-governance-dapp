@@ -369,7 +369,11 @@ function isTabSelected(tabName: TabNames) {
   return tabSelected.value.toLowerCase() == tabName.toLowerCase();
 }
 const typeToReadable = (content: { "@type": string }) => {
-  const type = content["@type"]?.split(".")?.pop()?.split(/(?=[A-Z])/) ?? [];
+  const type =
+    content["@type"]
+      ?.split(".")
+      ?.pop()
+      ?.split(/(?=[A-Z])/) ?? [];
   if (type[0] == "Msg") {
     type.shift();
   }

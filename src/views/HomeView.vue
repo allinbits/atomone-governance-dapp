@@ -139,6 +139,24 @@ function prev() {
   offset.value = offset.value <= limit.value ? 0 : offset.value - limit.value;
 }
 
+const typeToReadable = (content: { "@type": string }) => {
+  const type =
+    content["@type"]
+      ?.split(".")
+      ?.pop()
+      ?.split(/(?=[A-Z])/) ?? [];
+  if (type[0] == "Msg") {
+    type.shift();
+  }
+  return type.join(" ");
+};
+const extractTags = (content: { "@type": string }[]) => {
+  if (!content || content.length === 0) {
+    return ["Text Proposal"];
+  } else {
+    return content.map(typeToReadable);
+  }
+};
 watch(offset, async (newOffset, oldOffset) => {
   if (newOffset != oldOffset) {
     provideApolloClient(apolloClient);
@@ -275,7 +293,7 @@ function setTypeFilterIndex(idx: number) {
         <div>{{ proposal.title }}</div>
         <template #footer>
           <div class="flex flex-row text-200 text-grey-100 font-medium items-center justify-between w-full">
-            <span></span>
+            <span>{{ extractTags(proposal.content).join(", ") }}</span>
             <div class="flex flex-row gap-4">
               <!-- Vote Count-->
               <div class="flex flex-row items-center gap-1">
