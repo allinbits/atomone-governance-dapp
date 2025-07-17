@@ -601,7 +601,7 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                 </div>
               </SimpleCard>
             </div>
-            <div class="flex">
+            <div v-if="proposal?.proposal[0].content && proposal?.proposal[0].content.length > 0" class="flex">
               <SimpleCard class="w-full">
                 <div class="text-light text-300 md:text-500 text-left mb-8 font-medium">
                   {{ $t("proposalpage.labels.messages") }}
