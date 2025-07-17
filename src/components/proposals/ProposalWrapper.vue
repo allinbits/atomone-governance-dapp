@@ -550,10 +550,16 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
             <div class="flex flex-col md:flex-row gap-4 lg:gap-6">
               <SimpleCard class="w-full md:w-1/2 flex-grow">
                 <div class="flex w-full flex-wrap">
-                  <div class="w-full flex-2 mb-10">
+                  <div class="grow w-full lg:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposer") }}</div>
                     <div class="text-light text-200 md:text-300 break-words leading-normal">
                       {{ proposal?.proposal[0].proposer_address }}
+                    </div>
+                  </div>
+                  <div class="w-full lg:w-1/2  mb-10">
+                    <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposalType") }}</div>
+                    <div class="text-light text-200 md:text-300 break-words leading-normal">
+                      {{ proposal?.proposal[0].proposal_type }}
                     </div>
                   </div>
                   <div class="grow w-full lg:w-1/2 mb-10">
