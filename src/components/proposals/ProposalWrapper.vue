@@ -275,20 +275,29 @@ const abstainVotes = computed(() => {
   return parseFloat(proposalTallies.value?.proposal_tally_result[0]?.abstain ?? "0");
 });
 
-const yes = computed(() => {
+const yesAbs = computed(() => {
   return yesVotes.value / parseFloat(staking.value?.staking_pool[0]?.bonded_tokens ?? "0");
 });
 
-const no = computed(() => {
+const noAbs = computed(() => {
   return noVotes.value / parseFloat(staking.value?.staking_pool[0]?.bonded_tokens ?? "0");
 });
 
-const abstain = computed(() => {
+const abstainAbs = computed(() => {
   return abstainVotes.value / parseFloat(staking.value?.staking_pool[0]?.bonded_tokens ?? "0");
 });
 
 const turnout = computed(() => {
-  return no.value + yes.value + abstain.value;
+  return noAbs.value + yesAbs.value + abstainAbs.value;
+});
+const yes = computed(() => {
+  return yesAbs.value / turnout.value;
+});
+const no = computed(() => {
+  return noAbs.value / turnout.value;
+});
+const abstain = computed(() => {
+  return abstainAbs.value / turnout.value;
 });
 
 const tokenTallies = computed(() => {
