@@ -8,7 +8,7 @@ on:
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: uubuntu-22.04
+    runs-on: uubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
