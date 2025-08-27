@@ -72,7 +72,7 @@ const useWalletInstance = () => {
             throw new Error("Could not connect to Keplr: getOfflineSigner method does not exist");
           }
         } catch (e) {
-          throw new Error("Could not connect to Keplr: " + e);
+          throw new Error(" connect to Keplr: " + e);
         } finally {
           signal?.removeEventListener("abort", abortHandler);
         }
@@ -161,7 +161,7 @@ const useWalletInstance = () => {
         });
         return result;
       } catch (e) {
-        throw new Error("Could not sign messages");
+        throw new Error("Could not sign messages: " + e);
       }
     } else {
       throw new Error("No Signer available");
