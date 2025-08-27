@@ -161,7 +161,7 @@ const useWalletInstance = () => {
         });
         return result;
       } catch (e) {
-        throw new Error("Could not sign messages: "+ e);
+        throw new Error("Could not sign messages: " + e);
       }
     } else {
       throw new Error("No Signer available");
