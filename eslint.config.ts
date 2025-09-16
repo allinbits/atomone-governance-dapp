@@ -92,7 +92,7 @@ export default defineConfigWithVueTs(
       ],
       "max-lines": [
         "warn",
-        { max: 500,
+        { max: 1000,
           skipBlankLines: true,
           skipComments: true }
       ],

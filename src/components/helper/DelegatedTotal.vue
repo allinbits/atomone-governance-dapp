@@ -16,12 +16,12 @@ const delegated = ref<Coin[] | null>(null);
 watch(
   height,
   async (newHeight, oldHeight) => {
-    if (newHeight && newHeight.block[0].height != oldHeight?.block[0].height) {
+    if (newHeight && newHeight.blocks[0].height != oldHeight?.blocks[0].height) {
       provideApolloClient(apolloClient);
       try {
         const dq = await getDelegatedAsync(
           address,
-          newHeight.block[0].height
+          newHeight.blocks[0].height
         );
         if (dq) {
           delegated.value = dq.staked_balances.map((x) => {

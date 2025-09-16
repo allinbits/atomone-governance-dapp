@@ -48,7 +48,7 @@ const activeProposals = computed(() => {
     map((x) => {
       if (history.value) {
         return { ...x,
-          vote: history.value.proposal_vote.filter((y) => y.proposal_id == x.id) };
+          vote: history.value.proposal_votes.filter((y) => y.proposal_id == x.id) };
       } else {
         return { ...x,
           vote: [] };
@@ -61,7 +61,7 @@ const pastProposals = computed(() => {
     map((x) => {
       if (history.value) {
         return { ...x,
-          vote: history.value.proposal_vote.filter((y) => y.proposal_id == x.id) };
+          vote: history.value.proposal_votes.filter((y) => y.proposal_id == x.id) };
       } else {
         return { ...x,
           vote: [] };
@@ -69,7 +69,7 @@ const pastProposals = computed(() => {
     });
 });
 const hasMore = computed(() => {
-  return (proposals.value?.proposal_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
+  return (proposals.value?.proposals_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
 });
 function next () {
   offset.value += limit.value;
@@ -140,7 +140,7 @@ function prev () {
         @click="
           () => {
             if (hasMore) {
-              offset = Math.floor((proposals?.proposal_aggregate.aggregate?.count ?? 0) / limit) * limit;
+              offset = Math.floor((proposals?.proposals_aggregate.aggregate?.count ?? 0) / limit) * limit;
             }
           }
         "

@@ -11,7 +11,7 @@ const timestamp = getBlockTime(height);
 
 const displayDate = computed(() => {
   return timestamp.value
-    ? dayjs(timestamp.value.block[0].timestamp).format("MMMM D, YYYY h:mm A")
+    ? dayjs(timestamp.value.blocks[0].timestamp).format("MMMM D, YYYY h:mm A")
     : "-";
 });
 </script>

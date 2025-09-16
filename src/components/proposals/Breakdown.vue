@@ -17,7 +17,7 @@ const votes = getAllVotes(
   offset.value
 );
 const hasMore = computed(() => {
-  return (votes.value?.proposal_vote_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
+  return (votes.value?.proposal_votes_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
 });
 function next () {
   offset.value += limit.value;
@@ -48,10 +48,10 @@ watch(
 );
 
 const filteredVotes = computed(() => {
-  return votes.value?.proposal_vote;
+  return votes.value?.proposal_votes;
 });
 
-const getTxHash = (vote: AllVotesQuery["proposal_vote"][0]) => {
+const getTxHash = (vote: AllVotesQuery["proposal_votes"][0]) => {
   if (vote.block && vote.block.transactions && vote.block.transactions.length > 0) {
     const transaction = vote.block.transactions.filter((tx) => {
       return (
@@ -136,7 +136,7 @@ const getTxHash = (vote: AllVotesQuery["proposal_vote"][0]) => {
         :class="{ 'text-light hover:opacity-75 cursor-pointer': hasMore }"
         @click="
           () => {
-            offset = Math.floor((votes?.proposal_vote_aggregate.aggregate?.count ?? 0) / limit) * limit;
+            offset = Math.floor((votes?.proposal_votes_aggregate.aggregate?.count ?? 0) / limit) * limit;
           }
         "
       />
