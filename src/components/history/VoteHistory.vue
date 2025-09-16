@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { provideApolloClient } from "@vue/apollo-composable";
+import { computed, ref, watch } from "vue";
+
 import apolloClient from "@/apolloClient";
 import { bus } from "@/bus";
 import { useChainData } from "@/composables/useChainData";
-import { provideApolloClient } from "@vue/apollo-composable";
-import { computed, ref, watch } from "vue";
+
 import ProposalList from "./ProposalList.vue";
 const props = defineProps<{
   address: string;
@@ -12,54 +14,71 @@ const { getVoteHistory, getProposals, getProposalsAsync } = useChainData();
 
 const limit = ref(16);
 const offset = ref(0);
-const proposals = getProposals("active", limit.value, offset.value);
+const proposals = getProposals(
+  "active",
+  limit.value,
+  offset.value
+);
 
-watch(offset, async (newOffset, oldOffset) => {
-  if (newOffset != oldOffset) {
-    provideApolloClient(apolloClient);
-    try {
-      const res = await getProposalsAsync("active", limit.value, newOffset);
-      if (res) {
-        proposals.value = res;
+watch(
+  offset,
+  async (newOffset, oldOffset) => {
+    if (newOffset != oldOffset) {
+      provideApolloClient(apolloClient);
+      try {
+        const res = await getProposalsAsync(
+          "active",
+          limit.value,
+          newOffset
+        );
+        if (res) {
+          proposals.value = res;
+        }
+      } catch (_e) {
+        bus.emit("error");
       }
-    } catch (_e) {
-      bus.emit("error");
     }
   }
-});
+);
 const history = getVoteHistory(props.address);
 
 const activeProposals = computed(() => {
-  return proposals.value?.all_proposals
-    .filter((x) => x.status == "PROPOSAL_STATUS_VOTING_PERIOD" || x.status == "PROPOSAL_STATUS_DEPOSIT_PERIOD")
-    .map((x) => {
+  return proposals.value?.all_proposals.
+    filter((x) => x.status == "PROPOSAL_STATUS_VOTING_PERIOD" || x.status == "PROPOSAL_STATUS_DEPOSIT_PERIOD").
+    map((x) => {
       if (history.value) {
-        return { ...x, vote: history.value.proposal_vote.filter((y) => y.proposal_id == x.id) };
+        return { ...x,
+          vote: history.value.proposal_vote.filter((y) => y.proposal_id == x.id) };
       } else {
-        return { ...x, vote: [] };
+        return { ...x,
+          vote: [] };
       }
     });
 });
 const pastProposals = computed(() => {
-  return proposals.value?.all_proposals
-    .filter((x) => x.status != "PROPOSAL_STATUS_VOTING_PERIOD" && x.status != "PROPOSAL_STATUS_DEPOSIT_PERIOD")
-    .map((x) => {
+  return proposals.value?.all_proposals.
+    filter((x) => x.status != "PROPOSAL_STATUS_VOTING_PERIOD" && x.status != "PROPOSAL_STATUS_DEPOSIT_PERIOD").
+    map((x) => {
       if (history.value) {
-        return { ...x, vote: history.value.proposal_vote.filter((y) => y.proposal_id == x.id) };
+        return { ...x,
+          vote: history.value.proposal_vote.filter((y) => y.proposal_id == x.id) };
       } else {
-        return { ...x, vote: [] };
+        return { ...x,
+          vote: [] };
       }
     });
 });
 const hasMore = computed(() => {
   return (proposals.value?.proposal_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
 });
-function next() {
+function next () {
   offset.value += limit.value;
 }
 
-function prev() {
-  offset.value = offset.value <= limit.value ? 0 : offset.value - limit.value;
+function prev () {
+  offset.value = offset.value <= limit.value
+    ? 0
+    : offset.value - limit.value;
 }
 </script>
 <template>

@@ -1,40 +1,43 @@
 <script setup lang="ts">
-import { reactive, ref, computed, watch } from "vue";
-import { useChainData } from "@/composables/useChainData";
-import { useWallet } from "@/composables/useWallet";
-//import GithubComments from "@/components/proposals/GithubComments.vue";
-//import GithubLinks from "@/components/proposals/GithubLinks.vue";
 import { Deposit } from "@atomone/atomone-types/atomone/gov/v1beta1/gov";
-import ProposalVote from "@/components/popups/ProposalVote.vue";
-import ProposalDeposit from "@/components/popups/ProposalDeposit.vue";
-import chainConfig from "@/chain-config.json";
-import { bus } from "@/bus";
-import SimpleBadge from "@/components/ui/SimpleBadge.vue";
-import SimpleCard from "@/components/ui/SimpleCard.vue";
-import UiTabs from "@/components/ui/UiTabs.vue";
-import VotePanel from "@/components/proposals/VotePanel.vue";
-import Treemap from "@/components/proposals/Treemap.vue";
-import { ContextTypes, UiTabOption } from "@/types/ui";
+import { useTitle } from "@vueuse/core";
+import { VCodeBlock } from "@wdns/vue-code-block";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import utc from "dayjs/plugin/utc";
-import { decToPerc, formatAmount } from "@/utility";
-import { useValidators } from "@/composables/useValidators";
-import { ValSetQuery, ValidatorsQuery, VotesQuery } from "@/gql/graphql";
-import * as Utility from "@/utility/index";
-import CommonButton from "../ui/CommonButton.vue";
-import Breakdown from "@/components/proposals/Breakdown.vue";
-import ValidatorBreakdown from "./ValidatorBreakdown.vue";
-import { useTelemetry } from "@/composables/useTelemetry";
-import ModalWrap from "@/components/common/ModalWrap.vue";
-import { useTitle } from "@vueuse/core";
-
-import MarkdownParser from "@/components/common/MarkdownParser.vue";
-import PopupBox from "@/components/popups/PopupBox.vue";
-import { VCodeBlock } from "@wdns/vue-code-block";
+import { computed, reactive, ref, watch } from "vue";
 import { onMounted } from "vue";
 
-const voteTypes = ["yes", "no", "abstain"] as const;
+import { bus } from "@/bus";
+import chainConfig from "@/chain-config.json";
+import MarkdownParser from "@/components/common/MarkdownParser.vue";
+import ModalWrap from "@/components/common/ModalWrap.vue";
+import PopupBox from "@/components/popups/PopupBox.vue";
+import ProposalDeposit from "@/components/popups/ProposalDeposit.vue";
+import ProposalVote from "@/components/popups/ProposalVote.vue";
+import Breakdown from "@/components/proposals/Breakdown.vue";
+import Treemap from "@/components/proposals/Treemap.vue";
+import VotePanel from "@/components/proposals/VotePanel.vue";
+import SimpleBadge from "@/components/ui/SimpleBadge.vue";
+import SimpleCard from "@/components/ui/SimpleCard.vue";
+import UiTabs from "@/components/ui/UiTabs.vue";
+import { useChainData } from "@/composables/useChainData";
+import { useTelemetry } from "@/composables/useTelemetry";
+import { useValidators } from "@/composables/useValidators";
+import { useWallet } from "@/composables/useWallet";
+import { ValidatorsQuery, ValSetQuery, VotesQuery } from "@/gql/graphql";
+import { ContextTypes, UiTabOption } from "@/types/ui";
+import { decToPerc, formatAmount } from "@/utility";
+import * as Utility from "@/utility/index";
+
+import CommonButton from "../ui/CommonButton.vue";
+import ValidatorBreakdown from "./ValidatorBreakdown.vue";
+
+const voteTypes = [
+  "yes",
+  "no",
+  "abstain"
+] as const;
 type BreakdownType = "voters" | "validators" | null;
 type TabNames = "Description" | "Info" | "Voters" | "Discussions" | "Links";
 type VoteTypes = (typeof voteTypes)[number];
@@ -47,42 +50,51 @@ const props = defineProps<{
   height: number;
 }>();
 const { getProposal, getParams, getProposalTallies, getStakingStatus, getVotesAsync, getVoteOption } = useChainData();
-const { validators, getVotingPower } = useValidators(props.height != 0 ? props.height.toString() : undefined);
+const { validators, getVotingPower } = useValidators(props.height != 0
+  ? props.height.toString()
+  : undefined);
 const validatorsWithStakeAndVotes = ref<
   Array<
-    (ValidatorsQuery["block"][0]["validator_statuses"][0] | ValSetQuery["proposal_validator_status_snapshot"][0]) & {
+    (ValidatorsQuery["proposal_validator_status_snapshot"][0] | ValSetQuery["proposal_validator_status_snapshot"][0]) & {
       voting_power: number;
-      votes: VotesQuery["proposal_vote"];
+      votes: VotesQuery["proposal_votes"];
     }
   >
 >([]);
 
-watch(validators, async (valSet, _old) => {
-  try {
-    validatorsWithStakeAndVotes.value = await Promise.all(
-      valSet.map(async (val) => {
+watch(
+  validators,
+  async (valSet, _old) => {
+    try {
+      validatorsWithStakeAndVotes.value = await Promise.all(valSet.map(async (val) => {
         if (val.validator_info && val.validator_info.self_delegate_address) {
           const vp = await getVotingPower(val.validator_info.self_delegate_address);
-          const votes = await getVotesAsync(val.validator_info.self_delegate_address, props.proposalId);
-          if (votes && votes.proposal_vote.length > 0) {
+          const votes = await getVotesAsync(
+            val.validator_info.self_delegate_address,
+            props.proposalId
+          );
+          if (votes && votes.proposal_votes.length > 0) {
             return {
               ...val,
               voting_power: vp,
-              votes: votes.proposal_vote.filter((x) => x.height == votes.proposal_vote[0].height),
+              votes: votes.proposal_votes.filter((x) => x.height == votes.proposal_votes[0].height)
             };
           } else {
-            return { ...val, voting_power: vp, votes: [] };
+            return { ...val,
+              voting_power: vp,
+              votes: [] };
           }
         } else {
-          return { ...val, voting_power: 0, votes: [] };
+          return { ...val,
+            voting_power: 0,
+            votes: [] };
         }
-      }),
-    );
-  } catch (_e) {
-    bus.emit("error");
-    1;
+      }));
+    } catch (_e) {
+      bus.emit("error");
+    }
   }
-});
+);
 
 const maxValidators = computed(() => {
   return validatorsWithStakeAndVotes.value.length;
@@ -94,7 +106,7 @@ const validatorTallies = computed<{ [key in VoteTypes]: number }>(() => {
   const tally = {
     yes: 0,
     no: 0,
-    abstain: 0,
+    abstain: 0
   };
 
   for (let i = 0; i < validatorsWithStakeAndVotes.value.length; i++) {
@@ -123,7 +135,7 @@ const validatorVoteCounts = computed(() => {
   const tally = {
     yes: 0,
     no: 0,
-    abstain: 0,
+    abstain: 0
   };
 
   for (let i = 0; i < validatorsWithStakeAndVotes.value.length; i++) {
@@ -149,15 +161,16 @@ const validatorVoteSum = computed(() => {
   return Object.values(validatorVoteCounts.value).reduce((att, val) => att + val);
 });
 
-function getValidatorVotes(voteType: VoteTypes) {
-  const data: { name: string; value: number }[] = [];
+function getValidatorVotes (voteType: VoteTypes) {
+  const data: { name: string;
+    value: number; }[] = [];
 
   for (let i = 0; i < validatorsWithStakeAndVotes.value.length; i++) {
     const votes = validatorsWithStakeAndVotes.value[i].votes;
     const tally = {
       yes: 0,
       no: 0,
-      abstain: 0,
+      abstain: 0
     };
 
     for (let j = 0; j < votes.length; j++) {
@@ -178,7 +191,7 @@ function getValidatorVotes(voteType: VoteTypes) {
       name:
         validatorsWithStakeAndVotes.value[i].validator_info.validator_descriptions[0].moniker ??
         validatorsWithStakeAndVotes.value[i].validator_address,
-      value: tally[voteType],
+      value: tally[voteType]
     });
   }
 
@@ -191,44 +204,58 @@ const proposalTallies = getProposalTallies(props.proposalId);
 const params = getParams();
 const staking = getStakingStatus();
 
-//const termLink = computed(() => `Link #${props.proposalId}`);
-//const termDiscussion = computed(() => `Proposal #${props.proposalId}`);
+/*
+ * const termLink = computed(() => `Link #${props.proposalId}`);
+ * const termDiscussion = computed(() => `Proposal #${props.proposalId}`);
+ */
 
 const tabSelected = ref<TabNames>("Info");
 const tabOptions = reactive<UiTabOption[]>([
   { title: "Description" },
   { title: "Info" },
-  { title: "Voters" },
-  // { title: "Discussions", link: "https://commonwealth.im/atomone/proposal/" + props.proposalId },
-  // { title: "Links", link: "https://commonwealth.im/atomone/proposal/" + props.proposalId },
+  { title: "Voters" }
+
+  /*
+   * { title: "Discussions", link: "https://commonwealth.im/atomone/proposal/" + props.proposalId },
+   * { title: "Links", link: "https://commonwealth.im/atomone/proposal/" + props.proposalId },
+   */
 ]);
 
-const breakdownType = ref<("validators" | "voters") | null>(null);
+const breakdownType = ref<"validators" | "voters" | null>(null);
 const breakdownOffset = ref(0);
 
 const showJsonModal = ref(false);
 
-const inDeposit = computed(() => proposal.value?.proposal[0].status === "PROPOSAL_STATUS_DEPOSIT_PERIOD");
-const inVoting = computed(() => proposal.value?.proposal[0].status === "PROPOSAL_STATUS_VOTING_PERIOD");
-const failed = computed(() => proposal.value?.proposal[0].status === "PROPOSAL_STATUS_FAILED");
-const rejected = computed(() => proposal.value?.proposal[0].status === "PROPOSAL_STATUS_REJECTED");
-const passed = computed(() => proposal.value?.proposal[0].status === "PROPOSAL_STATUS_PASSED");
+const inDeposit = computed(() => proposal.value?.proposals[0].status === "PROPOSAL_STATUS_DEPOSIT_PERIOD");
+const inVoting = computed(() => proposal.value?.proposals[0].status === "PROPOSAL_STATUS_VOTING_PERIOD");
+const failed = computed(() => proposal.value?.proposals[0].status === "PROPOSAL_STATUS_FAILED");
+const rejected = computed(() => proposal.value?.proposals[0].status === "PROPOSAL_STATUS_REJECTED");
+const passed = computed(() => proposal.value?.proposals[0].status === "PROPOSAL_STATUS_PASSED");
 
 const depositReducer = (sum: number, deposit: Partial<{ amount: Deposit["amount"] | null }>) => {
-  return sum + (deposit.amount?.reduce((sum: number, amount) => sum + parseInt(amount?.amount ?? ""), 0) ?? 0);
+  return sum + (deposit.amount?.reduce(
+    (sum: number, amount) => sum + parseInt(amount?.amount ?? ""),
+    0
+  ) ?? 0);
 };
 
 const initialDeposit = computed(() => {
-  return proposal.value?.proposal[0].proposal_deposits
-    .filter((x) => x.depositor_address == proposal.value?.proposal[0].proposer_address)
-    .reduce(depositReducer, 0);
+  return proposal.value?.proposals[0].proposal_deposits.
+    filter((x) => x.depositor_address == proposal.value?.proposals[0].proposer_address).
+    reduce(
+      depositReducer,
+      0
+    );
 });
 const distinctVoters = computed(() => {
-  let votes = proposal.value?.proposal[0].proposal_votes ?? [];
+  const votes = proposal.value?.proposals[0].proposal_votes ?? [];
   return new Set(votes.map((x) => x.voter_address)).size;
 });
 const totalDeposit = computed(() => {
-  return proposal.value?.proposal[0].proposal_deposits.reduce(depositReducer, 0) ?? 0;
+  return proposal.value?.proposals[0].proposal_deposits.reduce(
+    depositReducer,
+    0
+  ) ?? 0;
 });
 const minDeposit = computed(() => {
   return params.value?.gov_params[0].params.min_deposit[0].amount;
@@ -240,7 +267,7 @@ const depositDenom = computed(() => {
 const tally_params = computed(() => {
   try {
     return params.value?.gov_params[0].params;
-  } catch (e) {
+  } catch (_e) {
     return {};
   }
 });
@@ -253,26 +280,35 @@ const threshold = computed(() => {
   return parseFloat(tally_params.value?.threshold ?? "0");
 });
 
-const yesCount = getVoteOption(props.proposalId, "VOTE_OPTION_YES");
-const noCount = getVoteOption(props.proposalId, "VOTE_OPTION_NO");
-const abstainCount = getVoteOption(props.proposalId, "VOTE_OPTION_ABSTAIN");
+const yesCount = getVoteOption(
+  props.proposalId,
+  "VOTE_OPTION_YES"
+);
+const noCount = getVoteOption(
+  props.proposalId,
+  "VOTE_OPTION_NO"
+);
+const abstainCount = getVoteOption(
+  props.proposalId,
+  "VOTE_OPTION_ABSTAIN"
+);
 const allVoteCounts = computed(() => {
   return {
-    yes: yesCount.value?.proposal_vote_aggregate.aggregate?.count ?? 0,
-    no: noCount.value?.proposal_vote_aggregate.aggregate?.count ?? 0,
-    abstain: abstainCount.value?.proposal_vote_aggregate.aggregate?.count ?? 0,
+    yes: yesCount.value?.proposal_votes_aggregate.aggregate?.count ?? 0,
+    no: noCount.value?.proposal_votes_aggregate.aggregate?.count ?? 0,
+    abstain: abstainCount.value?.proposal_votes_aggregate.aggregate?.count ?? 0
   };
 });
 const yesVotes = computed(() => {
-  return parseFloat(proposalTallies.value?.proposal_tally_result[0]?.yes ?? "0");
+  return parseFloat(proposalTallies.value?.proposal_tally_results[0]?.yes ?? "0");
 });
 
 const noVotes = computed(() => {
-  return parseFloat(proposalTallies.value?.proposal_tally_result[0]?.no ?? "0");
+  return parseFloat(proposalTallies.value?.proposal_tally_results[0]?.no ?? "0");
 });
 
 const abstainVotes = computed(() => {
-  return parseFloat(proposalTallies.value?.proposal_tally_result[0]?.abstain ?? "0");
+  return parseFloat(proposalTallies.value?.proposal_tally_results[0]?.abstain ?? "0");
 });
 
 const yesAbs = computed(() => {
@@ -304,7 +340,7 @@ const tokenTallies = computed(() => {
   return {
     yes: yesVotes.value,
     no: noVotes.value,
-    abstain: abstainVotes.value,
+    abstain: abstainVotes.value
   };
 });
 
@@ -342,30 +378,14 @@ const stakingDenomDecimals = computed(() => {
   return currencies[0].coinDecimals ?? 0;
 });
 
-function calculateWidthForTree(key: VoteTypes) {
+function calculateWidthForTree (key: VoteTypes) {
   const sum = Object.values(validatorTallies.value).reduce((acc, val) => acc + val);
   if (sum <= 0) {
     return 25;
   }
 
-  return Math.floor((validatorTallies.value[key] / sum) * 100);
+  return Math.floor(validatorTallies.value[key] / sum * 100);
 }
-/*
-const voting_params = computed(() => {
-  try {
-    return JSON.parse(params.value?.gov_params[0].voting_params);
-  } catch (e) {
-    return {};
-  }
-});
-const deposit_params = computed(() => {
-  try {
-    return JSON.parse(params.value?.gov_params[0].deposit_params);
-  } catch (e) {
-    return {};
-  }
-});
-*/
 const timeTo = (dateString: string) => {
   const now = dayjs.utc();
   const to = dayjs.utc(dateString);
@@ -374,40 +394,42 @@ const timeTo = (dateString: string) => {
   return days + " d : " + diff.format("H [hr] : m [m] [left]");
 };
 
-function isTabSelected(tabName: TabNames) {
+function isTabSelected (tabName: TabNames) {
   return tabSelected.value.toLowerCase() == tabName.toLowerCase();
 }
 const typeToReadable = (content: { "@type": string }) => {
   const type =
-    content["@type"]
-      ?.split(".")
-      ?.pop()
-      ?.split(/(?=[A-Z])/) ?? [];
+    content["@type"]?.
+      split(".")?.
+      pop()?.
+      split(/(?=[A-Z])/) ?? [];
   if (type[0] == "Msg") {
     type.shift();
   }
   return type.join(" ");
 };
 const proposalTypes = computed(() => {
-  if (proposal.value?.proposal[0].content.length > 0) {
-    return proposal.value?.proposal[0].content.map(typeToReadable);
+  if (proposal.value?.proposals[0].content.length > 0) {
+    return proposal.value?.proposals[0].content.map(typeToReadable);
   } else {
     return ["Text Proposal"];
   }
 });
 const displayBreakdown = ref(false);
 const { logEvent } = useTelemetry();
-function showBreakdown(type: BreakdownType) {
+function showBreakdown (type: BreakdownType) {
   breakdownType.value = type;
   breakdownOffset.value = 0;
   displayBreakdown.value = !displayBreakdown.value;
 
   if (type === null) return;
-  logEvent(type === "voters" ? "Click Voters Breakdown" : "Click Validators Breakdown");
+  logEvent(type === "voters"
+    ? "Click Voters Breakdown"
+    : "Click Validators Breakdown");
 }
 
 const title = useTitle();
-onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} ${proposal.value?.proposal[0].title}`));
+onMounted(() => title.value = `AtomOne — #${proposal.value?.proposals[0].id} ${proposal.value?.proposals[0].title}`);
 </script>
 
 <template>
@@ -451,7 +473,7 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
     <div class="flex mb-12 flex-col md:flex-row">
       <div class="basic-details flex-grow md:pr-10">
         <h1 class="font-termina text-500 md:text-800 text-light mb-8 md:mb-16 pb-2">
-          #{{ proposal?.proposal[0].id }}: {{ proposal?.proposal[0].title }}
+          #{{ proposal?.proposals[0].id }}: {{ proposal?.proposals[0].title }}
         </h1>
         <div class="basic-stats flex flex-col sm:flex-row gap-y-6">
           <div class="quorum mr-[72px]">
@@ -496,12 +518,12 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
       <div class="cta w-full md:w-96 pt-6 md:pt-0">
         <SimpleCard v-if="inVoting">
           <div class="text-center text-light text-300 md:text-500 mt-8 md:mt-0">
-            {{ timeTo(proposal?.proposal[0].voting_end_time) }}
+            {{ timeTo(proposal?.proposals[0].voting_end_time) }}
           </div>
           <div class="progress-bar w-full h-2 bg-grey-200 rounded my-6">
             <div class="link-gradient rounded h-2 w-2/12" />
           </div>
-          <ProposalVote v-if="loggedIn" :proposal-id="proposal?.proposal[0].id" class="w-full" />
+          <ProposalVote v-if="loggedIn" :proposal-id="proposal?.proposals[0].id" class="w-full" />
           <div
             v-else
             class="justify-center px-6 py-4 rounded link-gradient text-dark text-300 text-center cursor-pointer w-full"
@@ -516,14 +538,14 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
         </SimpleCard>
         <SimpleCard v-if="inDeposit">
           <div class="text-center text-light text-300 md:text-500 mt-8 md:mt-0">
-            {{ timeTo(proposal?.proposal[0].deposit_end_time) }}
+            {{ timeTo(proposal?.proposals[0].deposit_end_time) }}
           </div>
           <div class="progress-bar w-full h-2 bg-grey-200 rounded my-6">
             <div class="link-gradient rounded h-2 w-2/12" />
           </div>
           <ProposalDeposit
             v-if="loggedIn"
-            :proposal-id="proposal?.proposal[0].id"
+            :proposal-id="proposal?.proposals[0].id"
             :min-deposit="minDeposit"
             :total-deposit="totalDeposit"
             :deposit-denom="depositDenom"
@@ -579,7 +601,7 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                   <div class="grow w-full lg:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposer") }}</div>
                     <div class="text-light text-200 md:text-300 break-words leading-normal">
-                      {{ proposal?.proposal[0].proposer_address }}
+                      {{ proposal?.proposals[0].proposer_address }}
                     </div>
                   </div>
                   <div class="w-full lg:w-1/2 mb-10">
@@ -592,27 +614,27 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.votingStart") }}</div>
                     <div class="text-light text-200 md:text-300">
                       {{
-                        inDeposit ? "-" : dayjs(proposal?.proposal[0].voting_start_time).format("MMMM D, YYYY h:mm A")
+                        inDeposit ? "-" : dayjs(proposal?.proposals[0].voting_start_time).format("MMMM D, YYYY h:mm A")
                       }}
                     </div>
                   </div>
                   <div class="grow w-full lg:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.votingEnd") }}</div>
                     <div class="text-light text-200 md:text-300">
-                      {{ inDeposit ? "-" : dayjs(proposal?.proposal[0].voting_end_time).format("MMMM D, YYYY h:mm A") }}
+                      {{ inDeposit ? "-" : dayjs(proposal?.proposals[0].voting_end_time).format("MMMM D, YYYY h:mm A") }}
                     </div>
                   </div>
                   <div class="grow w-full lg:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.submitTime") }}</div>
                     <div class="text-light text-200 md:text-300">
-                      {{ dayjs(proposal?.proposal[0].submit_time).format("MMMM D, YYYY h:mm A") }}
+                      {{ dayjs(proposal?.proposals[0].submit_time).format("MMMM D, YYYY h:mm A") }}
                     </div>
                   </div>
                   <div class="grow w-full lg:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.depositEnd") }}</div>
                     <div class="text-light text-200 md:text-300">
                       {{
-                        inDeposit ? dayjs(proposal?.proposal[0].deposit_end_time).format("MMMM D, YYYY h:mm A") : "-"
+                        inDeposit ? dayjs(proposal?.proposals[0].deposit_end_time).format("MMMM D, YYYY h:mm A") : "-"
                       }}
                     </div>
                   </div>
@@ -633,15 +655,15 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                 </div>
               </SimpleCard>
             </div>
-            <div v-if="proposal?.proposal[0].content && proposal?.proposal[0].content.length > 0" class="flex">
+            <div v-if="proposal?.proposals[0].content && proposal?.proposals[0].content.length > 0" class="flex">
               <SimpleCard class="w-full">
                 <div class="text-light text-300 md:text-500 text-left mb-8 font-medium">
                   {{ $t("proposalpage.labels.messages") }}
                 </div>
                 <div
                   v-if="
-                    proposal?.proposal[0].proposal_type == '/atomone.gov.v1beta1.TextProposal' ||
-                    proposal?.proposal[0].proposal_type == ''
+                    proposal?.proposals[0].proposal_type == '/atomone.gov.v1beta1.TextProposal' ||
+                    proposal?.proposals[0].proposal_type == ''
                   "
                   class="flex w-full flex-wrap2"
                 >
@@ -652,18 +674,18 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                   <div class="grow w-full md:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.title") }}</div>
                     <div class="text-light text-200 md:text-300">
-                      {{ proposal?.proposal[0].content.title }}
+                      {{ proposal?.proposals[0].content.title }}
                     </div>
                   </div>
                   <div class="w-full flex-2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.description") }}</div>
                     <div class="text-light text-200 md:text-300">
-                      {{ proposal?.proposal[0].content.description }}
+                      {{ proposal?.proposals[0].content.description }}
                     </div>
                   </div>
                 </div>
                 <div
-                  v-if="proposal?.proposal[0].proposal_type == '/cosmos.params.v1beta1.ParameterChangeProposal'"
+                  v-if="proposal?.proposals[0].proposal_type == '/cosmos.params.v1beta1.ParameterChangeProposal'"
                   class="flex w-full flex-wrap flex-col md:flex-row"
                 >
                   <div class="grow w-full md:w-1/2 mb-10 md:pr-3 pr-0">
@@ -673,20 +695,20 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                   <div class="grow w-full md:w-1/2 mb-10 md:pl-3 pr-0">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.title") }}</div>
                     <div class="text-light text-200 md:text-300">
-                      {{ proposal?.proposal[0].content.title }}
+                      {{ proposal?.proposals[0].content.title }}
                     </div>
                   </div>
                   <div class="grow w-full md:w-1/2 mb-10 md:pr-3 pr-0">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.description") }}</div>
                     <div class="text-light text-200 md:text-300">
-                      {{ proposal?.proposal[0].content.description }}
+                      {{ proposal?.proposals[0].content.description }}
                     </div>
                   </div>
                   <div class="grow w-full md:w-1/2 mb-10 md:pl-3 pr-0">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.changes") }}</div>
                     <div class="text-light text-100">
                       <VCodeBlock
-                        :code="JSON.stringify(proposal?.proposal[0].content.changes, null, '\t')"
+                        :code="JSON.stringify(proposal?.proposals[0].content.changes, null, '\t')"
                         prismjs
                         :theme="false"
                       />
@@ -694,7 +716,7 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                   </div>
                 </div>
                 <div
-                  v-if="proposal?.proposal[0].proposal_type == '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'"
+                  v-if="proposal?.proposals[0].proposal_type == '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'"
                   class="flex w-full flex-wrap"
                 >
                   <div class="grow w-1/2 mb-10">
@@ -704,20 +726,20 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                   <div class="grow w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.title") }}</div>
                     <div class="text-light text-200 md:text-300">
-                      {{ proposal?.proposal[0].content.title }}
+                      {{ proposal?.proposals[0].content.title }}
                     </div>
                   </div>
                   <div class="grow w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.description") }}</div>
                     <div class="text-light text-200 md:text-300">
-                      {{ proposal?.proposal[0].content.description }}
+                      {{ proposal?.proposals[0].content.description }}
                     </div>
                   </div>
                   <div class="grow w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.upgradePlan") }}</div>
                     <div class="text-light text-100">
                       <VCodeBlock
-                        :code="JSON.stringify(proposal?.proposal[0].content.plan, null, '\t')"
+                        :code="JSON.stringify(proposal?.proposals[0].content.plan, null, '\t')"
                         prismjs
                         :theme="false"
                       />
@@ -728,7 +750,7 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
                   <div class="grow w-full mb-10">
                     <div class="text-light text-100">
                       <VCodeBlock
-                        :code="JSON.stringify(proposal?.proposal[0].content, null, '\t')"
+                        :code="JSON.stringify(proposal?.proposals[0].content, null, '\t')"
                         prismjs
                         :theme="false"
                       />
@@ -744,14 +766,14 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
           <div class="flex flex-col gap-8 p-10 bg-grey-400 rounded-md">
             <span>{{ $t("proposalpage.labels.proposalDescription") }}</span>
             <div v-if="proposal" class="text-grey-50">
-              <MarkdownParser v-model="proposal.proposal[0].description" />
+              <MarkdownParser v-model="proposal.proposals[0].description" />
             </div>
           </div>
         </div>
 
         <div v-else-if="isTabSelected('Voters')" class="flex flex-col w-full gap-6">
           <!-- Voters Panel -->
-          <div v-if="proposal && proposal.proposal[0]" class="flex flex-col lg:flex-row w-full gap-6">
+          <div v-if="proposal && proposal.proposals[0]" class="flex flex-col lg:flex-row w-full gap-6">
             <!-- All Account Votes -->
             <VotePanel
               :voters="distinctVoters"
@@ -827,7 +849,7 @@ onMounted(() => (title.value = `AtomOne — #${proposal.value?.proposal[0].id} $
           {{ Utility.capitalizeFirstLetter(breakdownType ?? "") }}
         </div>
 
-        <Breakdown v-if="proposal && breakdownType == 'voters'" :proposal-id="proposal.proposal[0].id" />
+        <Breakdown v-if="proposal && breakdownType == 'voters'" :proposal-id="proposal.proposals[0].id" />
         <ValidatorBreakdown v-if="breakdownType == 'validators'" :validator-data="validatorsWithStakeAndVotes" />
       </div>
     </ModalWrap>

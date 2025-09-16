@@ -1,7 +1,8 @@
-import { ref, computed } from "vue";
-import * as GithubTypes from "@/types/github/index";
+import { computed, ref } from "vue";
+
 import { useConfig } from "@/composables/useConfig";
 import { useGithubDiscussions } from "@/composables/useGithubDiscussions";
+import * as GithubTypes from "@/types/github/index";
 import * as Utility from "@/utility/index";
 
 type ParsedComment = {
@@ -22,7 +23,7 @@ type ParsedComment = {
 const { getDiscussion, getCategory, post, toggleVote } = useGithubDiscussions();
 const Config = useConfig();
 
-export function useGithubDiscusser(threadTitle: string) {
+export function useGithubDiscusser (threadTitle: string) {
   const term = ref(threadTitle);
   const category = ref();
   const discussion = ref<GithubTypes.DiscussionResponse>();
@@ -37,14 +38,18 @@ export function useGithubDiscusser(threadTitle: string) {
    *
    * @return
    */
-  async function refresh() {
+  async function refresh () {
     isRefreshing.value = true;
-    category.value = await getCategory({ repo: Config.REPO, name: "Proposals" });
+    category.value = await getCategory({ repo: Config.REPO,
+      name: "Proposals" });
 
     if (!category.value) {
       isRefreshing.value = false;
       didCommentsFailToLoad.value = true;
-      setTimeout(refresh, Config.DISCUSSION_REFRESH_TIME);
+      setTimeout(
+        refresh,
+        Config.DISCUSSION_REFRESH_TIME
+      );
       return;
     }
 
@@ -53,12 +58,15 @@ export function useGithubDiscusser(threadTitle: string) {
       count: 100,
       term: term.value,
       category: category.value,
-      upsert: true,
+      upsert: true
     });
 
     if (!discussion.value) {
       didCommentsFailToLoad.value = true;
-      setTimeout(refresh, Config.DISCUSSION_REFRESH_TIME);
+      setTimeout(
+        refresh,
+        Config.DISCUSSION_REFRESH_TIME
+      );
     } else {
       isLoading.value = false;
     }
@@ -66,7 +74,7 @@ export function useGithubDiscusser(threadTitle: string) {
     isRefreshing.value = false;
   }
 
-  async function postMessage(msg: string): Promise<boolean> {
+  async function postMessage (msg: string): Promise<boolean> {
     if (isPosting.value) {
       return false;
     }
@@ -80,7 +88,7 @@ export function useGithubDiscusser(threadTitle: string) {
 
     const response = await post({
       discussion: discussion.value.id,
-      message: msg,
+      message: msg
     });
 
     if (!response) {
@@ -93,14 +101,16 @@ export function useGithubDiscusser(threadTitle: string) {
     return true;
   }
 
-  async function postVote(type: "upvote" | "downvote", subjectId: string, isToggled: boolean): Promise<boolean> {
+  async function postVote (type: "upvote" | "downvote", subjectId: string, isToggled: boolean): Promise<boolean> {
     if (isPosting.value) {
       return false;
     }
 
     isPosting.value = true;
 
-    const response = await toggleVote({ type, subjectId, isToggled });
+    const response = await toggleVote({ type,
+      subjectId,
+      isToggled });
     if (!response) {
       isPosting.value = false;
       alert("Failed to upvote");
@@ -122,10 +132,16 @@ export function useGithubDiscusser(threadTitle: string) {
       const upvote = comment.reactionGroups.find((comment) => comment.content == "THUMBS_UP");
       const downvote = comment.reactionGroups.find((comment) => comment.content == "THUMBS_DOWN");
       const totalVotes =
-        (upvote?.users.totalCount ? upvote.users.totalCount : 0) +
-        (downvote?.users.totalCount ? downvote?.users.totalCount : 0);
+        (upvote?.users.totalCount
+          ? upvote.users.totalCount
+          : 0) +
+          (downvote?.users.totalCount
+            ? downvote?.users.totalCount
+            : 0);
 
-      const voteRatio = totalVotes === 0 ? 0 : (upvote?.users.totalCount ?? 0 / totalVotes);
+      const voteRatio = totalVotes === 0
+        ? 0
+        : upvote?.users.totalCount ?? 0 / totalVotes;
       if (voteRatio < ratio.value) {
         continue;
       }
@@ -137,11 +153,19 @@ export function useGithubDiscusser(threadTitle: string) {
         createdAtHuman: Utility.formatHuman(comment.createdAt),
         editedAt: comment.lastEditedAt,
         author: comment.author,
-        upvotes: upvote ? upvote.users.totalCount : 0,
-        downvotes: downvote ? downvote.users.totalCount : 0,
-        didUpvote: upvote?.viewerHasReacted ? true : false,
-        didDownvote: downvote?.viewerHasReacted ? true : false,
-        url: comment.url,
+        upvotes: upvote
+          ? upvote.users.totalCount
+          : 0,
+        downvotes: downvote
+          ? downvote.users.totalCount
+          : 0,
+        didUpvote: upvote?.viewerHasReacted
+          ? true
+          : false,
+        didDownvote: downvote?.viewerHasReacted
+          ? true
+          : false,
+        url: comment.url
       });
     }
 
@@ -162,10 +186,16 @@ export function useGithubDiscusser(threadTitle: string) {
       const upvote = comment.reactionGroups.find((comment) => comment.content == "THUMBS_UP");
       const downvote = comment.reactionGroups.find((comment) => comment.content == "THUMBS_DOWN");
       const totalVotes =
-        (upvote?.users.totalCount ? upvote.users.totalCount : 0) +
-        (downvote?.users.totalCount ? downvote?.users.totalCount : 0);
+        (upvote?.users.totalCount
+          ? upvote.users.totalCount
+          : 0) +
+          (downvote?.users.totalCount
+            ? downvote?.users.totalCount
+            : 0);
 
-      const voteRatio = totalVotes === 0 ? 0 : (upvote?.users.totalCount ?? 0 / totalVotes);
+      const voteRatio = totalVotes === 0
+        ? 0
+        : upvote?.users.totalCount ?? 0 / totalVotes;
       if (voteRatio < ratio.value) {
         continue;
       }
@@ -178,12 +208,22 @@ export function useGithubDiscusser(threadTitle: string) {
         createdAtHuman: Utility.formatHuman(comment.createdAt),
         editedAt: comment.lastEditedAt,
         author: comment.author,
-        upvotes: upvote ? upvote.users.totalCount : 0,
-        downvotes: downvote ? downvote.users.totalCount : 0,
-        didUpvote: upvote?.viewerHasReacted ? true : false,
-        didDownvote: downvote?.viewerHasReacted ? true : false,
+        upvotes: upvote
+          ? upvote.users.totalCount
+          : 0,
+        downvotes: downvote
+          ? downvote.users.totalCount
+          : 0,
+        didUpvote: upvote?.viewerHasReacted
+          ? true
+          : false,
+        didDownvote: downvote?.viewerHasReacted
+          ? true
+          : false,
         url: comment.url,
-        link: commentLinks[0] ? commentLinks[0] : "#",
+        link: commentLinks[0]
+          ? commentLinks[0]
+          : "#"
       });
     }
 
@@ -208,6 +248,6 @@ export function useGithubDiscusser(threadTitle: string) {
     isRefreshing,
     isLoading,
     isFailing,
-    ratio,
+    ratio
   };
 }

@@ -1,18 +1,18 @@
 <script setup lang="ts">
+import { provideApolloClient } from "@vue/apollo-composable";
 import { computed, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+
+import apolloClient from "@/apolloClient";
+import { bus } from "@/bus";
 import ProposalCard from "@/components/home/ProposalCard.vue";
-//import CommentCount from "@/components/home/CommentCount.vue";
-import Search from "@/components/ui/Search.vue";
 import DropDown from "@/components/ui/DropDown.vue";
 import ProposalStatus from "@/components/ui/ProposalStatus.vue";
-import { PropStatus } from "@/types/proposals";
-import { provideApolloClient } from "@vue/apollo-composable";
-import apolloClient from "@/apolloClient";
-
+// import CommentCount from "@/components/home/CommentCount.vue";
+import Search from "@/components/ui/Search.vue";
 import { useChainData } from "@/composables/useChainData";
 import { useTelemetry } from "@/composables/useTelemetry";
-import { bus } from "@/bus";
-import { useRouter } from "vue-router";
+import { PropStatus } from "@/types/proposals";
 
 const chain_id = import.meta.env.VITE_CHAIN_ID;
 const router = useRouter();
@@ -23,7 +23,11 @@ const offset = ref(0);
 const searchText = ref("");
 const { getProposals, getProposalsAsync } = useChainData();
 
-const proposals = getProposals("active", limit.value, offset.value);
+const proposals = getProposals(
+  "active",
+  limit.value,
+  offset.value
+);
 
 const searchString = computed(() => {
   if (searchText.value.trim().length >= 1) {
@@ -63,88 +67,105 @@ const filterToStatus = computed(() => {
   }
 });
 
-watch(filterToStatus, async (newType, oldType) => {
-  if (newType !== oldType) {
-    provideApolloClient(apolloClient);
-    try {
-      const res = await getProposalsAsync(
-        sortToOrder.value,
-        limit.value,
-        offset.value,
-        newType ?? undefined,
-        searchString.value,
-      );
-      if (res) {
-        proposals.value = res;
+watch(
+  filterToStatus,
+  async (newType, oldType) => {
+    if (newType !== oldType) {
+      provideApolloClient(apolloClient);
+      try {
+        const res = await getProposalsAsync(
+          sortToOrder.value,
+          limit.value,
+          offset.value,
+          newType ?? undefined,
+          searchString.value
+        );
+        if (res) {
+          proposals.value = res;
+        }
+      } catch (_e) {
+        bus.emit("error");
       }
-    } catch (_e) {
-      bus.emit("error");
     }
   }
-});
-watch(searchString, async (newSearch, oldSearch) => {
-  if (newSearch !== oldSearch) {
-    provideApolloClient(apolloClient);
-    try {
-      const res = await getProposalsAsync(
-        sortToOrder.value,
-        limit.value,
-        offset.value,
-        filterToStatus.value ?? undefined,
-        searchString.value,
-      );
-      if (res) {
-        proposals.value = res;
+);
+watch(
+  searchString,
+  async (newSearch, oldSearch) => {
+    if (newSearch !== oldSearch) {
+      provideApolloClient(apolloClient);
+      try {
+        const res = await getProposalsAsync(
+          sortToOrder.value,
+          limit.value,
+          offset.value,
+          filterToStatus.value ?? undefined,
+          searchString.value
+        );
+        if (res) {
+          proposals.value = res;
+        }
+      } catch (_e) {
+        bus.emit("error");
       }
-    } catch (_e) {
-      bus.emit("error");
     }
   }
-});
-watch(sortToOrder, async (newOrder, oldOrder) => {
-  if (newOrder !== oldOrder) {
-    provideApolloClient(apolloClient);
-    try {
-      const res = await getProposalsAsync(
-        sortToOrder.value,
-        limit.value,
-        offset.value,
-        filterToStatus.value ?? undefined,
-        searchString.value,
-      );
-      if (res) {
-        proposals.value = res;
+);
+watch(
+  sortToOrder,
+  async (newOrder, oldOrder) => {
+    if (newOrder !== oldOrder) {
+      provideApolloClient(apolloClient);
+      try {
+        const res = await getProposalsAsync(
+          sortToOrder.value,
+          limit.value,
+          offset.value,
+          filterToStatus.value ?? undefined,
+          searchString.value
+        );
+        if (res) {
+          proposals.value = res;
+        }
+      } catch (_e) {
+        bus.emit("error");
       }
-    } catch (_e) {
-      bus.emit("error");
     }
   }
-});
+);
 const orderedProposals = computed(() => {
   return proposals.value?.all_proposals;
 });
 const links = ref([
-  { title: "Twitter", url: "https://twitter.com/_atomone", icon: "twitter" },
-  { title: "Discord", url: "https://discord.com/invite/atomone", icon: "discord" },
-  { title: "Github", url: "https://github.com/atomone-hub", icon: "github" },
+  { title: "Twitter",
+    url: "https://twitter.com/_atomone",
+    icon: "twitter" },
+  { title: "Discord",
+    url: "https://discord.com/invite/atomone",
+    icon: "discord" },
+  { title: "Github",
+    url: "https://github.com/atomone-hub",
+    icon: "github" }
 ]);
 const hasMore = computed(() => {
-  return (proposals.value?.proposal_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
+  return (proposals.value?.proposals_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
 });
-function next() {
+function next () {
   offset.value += limit.value;
 }
 
-function prev() {
-  offset.value = offset.value <= limit.value ? 0 : offset.value - limit.value;
+function prev () {
+  offset.value = offset.value <= limit.value
+    ? 0
+    : offset.value - limit.value;
 }
 
 const typeToReadable = (content: { "@type": string }) => {
   const type =
-    content["@type"]
-      ?.split(".")
-      ?.pop()
-      ?.split(/(?=[A-Z])/) ?? [];
+    content["@type"]?.
+      split(".")?.
+      pop()?.
+      split(/(?=[A-Z])/) ?? [];
   if (type[0] == "Msg") {
     type.shift();
   }
@@ -157,47 +178,74 @@ const extractTags = (content: { "@type": string }[]) => {
     return content.map(typeToReadable);
   }
 };
-watch(offset, async (newOffset, oldOffset) => {
-  if (newOffset != oldOffset) {
-    provideApolloClient(apolloClient);
-    try {
-      if (filterToStatus.value != null) {
-        const res = await getProposalsAsync(
-          sortToOrder.value,
-          limit.value,
-          newOffset,
-          filterToStatus.value,
-          searchString.value,
-        );
-        if (res) {
-          proposals.value = res;
+watch(
+  offset,
+  async (newOffset, oldOffset) => {
+    if (newOffset != oldOffset) {
+      provideApolloClient(apolloClient);
+      try {
+        if (filterToStatus.value != null) {
+          const res = await getProposalsAsync(
+            sortToOrder.value,
+            limit.value,
+            newOffset,
+            filterToStatus.value,
+            searchString.value
+          );
+          if (res) {
+            proposals.value = res;
+          }
+        } else {
+          const res = await getProposalsAsync(
+            sortToOrder.value,
+            limit.value,
+            newOffset,
+            undefined,
+            searchString.value
+          );
+          if (res) {
+            proposals.value = res;
+          }
         }
-      } else {
-        const res = await getProposalsAsync(sortToOrder.value, limit.value, newOffset, undefined, searchString.value);
-        if (res) {
-          proposals.value = res;
-        }
+      } catch (_e) {
+        bus.emit("error");
       }
-    } catch (_e) {
-      bus.emit("error");
     }
   }
-});
+);
 
 const { logEvent } = useTelemetry();
-const typeFilter = ["All Proposals", "Deposit", "Voting", "Passed", "Rejected", "Failed"];
-const activityFilter = ["Active First", "Passed First", "Rejected First", "Failed First"];
+const typeFilter = [
+  "All Proposals",
+  "Deposit",
+  "Voting",
+  "Passed",
+  "Rejected",
+  "Failed"
+];
+const activityFilter = [
+  "Active First",
+  "Passed First",
+  "Rejected First",
+  "Failed First"
+];
 
-function setActivityFilterIndex(idx: number) {
+function setActivityFilterIndex (idx: number) {
   // Needs integration to filter proposals
   activityFilterIndex.value = idx;
-  logEvent("Select Prop Activity Filter", { filterActivityOption: typeFilter[idx] });
+  logEvent(
+    "Select Prop Activity Filter",
+    { filterActivityOption: typeFilter[idx] }
+  );
 }
 
-function setTypeFilterIndex(idx: number) {
+function setTypeFilterIndex (idx: number) {
   // Needs integration to filter proposals
   typeFilterIndex.value = idx;
-  logEvent("Select Prop Type Filter", { filterTypeOption: activityFilter[idx] });
+  logEvent(
+    "Select Prop Type Filter",
+    { filterTypeOption: activityFilter[idx] }
+  );
 }
 </script>
 

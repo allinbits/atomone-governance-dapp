@@ -1,10 +1,11 @@
 import { TextProposal, VoteOption } from "@atomone/atomone-types/atomone/gov/v1beta1/gov";
-import { ParameterChangeProposal } from "@atomone/atomone-types/cosmos/params/v1beta1/params";
-import { useWallet } from "@/composables/useWallet";
 import { MsgDeposit, MsgSubmitProposal, MsgVote, MsgVoteWeighted } from "@atomone/atomone-types/atomone/gov/v1beta1/tx";
-import { EncodeObject } from "@cosmjs/proto-signing";
+import { ParameterChangeProposal } from "@atomone/atomone-types/cosmos/params/v1beta1/params";
 import { SoftwareUpgradeProposal } from "@atomone/atomone-types/cosmos/upgrade/v1beta1/upgrade";
+import { EncodeObject } from "@cosmjs/proto-signing";
+
 import chainInfo from "@/chain-config.json";
+import { useWallet } from "@/composables/useWallet";
 import CommandBuilder from "@/utility/commandBuilder";
 
 export const useProposals = () => {
@@ -14,8 +15,8 @@ export const useProposals = () => {
       typeUrl: "/atomone.gov.v1beta1.TextProposal",
       value: TextProposal.encode({
         description: proposal.description,
-        title: proposal.title,
-      }).finish(),
+        title: proposal.title
+      }).finish()
     };
   };
 
@@ -25,8 +26,8 @@ export const useProposals = () => {
       value: ParameterChangeProposal.encode({
         description: proposal.description,
         title: proposal.title,
-        changes: proposal.changes,
-      }).finish(),
+        changes: proposal.changes
+      }).finish()
     };
   };
 
@@ -36,26 +37,26 @@ export const useProposals = () => {
       value: SoftwareUpgradeProposal.encode({
         description: proposal.description,
         title: proposal.title,
-        plan: proposal.plan,
-      }).finish(),
+        plan: proposal.plan
+      }).finish()
     };
   };
 
   const createProposal = async (
     proposalMeta: Partial<MsgSubmitProposal>,
     proposal: EncodeObject,
-    cli: boolean = false,
+    cli: boolean = false
   ) => {
     if (cli) {
-      //TODO : CommandBuilder + proposal JSON Generation
+      // TODO : CommandBuilder + proposal JSON Generation
     } else {
       const SubmitProposal: EncodeObject = {
         typeUrl: "/atomone.gov.v1beta1.MsgSubmitProposal",
         value: {
           initialDeposit: proposalMeta.initialDeposit,
           proposer: address.value,
-          content: proposal,
-        },
+          content: proposal
+        }
       };
       const result = await sendTx([SubmitProposal]);
       return result;
@@ -63,13 +64,16 @@ export const useProposals = () => {
   };
   const depositProposal = async (deposit: Partial<MsgDeposit>, cli: boolean = false) => {
     if (cli && deposit.amount && deposit.amount.length >= 1) {
-      const command = CommandBuilder.Deposit()
-        .withChainId(chainInfo.chainId)
-        .withFees([{ amount: "5000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }])
-        .withSigner(address.value)
-        .addParam(deposit.proposalId?.toString() ?? "0")
-        .addParam(deposit.amount[0].amount + deposit.amount[0].denom)
-        .finish();
+      const command = CommandBuilder.Deposit().
+        withChainId(chainInfo.chainId).
+        withFees([
+          { amount: "5000",
+            denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+        ]).
+        withSigner(address.value).
+        addParam(deposit.proposalId?.toString() ?? "0").
+        addParam(deposit.amount[0].amount + deposit.amount[0].denom).
+        finish();
       return command;
     } else {
       const Deposit: EncodeObject = {
@@ -77,8 +81,8 @@ export const useProposals = () => {
         value: {
           proposalId: deposit.proposalId,
           depositor: address.value,
-          amount: deposit.amount,
-        },
+          amount: deposit.amount
+        }
       };
       const result = await sendTx([Deposit]);
       return result;
@@ -98,13 +102,16 @@ export const useProposals = () => {
           voteOption = "abstain";
           break;
       }
-      const command = CommandBuilder.Vote()
-        .withChainId(chainInfo.chainId)
-        .withFees([{ amount: "5000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }])
-        .withSigner(address.value)
-        .addParam(vote.proposalId?.toString() ?? "0")
-        .addParam(voteOption)
-        .finish();
+      const command = CommandBuilder.Vote().
+        withChainId(chainInfo.chainId).
+        withFees([
+          { amount: "5000",
+            denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+        ]).
+        withSigner(address.value).
+        addParam(vote.proposalId?.toString() ?? "0").
+        addParam(voteOption).
+        finish();
       return command;
     } else {
       const Vote: EncodeObject = {
@@ -112,8 +119,8 @@ export const useProposals = () => {
         value: {
           proposalId: vote.proposalId,
           voter: address.value,
-          option: vote.option,
-        },
+          option: vote.option
+        }
       };
       const result = await sendTx([Vote]);
       return result;
@@ -126,28 +133,40 @@ export const useProposals = () => {
         switch (voteWeighted.options[i].option) {
           case VoteOption.VOTE_OPTION_YES:
             voteOptions =
-              voteOptions + "yes=" + (parseInt(voteWeighted.options[i].weight) / Math.pow(10, 18)).toString();
+              voteOptions + "yes=" + (parseInt(voteWeighted.options[i].weight) / Math.pow(
+                10,
+                18
+              )).toString();
             break;
           case VoteOption.VOTE_OPTION_NO:
             voteOptions =
-              voteOptions + "no=" + (parseInt(voteWeighted.options[i].weight) / Math.pow(10, 18)).toString();
+              voteOptions + "no=" + (parseInt(voteWeighted.options[i].weight) / Math.pow(
+                10,
+                18
+              )).toString();
             break;
           case VoteOption.VOTE_OPTION_ABSTAIN:
             voteOptions =
-              voteOptions + "abstain=" + (parseInt(voteWeighted.options[i].weight) / Math.pow(10, 18)).toString();
+              voteOptions + "abstain=" + (parseInt(voteWeighted.options[i].weight) / Math.pow(
+                10,
+                18
+              )).toString();
             break;
         }
         if (i + 1 != voteWeighted.options?.length) {
           voteOptions = voteOptions + ",";
         }
       }
-      const command = CommandBuilder.WeightedVote()
-        .withChainId(chainInfo.chainId)
-        .withFees([{ amount: "5000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }])
-        .withSigner(address.value)
-        .addParam(voteWeighted.proposalId?.toString() ?? "0")
-        .addParam(voteOptions)
-        .finish();
+      const command = CommandBuilder.WeightedVote().
+        withChainId(chainInfo.chainId).
+        withFees([
+          { amount: "5000",
+            denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+        ]).
+        withSigner(address.value).
+        addParam(voteWeighted.proposalId?.toString() ?? "0").
+        addParam(voteOptions).
+        finish();
       return command;
     } else {
       const VoteWeighted: EncodeObject = {
@@ -155,8 +174,8 @@ export const useProposals = () => {
         value: {
           proposalId: voteWeighted.proposalId,
           voter: address.value,
-          options: voteWeighted.options,
-        },
+          options: voteWeighted.options
+        }
       };
       const result = await sendTx([VoteWeighted]);
       return result;
@@ -169,6 +188,6 @@ export const useProposals = () => {
     voteProposal,
     voteWeightedProposal,
     createParamChangeProposalContent,
-    createUpgradePlanProposalContent,
+    createUpgradePlanProposalContent
   };
 };

@@ -55,10 +55,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import DropDown from "./DropDown.vue";
+import { onMounted, ref } from "vue";
+
 import { useTelemetry } from "@/composables/useTelemetry";
 import { UiTabOption } from "@/types/ui";
+
+import DropDown from "./DropDown.vue";
 
 type Props = {
   modelValue?: string | number;
@@ -73,13 +75,19 @@ const tabRefs = ref<HTMLElement[]>([]);
 const line = ref<HTMLElement | null>(null);
 const tabIdx = ref<number>(0);
 
-const props = withDefaults(defineProps<Props>(), { modelValue: undefined });
-function changeTab(idx: number = 0, isClicked = true) {
+const props = withDefaults(
+  defineProps<Props>(),
+  { modelValue: undefined }
+);
+function changeTab (idx: number = 0, isClicked = true) {
   tabIdx.value = idx;
   if (isClicked) {
     const link = props.options[tabIdx.value].link;
     if (link) {
-      window.open(link, "_blank");
+      window.open(
+        link,
+        "_blank"
+      );
     } else {
       tabSelected.value = props.options[tabIdx.value].title;
       lastTab.value = idx;

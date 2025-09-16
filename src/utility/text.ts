@@ -1,26 +1,41 @@
 import { Coin } from "@cosmjs/proto-signing";
-import chainConfig from "../chain-config.json";
-import { purifyForLinks } from "./purify";
 import BigNumber from "bignumber.js";
 
-export function capitalizeFirstLetter(text: string) {
+import chainConfig from "../chain-config.json";
+import { purifyForLinks } from "./purify";
+
+export function capitalizeFirstLetter (text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-export function shorten(text: string) {
+export function shorten (text: string) {
   if (text.length <= 20) {
     return text;
   } else {
-    return text.slice(0, 8) + "..." + text.slice(-8);
+    return text.slice(
+      0,
+      8
+    ) + "..." + text.slice(-8);
   }
 }
 export const toPlainObjectString = (obj: unknown) => {
-  return JSON.stringify(obj, (_key, value) => (typeof value === "bigint" ? value.toString() : value), "\t");
+  return JSON.stringify(
+    obj,
+    (_key, value) => {
+      return typeof value === "bigint"
+        ? value.toString()
+        : value;
+    },
+    "\t"
+  );
 };
-export function totalAmounts(amount: Coin[]): string {
+export function totalAmounts (amount: Coin[]): string {
   const amounts = new Map<string, bigint>();
   for (let i = 0; i < amount.length; i++) {
-    amounts.set(amount[i].denom, (amounts.get(amount[i].denom) ?? BigInt(0)) + BigInt(amount[i].amount));
+    amounts.set(
+      amount[i].denom,
+      (amounts.get(amount[i].denom) ?? BigInt(0)) + BigInt(amount[i].amount)
+    );
   }
 
   let total = "";
@@ -30,7 +45,10 @@ export function totalAmounts(amount: Coin[]): string {
     let displayAmount = "";
     let displayDenom = "";
     if (denom) {
-      displayAmount = formatAmount(entry[1].toString(), denom[0].coinDecimals);
+      displayAmount = formatAmount(
+        entry[1].toString(),
+        denom[0].coinDecimals
+      );
       displayDenom = denom[0].coinDenom;
     } else {
       displayAmount = entry[1].toString();
@@ -48,14 +66,15 @@ export function totalAmounts(amount: Coin[]): string {
   }
   return total;
 }
-export function formatAmount(amount: string | number | undefined, precision: number) {
+export function formatAmount (amount: string | number | undefined, precision: number) {
   const n = BigNumber(amount ?? 0).dividedBy(BigNumber(10 ** precision));
   return n.toFixed(precision);
 }
 
-export function decToPerc(dec: string | number, prec: number) {
+export function decToPerc (dec: string | number, prec: number) {
   return (parseFloat(dec.toString()) * 100).toFixed(prec);
 }
+
 /**
  * Verify input is a link
  *
@@ -63,10 +82,8 @@ export function decToPerc(dec: string | number, prec: number) {
  * @param {string} link
  * @return
  */
-export function isLink(link: string) {
-  return /^(https?):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i.test(
-    link,
-  );
+export function isLink (link: string) {
+  return (/^(https?):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i).test(link);
 }
 
 /**
@@ -74,7 +91,7 @@ export function isLink(link: string) {
  *
  * @param rawHtml
  */
-export function getLinks(rawHtml: string): string[] {
+export function getLinks (rawHtml: string): string[] {
   const cleanedHtml = purifyForLinks(rawHtml);
   const doc = document.createElement("html");
   doc.innerHTML = cleanedHtml;

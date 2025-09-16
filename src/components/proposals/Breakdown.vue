@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { ref, computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
+
 import { useChainData } from "@/composables/useChainData";
-import * as Utility from "@/utility/index";
 import { AllVotesQuery } from "@/gql/graphql";
+import * as Utility from "@/utility/index";
 
 const { getAllVotes, getAllVotesAsync } = useChainData();
 
@@ -10,28 +11,41 @@ const props = defineProps<{ proposalId: number }>();
 const offset = ref<number>(0);
 const limit = ref<number>(10);
 
-const votes = getAllVotes(props.proposalId, limit.value, offset.value);
+const votes = getAllVotes(
+  props.proposalId,
+  limit.value,
+  offset.value
+);
 const hasMore = computed(() => {
   return (votes.value?.proposal_vote_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
 });
-function next() {
+function next () {
   offset.value += limit.value;
 }
 
-function prev() {
-  offset.value = offset.value <= limit.value ? 0 : offset.value - limit.value;
+function prev () {
+  offset.value = offset.value <= limit.value
+    ? 0
+    : offset.value - limit.value;
 }
 
-watch(offset, async (newOffset, oldOffset) => {
-  if (newOffset != oldOffset) {
-    if (votes.value) {
-      const fetchedVotes = await getAllVotesAsync(props.proposalId, limit.value, newOffset);
-      if (fetchedVotes) {
-        votes.value = fetchedVotes;
+watch(
+  offset,
+  async (newOffset, oldOffset) => {
+    if (newOffset != oldOffset) {
+      if (votes.value) {
+        const fetchedVotes = await getAllVotesAsync(
+          props.proposalId,
+          limit.value,
+          newOffset
+        );
+        if (fetchedVotes) {
+          votes.value = fetchedVotes;
+        }
       }
     }
   }
-});
+);
 
 const filteredVotes = computed(() => {
   return votes.value?.proposal_vote;

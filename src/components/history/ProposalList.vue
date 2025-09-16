@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import ProposalCard from "@/components/home/ProposalCard.vue";
-//import CommentCount from "@/components/home/CommentCount.vue";
-import DelegatedTotal from "@/components/helper/DelegatedTotal.vue";
-import BlockTimestamp from "@/components/helper/BlockTimestamp.vue";
-import ProposalStatus from "@/components/ui/ProposalStatus.vue";
-import { PropStatus } from "@/types/proposals";
-import { ProposalsActiveQuery, VoteHistoryQuery } from "@/gql/graphql";
 import { ref } from "vue";
+
+import BlockTimestamp from "@/components/helper/BlockTimestamp.vue";
+// import CommentCount from "@/components/home/CommentCount.vue";
+import DelegatedTotal from "@/components/helper/DelegatedTotal.vue";
+import ProposalCard from "@/components/home/ProposalCard.vue";
+import ProposalStatus from "@/components/ui/ProposalStatus.vue";
+import { ProposalsActiveQuery, VoteHistoryQuery } from "@/gql/graphql";
+import { PropStatus } from "@/types/proposals";
 import { decToPerc, totalAmounts } from "@/utility";
 
 const listView = ref(false);
@@ -22,10 +23,10 @@ const props = defineProps<{
 
 const typeToReadable = (content: { "@type": string }) => {
   const type =
-    content["@type"]
-      ?.split(".")
-      ?.pop()
-      ?.split(/(?=[A-Z])/) ?? [];
+    content["@type"]?.
+      split(".")?.
+      pop()?.
+      split(/(?=[A-Z])/) ?? [];
   if (type[0] == "Msg") {
     type.shift();
   }

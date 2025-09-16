@@ -1,23 +1,19 @@
 <script setup lang="ts">
+import { MsgDeposit } from "@atomone/atomone-types/atomone/gov/v1/tx";
+import { DeliverTxResponse } from "@atomone/atomone-types/types";
+import { useClipboard } from "@vueuse/core";
 import { computed, ref } from "vue";
 
-import { MsgDeposit } from "@atomone/atomone-types/atomone/gov/v1/tx";
-
 import chainConfig from "@/chain-config.json";
-
 import ModalWrap from "@/components/common/ModalWrap.vue";
-import UiInput from "@/components/ui/UiInput.vue";
-import UiInfo from "@/components/ui/UiInfo.vue";
-import Icon from "@/components/ui/Icon.vue";
 import CommonButton from "@/components/ui/CommonButton.vue";
-
-import { useWallet, Wallets } from "@/composables/useWallet";
-import { useClipboard } from "@vueuse/core";
+import Icon from "@/components/ui/Icon.vue";
+import UiInfo from "@/components/ui/UiInfo.vue";
+import UiInput from "@/components/ui/UiInput.vue";
 import { useProposals } from "@/composables/useProposals";
 import { useTelemetry } from "@/composables/useTelemetry";
-
+import { useWallet, Wallets } from "@/composables/useWallet";
 import { formatAmount, toPlainObjectString } from "@/utility";
-import { DeliverTxResponse } from "@atomone/atomone-types/types";
 
 interface Props {
   proposalId?: number;
@@ -52,7 +48,7 @@ const depositDenomDisplay = computed(() => {
   return currencies[0].coinDenom ?? props.depositDenom;
 });
 
-const resetDeposit = () => (depositAmount.value = null);
+const resetDeposit = () => depositAmount.value = null;
 
 const toggleModal = (dir: boolean) => {
   isOpen.value = dir;
@@ -74,21 +70,31 @@ const signDeposit = async (isCLI = false) => {
     amount: [
       {
         denom: props.depositDenom,
-        amount: (depositAmount.value * Math.pow(10, depositDenomDecimals.value))?.toString() ?? "",
-      },
-    ],
+        amount: (depositAmount.value * Math.pow(
+          10,
+          depositDenomDecimals.value
+        ))?.toString() ?? ""
+      }
+    ]
   };
   try {
     transacting.value = true;
-    const depot = await depositProposal(depositOptions, isCLI);
+    const depot = await depositProposal(
+      depositOptions,
+      isCLI
+    );
     if ((depot as DeliverTxResponse).code !== 0 && !isCLI) {
       transacting.value = false;
       errorMsg.value = (depot as DeliverTxResponse).rawLog ?? toPlainObjectString(depot);
       displayState.value = "error";
     } else {
       transacting.value = false;
-      cliDepositInput.value = (isCLI ? depot : "") as string;
-      displayState.value = isCLI ? "CLI" : "deposited";
+      cliDepositInput.value = (isCLI
+        ? depot
+        : "") as string;
+      displayState.value = isCLI
+        ? "CLI"
+        : "deposited";
     }
   } catch (e) {
     console.log(e);
@@ -96,9 +102,14 @@ const signDeposit = async (isCLI = false) => {
     transacting.value = false;
     displayState.value = "error";
   }
-  logEvent("Sign Popup ProposalDeposit", {
-    signOption: isCLI ? "CLI" : "GUI",
-  });
+  logEvent(
+    "Sign Popup ProposalDeposit",
+    {
+      signOption: isCLI
+        ? "CLI"
+        : "GUI"
+    }
+  );
 };
 
 const { copy, copied, isSupported: isClipboardSupported } = useClipboard();

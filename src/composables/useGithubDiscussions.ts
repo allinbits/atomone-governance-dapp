@@ -1,15 +1,22 @@
-import { ref, computed } from "vue";
 import { useStorage } from "@vueuse/core";
+import { computed, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
 import { useConfig } from "@/composables/useConfig";
 import * as GithubTypes from "@/types/github/index";
-import { useRoute, useRouter } from "vue-router";
 
 const config = useConfig();
 const username = ref<string>();
 const avatar = ref<string>();
 const isLoggedIn = computed(() => typeof username.value !== "undefined");
-const storedJwtToken = useStorage<string>(config.STORAGE_KEY, null);
-const storedPreviousPath = useStorage<string>(config.PREVIOUS_LINK_KEY, null);
+const storedJwtToken = useStorage<string>(
+  config.STORAGE_KEY,
+  null
+);
+const storedPreviousPath = useStorage<string>(
+  config.PREVIOUS_LINK_KEY,
+  null
+);
 
 /**
  * Propogate the username, and verify the token is valid.
@@ -19,10 +26,13 @@ const updateUser = async () => {
     return;
   }
 
-  const res = await fetch(config.ENDPOINT + `/api/user`, {
-    headers: { Authorization: storedJwtToken.value },
-    method: "GET",
-  }).catch((err) => {
+  const res = await fetch(
+    config.ENDPOINT + "/api/user",
+    {
+      headers: { Authorization: storedJwtToken.value },
+      method: "GET"
+    }
+  ).catch((err) => {
     console.error(err);
     return undefined;
   });
@@ -55,10 +65,13 @@ export const useGithubDiscussions = () => {
 
     // Check the URL Params for `token` and exchange temporary token for JWT for storage
     if (token) {
-      const res = await fetch(config.ENDPOINT + `/api/token`, {
-        headers: { Authorization: token },
-        method: "GET",
-      }).catch((err) => {
+      const res = await fetch(
+        config.ENDPOINT + "/api/token",
+        {
+          headers: { Authorization: token },
+          method: "GET"
+        }
+      ).catch((err) => {
         console.error(err);
         return undefined;
       });
@@ -95,7 +108,10 @@ export const useGithubDiscussions = () => {
    */
   const login = () => {
     storedPreviousPath.value = `${route.path}`;
-    window.open(config.ENDPOINT + "/api/login", "_self");
+    window.open(
+      config.ENDPOINT + "/api/login",
+      "_self"
+    );
   };
 
   /**
@@ -105,21 +121,22 @@ export const useGithubDiscussions = () => {
    *
    * @param {GithubTypes.DiscussionRequest} data
    */
-  const getDiscussion = async (
-    data: GithubTypes.DiscussionRequest,
-  ): Promise<GithubTypes.DiscussionResponse | undefined> => {
+  const getDiscussion = async (data: GithubTypes.DiscussionRequest): Promise<GithubTypes.DiscussionResponse | undefined> => {
     data.repo = config.REPO;
 
-    const result = await fetch(config.ENDPOINT + "/api/discussion", {
-      method: "POST",
-      headers: storedJwtToken.value
-        ? {
+    const result = await fetch(
+      config.ENDPOINT + "/api/discussion",
+      {
+        method: "POST",
+        headers: storedJwtToken.value
+          ? {
             "Content-Type": "application/json",
-            Authorization: storedJwtToken.value,
+            Authorization: storedJwtToken.value
           }
-        : { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }).catch((err) => {
+          : { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }
+    ).catch((err) => {
       console.error(err);
       return undefined;
     });
@@ -131,21 +148,22 @@ export const useGithubDiscussions = () => {
     return await result.json();
   };
 
-  const getDiscussionCommentCount = async (
-    data: GithubTypes.DiscussionCommentRequest,
-  ): Promise<GithubTypes.DiscussionCommentCountResponse> => {
+  const getDiscussionCommentCount = async (data: GithubTypes.DiscussionCommentRequest): Promise<GithubTypes.DiscussionCommentCountResponse> => {
     data.repo = config.REPO;
 
-    const result = await fetch(config.ENDPOINT + "/api/discussion/comment/count", {
-      method: "POST",
-      headers: storedJwtToken.value
-        ? {
+    const result = await fetch(
+      config.ENDPOINT + "/api/discussion/comment/count",
+      {
+        method: "POST",
+        headers: storedJwtToken.value
+          ? {
             "Content-Type": "application/json",
-            Authorization: storedJwtToken.value,
+            Authorization: storedJwtToken.value
           }
-        : { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }).catch((err) => {
+          : { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }
+    ).catch((err) => {
       console.error(err);
       return undefined;
     });
@@ -163,13 +181,16 @@ export const useGithubDiscussions = () => {
    * @param {GithubTypes.CategoryRequest} data
    */
   const getCategory = async (data: GithubTypes.CategoryRequest): Promise<string | undefined> => {
-    const result = await fetch(config.ENDPOINT + "/api/repo/categories", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }).catch((err) => {
+    const result = await fetch(
+      config.ENDPOINT + "/api/repo/categories",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }
+    ).catch((err) => {
       console.error(err);
       return undefined;
     });
@@ -186,15 +207,15 @@ export const useGithubDiscussions = () => {
 
     const { discussionCategories } = results.data.search.nodes[0];
     if (!discussionCategories) {
-      console.error(`Found categories, but could not find discussion category`);
+      console.error("Found categories, but could not find discussion category");
       return undefined;
     }
 
-    const filteredCategories = discussionCategories.nodes.filter((x) =>
-      x.name.toLowerCase().includes(data.name.toLowerCase()),
-    );
+    const filteredCategories = discussionCategories.nodes.filter((x) => x.name.toLowerCase().includes(data.name.toLowerCase()));
 
-    return filteredCategories.length <= 0 ? undefined : filteredCategories[0].id;
+    return filteredCategories.length <= 0
+      ? undefined
+      : filteredCategories[0].id;
   };
 
   /**
@@ -207,14 +228,17 @@ export const useGithubDiscussions = () => {
       return undefined;
     }
 
-    const result = await fetch(config.ENDPOINT + "/api/discussion/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: storedJwtToken.value,
-      },
-      body: JSON.stringify(data),
-    }).catch((err) => {
+    const result = await fetch(
+      config.ENDPOINT + "/api/discussion/post",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: storedJwtToken.value
+        },
+        body: JSON.stringify(data)
+      }
+    ).catch((err) => {
       console.error(err);
       return undefined;
     });
@@ -236,18 +260,23 @@ export const useGithubDiscussions = () => {
       return undefined;
     }
 
-    const result = await fetch(config.ENDPOINT + "/api/discussion/react", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: storedJwtToken.value,
-      },
-      body: JSON.stringify({
-        subjectId: data.subjectId,
-        reaction: data.type === "upvote" ? "THUMBS_UP" : "THUMBS_DOWN",
-        didReact: data.isToggled, // Do not set opposite, the API handles it
-      }),
-    }).catch((err) => {
+    const result = await fetch(
+      config.ENDPOINT + "/api/discussion/react",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: storedJwtToken.value
+        },
+        body: JSON.stringify({
+          subjectId: data.subjectId,
+          reaction: data.type === "upvote"
+            ? "THUMBS_UP"
+            : "THUMBS_DOWN",
+          didReact: data.isToggled // Do not set opposite, the API handles it
+        })
+      }
+    ).catch((err) => {
       console.error(err);
       return undefined;
     });
@@ -286,6 +315,6 @@ export const useGithubDiscussions = () => {
     logout,
     post,
     setup,
-    toggleVote,
+    toggleVote
   };
 };

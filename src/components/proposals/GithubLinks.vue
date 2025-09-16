@@ -1,17 +1,15 @@
 <script lang="ts" setup>
-import { onMounted, ref, computed, reactive } from "vue";
-import * as Utility from "@/utility/index";
-import CommonButton from "@/components/ui/CommonButton.vue";
+import { computed, onMounted, reactive, ref } from "vue";
 
-import { useGithubDiscussions } from "@/composables/useGithubDiscussions";
+import CommonButton from "@/components/ui/CommonButton.vue";
 import { useGithubDiscusser } from "@/composables/useGithubDiscusser";
+import { useGithubDiscussions } from "@/composables/useGithubDiscussions";
+import * as Utility from "@/utility/index";
 
 const props = defineProps<{ term: string }>();
 
 const { logout, isLoggedIn, login, username } = useGithubDiscussions();
-const { links, refresh, postMessage, postVote, isPosting, isFailing, isLoading, ratio } = useGithubDiscusser(
-  props.term,
-);
+const { links, refresh, postMessage, postVote, isPosting, isFailing, isLoading, ratio } = useGithubDiscusser(props.term);
 
 const linkInput = ref<string>("");
 const contextInput = ref<string>("");
@@ -19,10 +17,10 @@ const contextInput = ref<string>("");
 const state = reactive({
   isAddingLink: false,
   isLinkValid: false,
-  isContextValid: false,
+  isContextValid: false
 });
 
-async function createPost() {
+async function createPost () {
   if (isPosting.value) {
     return;
   }
@@ -45,11 +43,11 @@ async function createPost() {
   state.isAddingLink = false;
 }
 
-function verifyLinkInput() {
+function verifyLinkInput () {
   state.isLinkValid = Utility.isLink(linkInput.value);
 }
 
-function verifyContextInput() {
+function verifyContextInput () {
   state.isContextValid = contextInput.value.length >= 32;
 }
 

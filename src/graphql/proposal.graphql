@@ -1,5 +1,5 @@
 query Proposal($id: Int!) {
-  proposal(where: { id: { _eq: $id } }) {
+  proposals(where: { id: { _eq: $id } }) {
     content
     deposit_end_time
     description

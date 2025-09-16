@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ContextTypes } from "@/types/ui";
 import { computed } from "vue";
-import Icon from "@/components/ui/Icon.vue";
 
-const { type, icon } = defineProps<{ type: ContextTypes; icon?: string }>();
+import Icon from "@/components/ui/Icon.vue";
+import { ContextTypes } from "@/types/ui";
+
+const { type, icon } = defineProps<{ type: ContextTypes;
+  icon?: string; }>();
 
 const colorClasses = computed(() => {
   switch (type) {

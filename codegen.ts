@@ -6,9 +6,9 @@ const config: CodegenConfig = {
   documents: ["src/**/*.graphql"],
   generates: {
     "./src/gql/": {
-      preset: "client",
-    },
-  },
+      preset: "client"
+    }
+  }
 };
 
 export default config;
