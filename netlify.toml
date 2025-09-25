@@ -1,5 +1,5 @@
 [context.deploy-preview.environment]
-  VITE_GRAPHQL_ENDPOINT = "https://graphql-atomone-mainnet.allinbits.services/v1/graphql"
+  VITE_GRAPHQL_ENDPOINT = "https://graphql-atomone-mainnet-v2.allinbits.services//v1/graphql"
   VITE_CHAIN_ID         = "atomone-1"
   VITE_RPC              = "https://atomone-rpc.allinbits.com/"
   VITE_API              = "https://atomone-api.allinbits.com/"
@@ -15,12 +15,12 @@
   Access-Control-Allow-Origin = '''
   https://gov.atom.one,
   https://graphql-atomone-mainnet.allinbits.services
-
+  https://graphql-atomone-mainnet-v2.allinbits.services
   https://githubusercontent.com
   https://avatars.githubusercontent.com
   '''
   Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-  Content-Security-Policy = "default-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; img-src 'self' data: https:; connect-src https://graphql-atomone-mainnet.allinbits.services/v1/graphql https://graphql-atomone-testnet-1.allinbits.services/v1/graphql https://https://atomone-testnet-1-rpc.allinbits.services/ https://atomone-rpc.allinbits.com https://plausible.io/api/event githubusercontent.com *.githubusercontent.com"
+  Content-Security-Policy = "default-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; img-src 'self' data: https:; connect-src https://graphql-atomone-mainnet.allinbits.services/v1/graphql https://graphql-atomone-testnet-1.allinbits.services/v1/graphql https://https://atomone-testnet-1-rpc.allinbits.services/ https://graphql-atomone-mainnet-v2.allinbits.services/ https://atomone-rpc.allinbits.com https://plausible.io/api/event githubusercontent.com *.githubusercontent.com"
   X-Frame-Options = "SAMEORIGIN"
   X-Content-Type-Options = "nosniff"
   Referrer-Policy = "strict-origin"
