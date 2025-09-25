@@ -11,12 +11,12 @@ import {
   useLazyDelegatedQuery,
   useLazyParamsQuery,
   useLazyProposalQuery,
-  useLazyProposalTalliesQuery,
   useLazyProposalsActiveQuery,
   useLazyProposalsFailedQuery,
   useLazyProposalsPassedQuery,
   useLazyProposalsRejectedQuery,
   useLazyProposalsSearchQuery,
+  useLazyProposalTalliesQuery,
   useLazyStakingQuery,
   useLazyValidatorsQuery,
   useLazyValsetQuery,
@@ -25,20 +25,21 @@ import {
   useLazyVotesQuery,
   useParamsQuery,
   useProposalQuery,
-  useProposalTalliesQuery,
   useProposalsActiveQuery,
   useProposalsFailedQuery,
   useProposalsPassedQuery,
   useProposalsRejectedQuery,
   useProposalsSearchQuery,
+  useProposalTalliesQuery,
   useStakingQuery,
   useValidatorsQuery,
   useValsetQuery,
   useVoteHistoryQuery,
   useVoteOptionQuery,
-  useVotesQuery,
+  useVotesQuery
 } from "@/composables/queries";
 
+// eslint-disable-next-line max-lines-per-function
 export const useChainData = () => {
   const getBalance = (address: string) => {
     const { result } = useBalanceQuery({ address });
@@ -49,7 +50,7 @@ export const useChainData = () => {
     return useProposalsSearchQuery({
       limit,
       offset,
-      searchString,
+      searchString
     }).result;
   };
   const getProposals = (
@@ -57,7 +58,7 @@ export const useChainData = () => {
     limit: number,
     offset: number,
     status?: string,
-    searchString?: string,
+    searchString?: string
   ) => {
     let where;
     if (status) {
@@ -65,8 +66,11 @@ export const useChainData = () => {
         where = {
           _and: [
             { status: { _eq: status } },
-            { _or: [{ title: { _ilike: `%${searchString}%` } }, { description: { _ilike: `%${searchString}%` } }] },
-          ],
+            { _or: [
+              { title: { _ilike: `%${searchString}%` } },
+              { description: { _ilike: `%${searchString}%` } }
+            ] }
+          ]
         };
       } else {
         where = { status: { _eq: status } };
@@ -76,8 +80,11 @@ export const useChainData = () => {
         where = {
           _and: [
             { status: { _neq: "PROPOSAL_STATUS_INVALID" } },
-            { _or: [{ title: { _ilike: `%${searchString}%` } }, { description: { _ilike: `%${searchString}%` } }] },
-          ],
+            { _or: [
+              { title: { _ilike: `%${searchString}%` } },
+              { description: { _ilike: `%${searchString}%` } }
+            ] }
+          ]
         };
       } else {
         where = { status: { _neq: "PROPOSAL_STATUS_INVALID" } };
@@ -88,31 +95,34 @@ export const useChainData = () => {
         return useProposalsPassedQuery({
           limit,
           offset,
-          where,
+          where
         }).result;
       case "rejected":
         return useProposalsRejectedQuery({
           limit,
           offset,
-          where,
+          where
         }).result;
       case "failed":
         return useProposalsFailedQuery({
           limit,
           offset,
-          where,
+          where
         }).result;
       case "active":
       default:
         return useProposalsActiveQuery({
           limit,
           offset,
-          where,
+          where
         }).result;
     }
   };
   const getProposal = (id: number) => {
-    const { result } = useProposalQuery({ id }, { pollInterval: 10000 });
+    const { result } = useProposalQuery(
+      { id },
+      { pollInterval: 10000 }
+    );
     return result;
   };
   const getParams = () => {
@@ -128,7 +138,10 @@ export const useChainData = () => {
     return result;
   };
   const getProposalTallies = (id: number) => {
-    const { result } = useProposalTalliesQuery({ id }, { pollInterval: 10000 });
+    const { result } = useProposalTalliesQuery(
+      { id },
+      { pollInterval: 10000 }
+    );
     return result;
   };
   const getBlockHeight = (timestamp: string) => {
@@ -141,7 +154,10 @@ export const useChainData = () => {
   };
   const getDelegated = (address: string, height?: number) => {
     if (height) {
-      const where = { _and: [{ height: { _lte: height } }, { delegator: { _eq: address } }] };
+      const where = { _and: [
+        { height: { _lte: height } },
+        { delegator: { _eq: address } }
+      ] };
       const { result } = useDelegatedQuery({ where });
 
       return result;
@@ -161,15 +177,20 @@ export const useChainData = () => {
     return result;
   };
   const getVotes = (address: string, proposalId: number) => {
-    const { result } = useVotesQuery({ address, proposalId, propId: String(proposalId) });
+    const { result } = useVotesQuery({ address,
+      proposalId,
+      propId: String(proposalId) });
     return result;
   };
   const getAllVotes = (proposalId: number, limit: number, offset: number) => {
-    const { result } = useAllVotesQuery({ limit, offset, proposalId });
+    const { result } = useAllVotesQuery({ limit,
+      offset,
+      proposalId });
     return result;
   };
   const getVoteOption = (proposalId: number, option: string) => {
-    const { result } = useVoteOptionQuery({ proposalId, option });
+    const { result } = useVoteOptionQuery({ proposalId,
+      option });
     return result;
   };
   const getBalanceAsync = async (address: string) => {
@@ -180,7 +201,7 @@ export const useChainData = () => {
     return await useLazyProposalsSearchQuery({
       limit,
       offset,
-      searchString,
+      searchString
     }).load();
   };
   const getProposalsAsync = async (
@@ -188,7 +209,7 @@ export const useChainData = () => {
     limit: number,
     offset: number,
     status?: string,
-    searchString?: string,
+    searchString?: string
   ) => {
     let where;
     if (status) {
@@ -196,8 +217,11 @@ export const useChainData = () => {
         where = {
           _and: [
             { status: { _eq: status } },
-            { _or: [{ title: { _ilike: `%${searchString}%` } }, { description: { _ilike: `%${searchString}%` } }] },
-          ],
+            { _or: [
+              { title: { _ilike: `%${searchString}%` } },
+              { description: { _ilike: `%${searchString}%` } }
+            ] }
+          ]
         };
       } else {
         where = { status: { _eq: status } };
@@ -207,8 +231,11 @@ export const useChainData = () => {
         where = {
           _and: [
             { status: { _neq: "PROPOSAL_STATUS_INVALID" } },
-            { _or: [{ title: { _ilike: `%${searchString}%` } }, { description: { _ilike: `%${searchString}%` } }] },
-          ],
+            { _or: [
+              { title: { _ilike: `%${searchString}%` } },
+              { description: { _ilike: `%${searchString}%` } }
+            ] }
+          ]
         };
       } else {
         where = { status: { _neq: "PROPOSAL_STATUS_INVALID" } };
@@ -219,31 +246,34 @@ export const useChainData = () => {
         return await useLazyProposalsPassedQuery({
           limit,
           offset,
-          where,
+          where
         }).load();
       case "rejected":
         return await useLazyProposalsRejectedQuery({
           limit,
           offset,
-          where,
+          where
         }).load();
       case "failed":
         return await useLazyProposalsFailedQuery({
           limit,
           offset,
-          where,
+          where
         }).load();
       case "active":
       default:
         return await useLazyProposalsActiveQuery({
           limit,
           offset,
-          where,
+          where
         }).load();
     }
   };
   const getProposalAsync = async (id: number) => {
-    const result = await useLazyProposalQuery({ id }, { pollInterval: 5000 }).load();
+    const result = await useLazyProposalQuery(
+      { id },
+      { pollInterval: 5000 }
+    ).load();
     return result;
   };
   const getParamsAsync = async () => {
@@ -259,7 +289,10 @@ export const useChainData = () => {
     return result;
   };
   const getProposalTalliesAsync = async (id: number) => {
-    const result = await useLazyProposalTalliesQuery({ id }, { pollInterval: 5000 }).load();
+    const result = await useLazyProposalTalliesQuery(
+      { id },
+      { pollInterval: 5000 }
+    ).load();
     return result;
   };
   const getBlockHeightAsync = async (timestamp: string) => {
@@ -273,7 +306,10 @@ export const useChainData = () => {
   };
   const getDelegatedAsync = async (address: string, height?: number) => {
     if (height) {
-      const where = { _and: [{ height: { _lte: height } }, { delegator: { _eq: address } }] };
+      const where = { _and: [
+        { height: { _lte: height } },
+        { delegator: { _eq: address } }
+      ] };
       const result = useLazyDelegatedQuery({ where }).load();
 
       return result;
@@ -293,16 +329,21 @@ export const useChainData = () => {
     return result;
   };
   const getVotesAsync = async (address: string, proposalId: number) => {
-    const result = await useLazyVotesQuery({ address, proposalId, propId: String(proposalId) }).load();
+    const result = await useLazyVotesQuery({ address,
+      proposalId,
+      propId: String(proposalId) }).load();
     return result;
   };
 
   const getAllVotesAsync = async (proposalId: number, limit: number, offset: number) => {
-    const result = useLazyAllVotesQuery({ limit, offset, proposalId }).load();
+    const result = useLazyAllVotesQuery({ limit,
+      offset,
+      proposalId }).load();
     return result;
   };
   const getVoteOptionAsync = async (proposalId: number, option: string) => {
-    const result = await useLazyVoteOptionQuery({ proposalId, option }).load();
+    const result = await useLazyVoteOptionQuery({ proposalId,
+      option }).load();
     return result;
   };
   return {
@@ -337,6 +378,6 @@ export const useChainData = () => {
     getAllVotesAsync,
     getVoteOptionAsync,
     searchProposals,
-    searchProposalsAsync,
+    searchProposalsAsync
   };
 };

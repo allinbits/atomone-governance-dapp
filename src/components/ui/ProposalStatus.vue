@@ -1,18 +1,31 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-import { capitalizeFirstLetter } from "@/utility/index";
+
 import { PropStatus } from "@/types/proposals";
+import { capitalizeFirstLetter } from "@/utility/index";
 
 const { status } = defineProps<{ status: PropStatus }>();
 
 const colors = {
-  deposit: ["fill-accent-200", "text-accent-200"],
-  voting: ["fill-accent-100", "text-accent-100"],
+  deposit: [
+    "fill-accent-200",
+    "text-accent-200"
+  ],
+  voting: [
+    "fill-accent-100",
+    "text-accent-100"
+  ],
   passed: ["fill-accent-100"],
   rejected: ["fill-neg-200"],
   failed: ["fill-neg-200"],
-  unspecified: ["fill-neg-200", "text-neg-200"],
-  invalid: ["fill-neg-200", "text-neg-200"],
+  unspecified: [
+    "fill-neg-200",
+    "text-neg-200"
+  ],
+  invalid: [
+    "fill-neg-200",
+    "text-neg-200"
+  ]
 };
 
 const textColor = computed(() => {
@@ -21,7 +34,11 @@ const textColor = computed(() => {
 
 const iconClasses = computed(() => {
   if (!colors[status]) {
-    return ["fill-neg-200", "w-2", "h-2"];
+    return [
+      "fill-neg-200",
+      "w-2",
+      "h-2"
+    ];
   }
 
   const classes: string[] = [...colors[status]];

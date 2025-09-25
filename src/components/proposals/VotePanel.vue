@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed } from "vue";
+
 import VoteChart from "@/components/proposals/VoteChart.vue";
 import CommonButton from "@/components/ui/CommonButton.vue";
 import { decToPerc, formatAmount } from "@/utility";
@@ -26,9 +27,15 @@ const emits = defineEmits<{ (e: "onBreakdown"): void }>();
 const pcts = computed(() => {
   const sum = props.tokenTallies.yes + props.tokenTallies.no + props.tokenTallies.abstain;
   return {
-    yes: sum > 0 ? props.tokenTallies.yes / sum : 0,
-    no: sum > 0 ? props.tokenTallies.no / sum : 0,
-    abstain: sum > 0 ? props.tokenTallies.abstain / sum : 0,
+    yes: sum > 0
+      ? props.tokenTallies.yes / sum
+      : 0,
+    no: sum > 0
+      ? props.tokenTallies.no / sum
+      : 0,
+    abstain: sum > 0
+      ? props.tokenTallies.abstain / sum
+      : 0
   };
 });
 const totalVoteText = computed(() => {

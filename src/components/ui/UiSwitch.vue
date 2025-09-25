@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, reactive, nextTick, onMounted, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 
 interface Props {
   modelValue?: string | number;
@@ -48,31 +48,43 @@ interface State {
   tabsListPos: DOMRect | null;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: undefined,
-});
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    modelValue: undefined
+  }
+);
 
 const emit = defineEmits(["update:modelValue"]);
 const model = computed({
   get: () => props.modelValue,
   set: (value) => {
-    emit("update:modelValue", value);
-  },
+    emit(
+      "update:modelValue",
+      value
+    );
+  }
 });
 
 const toggler = ref<HTMLElement | null>(null);
 const togglerOption = ref<HTMLLabelElement[] | null>(null);
 const state: State = reactive({
   tabsPos: [],
-  tabsListPos: null,
+  tabsListPos: null
 });
 
 const changeOption = (idx: string) => {
   const el = state.tabsPos.find((tab: TabsPos) => tab.id === idx);
 
   if (el && state.tabsListPos && toggler.value) {
-    toggler.value.style.setProperty("--mw", `${el.pos.width.toString()}px`);
-    toggler.value.style.setProperty("--tx", `${el.pos.left - (state.tabsListPos?.left ?? 0)}px`);
+    toggler.value.style.setProperty(
+      "--mw",
+      `${el.pos.width.toString()}px`
+    );
+    toggler.value.style.setProperty(
+      "--tx",
+      `${el.pos.left - (state.tabsListPos?.left ?? 0)}px`
+    );
   }
 };
 
@@ -83,14 +95,18 @@ const setBg = () => {
     if (togglerOption.value && toggler.value) {
       state.tabsListPos = toggler.value.getBoundingClientRect();
       togglerOption.value.forEach((tab) => {
-        state.tabsPos.push({ id: tab.htmlFor, pos: tab.getBoundingClientRect() });
+        state.tabsPos.push({ id: tab.htmlFor,
+          pos: tab.getBoundingClientRect() });
         if (tab.htmlFor === props.id + model.value) changeOption(tab.htmlFor);
       });
     }
   });
 };
 
-watch(props.options, () => setBg());
+watch(
+  props.options,
+  () => setBg()
+);
 onMounted(() => setBg());
 </script>
 

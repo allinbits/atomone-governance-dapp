@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import { bus } from "@/bus";
 import { useGithubDiscussions } from "@/composables/useGithubDiscussions";
-import { onMounted, ref } from "vue";
 
 const props = defineProps<{ proposal: number }>();
 const count = ref(0);

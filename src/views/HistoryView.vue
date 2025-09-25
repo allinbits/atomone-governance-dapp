@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useWallet } from "@/composables/useWallet";
 import VoteHistory from "@/components/history/VoteHistory.vue";
+import { useWallet } from "@/composables/useWallet";
 
 const { loggedIn, address } = useWallet();
 </script>

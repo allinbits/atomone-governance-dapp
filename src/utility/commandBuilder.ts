@@ -2,20 +2,26 @@ import { Coin } from "@atomone/atomone-types/cosmos/base/v1beta1/coin";
 
 export default class CommandBuilder {
   private command: string[];
+
   private address: string;
+
   private fees: Coin[];
+
   private chainId: string;
 
-  static Deposit() {
+  static Deposit () {
     return new CommandBuilder("deposit");
   }
-  static Vote() {
+
+  static Vote () {
     return new CommandBuilder("vote");
   }
-  static WeightedVote() {
+
+  static WeightedVote () {
     return new CommandBuilder("weighted-vote");
   }
-  constructor(action: string) {
+
+  constructor (action: string) {
     this.command = [];
     this.address = "";
     this.fees = [];
@@ -25,23 +31,28 @@ export default class CommandBuilder {
     this.command.push("gov");
     this.command.push(action);
   }
-  withChainId(chainId: string) {
+
+  withChainId (chainId: string) {
     this.chainId = chainId;
     return this;
   }
-  withSigner(address: string) {
+
+  withSigner (address: string) {
     this.address = address;
     return this;
   }
-  withFees(fees: Coin[]) {
+
+  withFees (fees: Coin[]) {
     this.fees = fees;
     return this;
   }
-  addParam(param: string) {
+
+  addParam (param: string) {
     this.command.push(param);
     return this;
   }
-  finish() {
+
+  finish () {
     this.command.push("--fees");
     let feeString = "";
     for (let i = 0; i < this.fees.length; i++) {

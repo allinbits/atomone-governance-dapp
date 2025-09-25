@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useProposals } from "@/composables/useProposals";
-import CommonButton from "@/components/ui/CommonButton.vue";
-import ParameterInput from "@/components/create/ParameterInput.vue";
 import { DeliverTxResponse } from "@cosmjs/stargate";
-import { useRouter } from "vue-router";
-import { bus } from "@/bus";
 import { VCodeBlock } from "@wdns/vue-code-block";
-import { toPlainObjectString } from "@/utility";
-import { useWallet } from "@/composables/useWallet";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-type ParameterType = { key: string; subspace: string; value: string };
+import { bus } from "@/bus";
+import ParameterInput from "@/components/create/ParameterInput.vue";
+import CommonButton from "@/components/ui/CommonButton.vue";
+import { useProposals } from "@/composables/useProposals";
+import { useWallet } from "@/composables/useWallet";
+import { toPlainObjectString } from "@/utility";
+
+type ParameterType = { key: string;
+  subspace: string;
+  value: string; };
 
 const router = useRouter();
 
@@ -19,10 +22,10 @@ const {
   createProposal,
   createTextProposalContent,
   createParamChangeProposalContent,
-  createUpgradePlanProposalContent,
+  createUpgradePlanProposalContent
 } = useProposals();
 
-const proposalType = ref<("text" | "param" | "upgrade") | undefined>(undefined);
+const proposalType = ref<"text" | "param" | "upgrade" | undefined>(undefined);
 
 const title = ref<string>("");
 const description = ref<string>("");
@@ -31,30 +34,51 @@ const blockHeight = ref<number>(0);
 const blockInfo = ref<string>("");
 const upgradeName = ref<string>("");
 
-const parameters = ref<ParameterType[]>([{ key: "", subspace: "", value: "" }]);
+const parameters = ref<ParameterType[]>([
+  { key: "",
+    subspace: "",
+    value: "" }
+]);
 
 const isAllValid = ref<boolean>(false);
 const isProcessing = ref<boolean>(false);
 const trx = ref<Partial<DeliverTxResponse> | undefined>(undefined);
 
-async function create() {
+async function create () {
   isProcessing.value = true;
-  const defaultProposal = { title: title.value, description: description.value };
+  const defaultProposal = { title: title.value,
+    description: description.value };
   let response: DeliverTxResponse | undefined;
 
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(
+    resolve,
+    5000
+  ));
 
   if (proposalType.value === "text") {
     const prop = createTextProposalContent(defaultProposal);
-    response = await createProposal({ initialDeposit: [{ amount: "100000", denom: "uatone" }] }, prop).catch((err) => {
+    response = await createProposal(
+      { initialDeposit: [
+        { amount: "100000",
+          denom: "uatone" }
+      ] },
+      prop
+    ).catch((err) => {
       console.error(err);
       return undefined;
     });
   }
 
   if (proposalType.value === "param") {
-    const prop = createParamChangeProposalContent({ ...defaultProposal, changes: parameters.value });
-    response = await createProposal({ initialDeposit: [{ amount: "100000", denom: "uatone" }] }, prop).catch((err) => {
+    const prop = createParamChangeProposalContent({ ...defaultProposal,
+      changes: parameters.value });
+    response = await createProposal(
+      { initialDeposit: [
+        { amount: "100000",
+          denom: "uatone" }
+      ] },
+      prop
+    ).catch((err) => {
       console.error(err);
       return undefined;
     });
@@ -63,31 +87,48 @@ async function create() {
   if (proposalType.value === "upgrade") {
     const prop = createUpgradePlanProposalContent({
       ...defaultProposal,
-      plan: { height: BigInt(blockHeight.value), info: blockInfo.value, name: upgradeName.value, time: undefined },
+      plan: { height: BigInt(blockHeight.value),
+        info: blockInfo.value,
+        name: upgradeName.value,
+        time: undefined }
     });
-    response = await createProposal({ initialDeposit: [{ amount: "100000", denom: "uatone" }] }, prop).catch((err) => {
+    response = await createProposal(
+      { initialDeposit: [
+        { amount: "100000",
+          denom: "uatone" }
+      ] },
+      prop
+    ).catch((err) => {
       console.error(err);
       return undefined;
     });
   }
 
   if (!response) {
-    bus.emit("error", "Failed to push transaction");
+    bus.emit(
+      "error",
+      "Failed to push transaction"
+    );
   }
 
   trx.value = response;
   isProcessing.value = false;
 }
 
-function addParameter() {
-  parameters.value.push({ key: "", subspace: "", value: "" });
+function addParameter () {
+  parameters.value.push({ key: "",
+    subspace: "",
+    value: "" });
 }
 
-function delParameter(index: number) {
-  parameters.value.splice(index, 1);
+function delParameter (index: number) {
+  parameters.value.splice(
+    index,
+    1
+  );
 }
 
-async function validate() {
+async function validate () {
   isAllValid.value = false;
 
   if (title.value.length <= 0) {
@@ -99,7 +140,7 @@ async function validate() {
   }
 
   if (proposalType.value === "param" && parameters.value.length >= 1) {
-    for (let param of parameters.value) {
+    for (const param of parameters.value) {
       if (param.key.length <= 0 || param.subspace.length <= 0 || param.value.length <= 0) {
         return;
       }
@@ -107,8 +148,12 @@ async function validate() {
   }
 
   if (proposalType.value === "upgrade") {
-    const variables = [blockHeight, blockInfo, upgradeName];
-    for (let variable of variables) {
+    const variables = [
+      blockHeight,
+      blockInfo,
+      upgradeName
+    ];
+    for (const variable of variables) {
       if (typeof variable.value === "number" && variable.value <= 0) {
         return;
       }
@@ -122,7 +167,7 @@ async function validate() {
   isAllValid.value = true;
 }
 
-function clearProposal() {
+function clearProposal () {
   proposalType.value = undefined;
 }
 </script>

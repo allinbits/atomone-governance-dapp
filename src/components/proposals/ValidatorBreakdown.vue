@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import { ValSetQuery, ValidatorsQuery, VotesQuery } from "@/gql/graphql";
+import { ValidatorsQuery, ValSetQuery, VotesQuery } from "@/gql/graphql";
 import * as Utility from "@/utility/index";
 
 const props = defineProps<{
   validatorData: Array<
-    (ValidatorsQuery["block"][0]["validator_statuses"][0] | ValSetQuery["proposal_validator_status_snapshot"][0]) & {
+    (ValidatorsQuery["proposal_validator_status_snapshot"][0] | ValSetQuery["proposal_validator_status_snapshot"][0]) & {
       voting_power: number;
-      votes: VotesQuery["proposal_vote"];
+      votes: VotesQuery["proposal_votes"];
     }
   >;
 }>();
 
-const getTxHash = (vote: VotesQuery["proposal_vote"][0]) => {
+const getTxHash = (vote: VotesQuery["proposal_votes"][0]) => {
   if (vote.block && vote.block.transactions && vote.block.transactions.length > 0) {
     const transaction = vote.block.transactions.filter((tx) => {
       return (
@@ -34,8 +34,8 @@ const getTxHash = (vote: VotesQuery["proposal_vote"][0]) => {
   }
 };
 const getValidatorInfo = (address: string) => {
-  return props.validatorData.filter((x) => x.validator_info?.self_delegate_address == address)[0].validator_info
-    .validator_descriptions[0];
+  return props.validatorData.filter((x) => x.validator_info?.self_delegate_address == address)[0].validator_info.
+    validator_descriptions[0];
 };
 </script>
 

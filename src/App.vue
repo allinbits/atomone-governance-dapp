@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 
+import FooterSection from "@/components/layout/FooterSection.vue";
 import HeaderSection from "@/components/layout/HeaderSection.vue";
 import ErrorBox from "@/components/popups/ErrorBox.vue";
-import FooterSection from "@/components/layout/FooterSection.vue";
 
 /*
-import { useGithubDiscussions } from "@/composables/useGithubDiscussions";
-
-useGithubDiscussions().setup();
-*/
+ *import { useGithubDiscussions } from "@/composables/useGithubDiscussions";
+ *
+ *useGithubDiscussions().setup();
+ */
 </script>
 
 <template>

@@ -1,21 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ref, computed, Ref } from "vue";
-import chainInfo from "@/chain-config.json";
-import { EncodeObject, OfflineDirectSigner, OfflineSigner } from "@cosmjs/proto-signing";
 import { getSigningAtomoneClient } from "@atomone/atomone-types/atomone/client";
+import { EncodeObject, OfflineDirectSigner, OfflineSigner } from "@cosmjs/proto-signing";
 import { getOfflineSigner } from "@cosmostation/cosmos-client";
 import { OfflineAminoSigner } from "@keplr-wallet/types";
+import { computed, Ref, ref } from "vue";
+
+import chainInfo from "@/chain-config.json";
 
 export enum Wallets {
   keplr = "Keplr",
   leap = "Leap",
   cosmostation = "Cosmostation",
-  addressOnly = "AddressOnly",
+  addressOnly = "AddressOnly"
 }
 chainInfo.chainId = import.meta.env.VITE_CHAIN_ID;
 chainInfo.rpc = import.meta.env.VITE_RPC;
 chainInfo.rest = import.meta.env.VITE_API;
-chainInfo.chainName = (import.meta.env.VITE_ENVIRONMENT as string) == "staging" ? "AtomOne Testnet" : "AtomOne Mainnet";
+chainInfo.chainName = (import.meta.env.VITE_ENVIRONMENT as string) == "staging"
+  ? "AtomOne Testnet"
+  : "AtomOne Mainnet";
 
 export const getWalletHelp = (wallet: Wallets) => {
   switch (wallet) {
@@ -34,7 +37,7 @@ const useWalletInstance = () => {
     cosmostation: computed(() => !!window.cosmostation),
     loggedIn: ref(false),
     address: ref(""),
-    used: ref<Wallets | null>(null),
+    used: ref<Wallets | null>(null)
   };
   const signOut = () => {
     walletState.address.value = "";
@@ -45,14 +48,20 @@ const useWalletInstance = () => {
 
   const connect = async (walletType: Wallets, address?: string, signal?: AbortSignal) => {
     if (signal?.aborted) {
-      return Promise.reject(new DOMException("Aborted", "AbortError"));
+      return Promise.reject(new DOMException(
+        "Aborted",
+        "AbortError"
+      ));
     }
     const abortHandler = () => {
       walletState.address.value = "";
       walletState.used.value = null;
       walletState.loggedIn.value = false;
     };
-    signal?.addEventListener("abort", abortHandler);
+    signal?.addEventListener(
+      "abort",
+      abortHandler
+    );
     switch (walletType) {
       case Wallets.keplr:
         try {
@@ -74,7 +83,10 @@ const useWalletInstance = () => {
         } catch (e) {
           throw new Error(" connect to Keplr: " + e);
         } finally {
-          signal?.removeEventListener("abort", abortHandler);
+          signal?.removeEventListener(
+            "abort",
+            abortHandler
+          );
         }
         break;
       case Wallets.leap:
@@ -93,12 +105,14 @@ const useWalletInstance = () => {
         } catch (e) {
           throw new Error("Could not connect to Leap Wallet: " + e);
         } finally {
-          signal?.removeEventListener("abort", abortHandler);
+          signal?.removeEventListener(
+            "abort",
+            abortHandler
+          );
         }
         break;
       case Wallets.cosmostation:
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (window.cosmostation as any).cosmos.request({
             method: "cos_addChain",
             params: {
@@ -109,8 +123,8 @@ const useWalletInstance = () => {
               displayDenom: chainInfo.stakeCurrency.coinDenom,
               restURL: chainInfo.rest,
               decimals: chainInfo.stakeCurrency.coinDecimals, // optional
-              coinType: "" + chainInfo.bip44.coinType, // optional
-            },
+              coinType: "" + chainInfo.bip44.coinType // optional
+            }
           });
         } catch (e: unknown) {
           if ((e as { code: number }).code != -32602) {
@@ -121,7 +135,7 @@ const useWalletInstance = () => {
           walletState.address.value = (
             await (window.cosmostation as any).cosmos.request({
               method: "cos_requestAccount",
-              params: { chainName: chainInfo.chainId },
+              params: { chainName: chainInfo.chainId }
             })
           ).address;
           walletState.loggedIn.value = true;
@@ -139,7 +153,10 @@ const useWalletInstance = () => {
         } catch (e) {
           throw new Error("Could not connect to Cosmostation: " + e);
         } finally {
-          signal?.removeEventListener("abort", abortHandler);
+          signal?.removeEventListener(
+            "abort",
+            abortHandler
+          );
         }
         break;
       case Wallets.addressOnly:
@@ -154,11 +171,19 @@ const useWalletInstance = () => {
   const sendTx = async (msgs: EncodeObject[]) => {
     if (signer.value) {
       try {
-        const client = await getSigningAtomoneClient({ rpcEndpoint: chainInfo.rpc, signer: signer.value });
-        const result = await client.signAndBroadcast(walletState.address.value, msgs, {
-          amount: [{ amount: "10000", denom: chainInfo.feeCurrencies[0].coinMinimalDenom }],
-          gas: "400000",
-        });
+        const client = await getSigningAtomoneClient({ rpcEndpoint: chainInfo.rpc,
+          signer: signer.value });
+        const result = await client.signAndBroadcast(
+          walletState.address.value,
+          msgs,
+          {
+            amount: [
+              { amount: "10000",
+                denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+            ],
+            gas: "400000"
+          }
+        );
         return result;
       } catch (e) {
         throw new Error("Could not sign messages: " + e);
@@ -170,17 +195,32 @@ const useWalletInstance = () => {
   const refreshAddress = () => {
     if (walletState.used.value) {
       if (walletState.used.value == Wallets.addressOnly) {
-        connect(walletState.used.value, walletState.address.value);
+        connect(
+          walletState.used.value,
+          walletState.address.value
+        );
       } else {
         connect(walletState.used.value);
       }
     }
   };
-  window.addEventListener("cosmostation_keystorechange", refreshAddress);
-  window.addEventListener("keplr_keystorechange", refreshAddress);
-  window.addEventListener("leap_keystorechange", refreshAddress);
+  window.addEventListener(
+    "cosmostation_keystorechange",
+    refreshAddress
+  );
+  window.addEventListener(
+    "keplr_keystorechange",
+    refreshAddress
+  );
+  window.addEventListener(
+    "leap_keystorechange",
+    refreshAddress
+  );
 
-  return { ...walletState, signOut, connect, sendTx };
+  return { ...walletState,
+    signOut,
+    connect,
+    sendTx };
 };
 
 let walletInstance: ReturnType<typeof useWalletInstance>;

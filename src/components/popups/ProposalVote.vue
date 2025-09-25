@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { computed, ref, reactive } from "vue";
-
-import { MsgVote, MsgVoteWeighted } from "@atomone/atomone-types/atomone/gov/v1/tx";
 import { VoteOption } from "@atomone/atomone-types/atomone/gov/v1/gov";
-import ModalWrap from "@/components/common/ModalWrap.vue";
-
-import { useI18n } from "vue-i18n";
-import Icon from "@/components/ui/Icon.vue";
-import CommonButton from "@/components/ui/CommonButton.vue";
-import UiSwitch from "@/components/ui/UiSwitch.vue";
-import UiState from "@/components/ui/UiState.vue";
-import UiInput from "@/components/ui/UiInput.vue";
-import UiInfo from "@/components/ui/UiInfo.vue";
-
-import { useWallet, Wallets } from "@/composables/useWallet";
-import { useProposals } from "@/composables/useProposals";
-import { useClipboard } from "@vueuse/core";
-import { useTelemetry } from "@/composables/useTelemetry";
+import { MsgVote, MsgVoteWeighted } from "@atomone/atomone-types/atomone/gov/v1/tx";
 import { DeliverTxResponse } from "@atomone/atomone-types/types";
+import { useClipboard } from "@vueuse/core";
+import { computed, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+import ModalWrap from "@/components/common/ModalWrap.vue";
+import CommonButton from "@/components/ui/CommonButton.vue";
+import Icon from "@/components/ui/Icon.vue";
+import UiInfo from "@/components/ui/UiInfo.vue";
+import UiInput from "@/components/ui/UiInput.vue";
+import UiState from "@/components/ui/UiState.vue";
+import UiSwitch from "@/components/ui/UiSwitch.vue";
+import { useProposals } from "@/composables/useProposals";
+import { useTelemetry } from "@/composables/useTelemetry";
+import { useWallet, Wallets } from "@/composables/useWallet";
 import { toPlainObjectString } from "@/utility";
 
 interface Props {
@@ -29,7 +27,10 @@ const { t } = useI18n();
 const isOpen = ref(false);
 const displayState = ref<"voted" | "CLI" | "pending" | "error">("pending");
 
-const tabOptions = reactive(["Straight", "Weighted"]);
+const tabOptions = reactive([
+  "Straight",
+  "Weighted"
+]);
 const tab = ref(tabOptions[0]);
 
 const errorMsg = ref<string>("");
@@ -37,10 +38,14 @@ const cliVoteInput = ref("");
 const transacting = ref<boolean>(false);
 
 // Votes info
-const voteList: Partial<Record<VoteOption, { label: string; color: string }>> = {
-  [VoteOption.VOTE_OPTION_YES]: { label: t("voteOptions.yes"), color: "text-accent-100" },
-  [VoteOption.VOTE_OPTION_NO]: { label: t("voteOptions.no"), color: "text-neg-200" },
-  [VoteOption.VOTE_OPTION_ABSTAIN]: { label: t("voteOptions.abstain"), color: "text-grey-100" },
+const voteList: Partial<Record<VoteOption, { label: string;
+  color: string; }>> = {
+  [VoteOption.VOTE_OPTION_YES]: { label: t("voteOptions.yes"),
+    color: "text-accent-100" },
+  [VoteOption.VOTE_OPTION_NO]: { label: t("voteOptions.no"),
+    color: "text-neg-200" },
+  [VoteOption.VOTE_OPTION_ABSTAIN]: { label: t("voteOptions.abstain"),
+    color: "text-grey-100" }
 };
 
 // Vote records
@@ -48,7 +53,7 @@ const voteStraight = ref<VoteOption | null>();
 const voteWeighted = reactive<Partial<Record<VoteOption, { value: number | null }>>>({
   [VoteOption.VOTE_OPTION_YES]: { value: null },
   [VoteOption.VOTE_OPTION_NO]: { value: null },
-  [VoteOption.VOTE_OPTION_ABSTAIN]: { value: null },
+  [VoteOption.VOTE_OPTION_ABSTAIN]: { value: null }
 });
 
 const resetVote = () => {
@@ -56,7 +61,7 @@ const resetVote = () => {
   voteStraight.value = undefined;
 
   // Reset Weighted votes
-  Object.entries(voteWeighted).forEach((el) => (el[1].value = null));
+  Object.entries(voteWeighted).forEach((el) => el[1].value = null);
 };
 
 const toggleModal = (dir: boolean) => {
@@ -66,9 +71,10 @@ const toggleModal = (dir: boolean) => {
 };
 
 const getVoteWeightedPercent = (data: number) => data * 100;
-const checkVoteWeighted = computed(
-  () => Object.entries(voteWeighted).reduce((acc, curr) => acc + (curr[1].value ?? 2), 0) === 1,
-);
+const checkVoteWeighted = computed(() => Object.entries(voteWeighted).reduce(
+  (acc, curr) => acc + (curr[1].value ?? 2),
+  0
+) === 1);
 
 const { voteProposal, voteWeightedProposal } = useProposals();
 const { address, used } = useWallet();
@@ -89,19 +95,28 @@ const signVote = async (isCLI = false) => {
       options: [
         {
           option: VoteOption.VOTE_OPTION_YES,
-          weight: (((voteWeighted[VoteOption.VOTE_OPTION_YES]?.value ?? -1) as number) * Math.pow(10, 18)).toString(),
+          weight: (((voteWeighted[VoteOption.VOTE_OPTION_YES]?.value ?? -1) as number) * Math.pow(
+            10,
+            18
+          )).toString()
         },
         {
           option: VoteOption.VOTE_OPTION_NO,
-          weight: (((voteWeighted[VoteOption.VOTE_OPTION_NO]?.value ?? -1) as number) * Math.pow(10, 18)).toString(),
+          weight: (((voteWeighted[VoteOption.VOTE_OPTION_NO]?.value ?? -1) as number) * Math.pow(
+            10,
+            18
+          )).toString()
         },
         {
           option: VoteOption.VOTE_OPTION_ABSTAIN,
           weight: (
-            ((voteWeighted[VoteOption.VOTE_OPTION_ABSTAIN]?.value ?? -1) as number) * Math.pow(10, 18)
-          ).toString(),
-        },
-      ],
+            ((voteWeighted[VoteOption.VOTE_OPTION_ABSTAIN]?.value ?? -1) as number) * Math.pow(
+              10,
+              18
+            )
+          ).toString()
+        }
+      ]
     };
     voteOptions.options = voteOptions.options.filter((opt) => opt.weight !== "0");
   } else {
@@ -110,23 +125,32 @@ const signVote = async (isCLI = false) => {
       proposalId: BigInt(props.proposalId),
       metadata: "",
       voter: address.value,
-      option: +voteStraight.value,
+      option: +voteStraight.value
     };
   }
 
-  const voteProposalFunc = checkVoteWeighted.value ? voteWeightedProposal : voteProposal;
+  const voteProposalFunc = checkVoteWeighted.value
+    ? voteWeightedProposal
+    : voteProposal;
 
   try {
     transacting.value = true;
-    const vote = await (voteOptions && voteProposalFunc(voteOptions, isCLI));
+    const vote = await (voteOptions && voteProposalFunc(
+      voteOptions,
+      isCLI
+    ));
     if ((vote as DeliverTxResponse).code !== 0 && !isCLI) {
       transacting.value = false;
       errorMsg.value = (vote as DeliverTxResponse).rawLog ?? toPlainObjectString(vote);
       displayState.value = "error";
     } else {
       transacting.value = false;
-      cliVoteInput.value = (isCLI ? vote : "") as string;
-      displayState.value = isCLI ? "CLI" : "voted";
+      cliVoteInput.value = (isCLI
+        ? vote
+        : "") as string;
+      displayState.value = isCLI
+        ? "CLI"
+        : "voted";
     }
   } catch (e) {
     console.log(e);
@@ -135,7 +159,12 @@ const signVote = async (isCLI = false) => {
     displayState.value = "error";
   }
 
-  logEvent("Sign Popup ProposalVote", { signOption: isCLI ? "CLI" : "GUI" });
+  logEvent(
+    "Sign Popup ProposalVote",
+    { signOption: isCLI
+      ? "CLI"
+      : "GUI" }
+  );
 };
 
 const { copy, copied, isSupported: isClipboardSupported } = useClipboard();

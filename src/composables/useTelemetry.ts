@@ -1,4 +1,5 @@
-/***
+/**
+ **
  * Plausible tracker API - 0.3.8: https://github.com/plausible/plausible-tracker/tree/master/src/lib
  */
 type Eventprops = Record<string, string>;
@@ -36,12 +37,13 @@ type EventOptions = {
 type EnableAutoPageviews = () => Cleanup;
 type EnableAutoOutboundTracking = (targetNode?: Node & ParentNode, observerInit?: MutationObserverInit) => Cleanup;
 
-/***
+/**
+ **
  * FUNC: Plausible API
  */
-function sendEvent(eventName: string, data: Required<PlausibleOptions>, options?: EventOptions): void {
+function sendEvent (eventName: string, data: Required<PlausibleOptions>, options?: EventOptions): void {
   const isLocalhost =
-    /^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/.test(location.hostname) ||
+    (/^localhost$|^127(?:\.[0-9]+){0,2}\.[0-9]+$|^(?:0*:)*?:?0*1$/).test(location.hostname) ||
     location.protocol === "file:";
 
   if (!data.trackLocalhost && isLocalhost) {
@@ -50,10 +52,10 @@ function sendEvent(eventName: string, data: Required<PlausibleOptions>, options?
 
   try {
     if (window.localStorage.plausible_ignore === "true") {
-      return console.warn('[Plausible] Ignoring event because "plausible_ignore" is set to "true" in localStorage');
+      return console.warn("[Plausible] Ignoring event because \"plausible_ignore\" is set to \"true\" in localStorage");
     }
-  } catch (e) {
-    null;
+  } catch (_e) {
+    return;
   }
 
   const payload: EventPayload = {
@@ -62,13 +64,24 @@ function sendEvent(eventName: string, data: Required<PlausibleOptions>, options?
     d: data.domain,
     r: data.referrer,
     w: data.deviceWidth,
-    h: data.hashMode ? 1 : 0,
-    p: options && options.props ? JSON.stringify(options.props) : undefined,
+    h: data.hashMode
+      ? 1
+      : 0,
+    p: options && options.props
+      ? JSON.stringify(options.props)
+      : undefined
   };
 
   const req = new XMLHttpRequest();
-  req.open("POST", `${data.apiHost}/api/event`, true);
-  req.setRequestHeader("Content-Type", "text/plain");
+  req.open(
+    "POST",
+    `${data.apiHost}/api/event`,
+    true
+  );
+  req.setRequestHeader(
+    "Content-Type",
+    "text/plain"
+  );
   req.send(JSON.stringify(payload));
 
   req.onreadystatechange = () => {
@@ -79,7 +92,7 @@ function sendEvent(eventName: string, data: Required<PlausibleOptions>, options?
   };
 }
 
-function Plausible(defaults?: PlausibleInitOptions): {
+function Plausible (defaults?: PlausibleInitOptions): {
   readonly trackEvent: TrackEvent;
   readonly trackPageview: TrackPageview;
   readonly enableAutoPageviews: EnableAutoPageviews;
@@ -93,15 +106,24 @@ function Plausible(defaults?: PlausibleInitOptions): {
     referrer: document.referrer || null,
     deviceWidth: window.innerWidth,
     apiHost: "https://plausible.io",
-    ...defaults,
+    ...defaults
   });
 
   const trackEvent: TrackEvent = (eventName, options, eventData) => {
-    sendEvent(eventName, { ...getConfig(), ...eventData }, options);
+    sendEvent(
+      eventName,
+      { ...getConfig(),
+        ...eventData },
+      options
+    );
   };
 
   const trackPageview: TrackPageview = (eventData, options) => {
-    trackEvent("pageview", options, eventData);
+    trackEvent(
+      "pageview",
+      options,
+      eventData
+    );
   };
 
   const enableAutoPageviews: EnableAutoPageviews = () => {
@@ -110,27 +132,46 @@ function Plausible(defaults?: PlausibleInitOptions): {
     const originalPushState = history.pushState;
     if (originalPushState) {
       history.pushState = function (data, title, url) {
-        originalPushState.apply(this, [data, title, url]);
+        originalPushState.apply(
+          this,
+          [
+            data,
+            title,
+            url
+          ]
+        );
         page();
       };
-      addEventListener("popstate", page);
+      addEventListener(
+        "popstate",
+        page
+      );
     }
 
     // Attach hashchange listener
     if (defaults && defaults.hashMode) {
-      addEventListener("hashchange", page);
+      addEventListener(
+        "hashchange",
+        page
+      );
     }
 
     // Trigger first page view
     trackPageview();
 
-    return function cleanup() {
+    return function cleanup () {
       if (originalPushState) {
         history.pushState = originalPushState;
-        removeEventListener("popstate", page);
+        removeEventListener(
+          "popstate",
+          page
+        );
       }
       if (defaults && defaults.hashMode) {
-        removeEventListener("hashchange", page);
+        removeEventListener(
+          "hashchange",
+          page
+        );
       }
     };
   };
@@ -141,16 +182,22 @@ function Plausible(defaults?: PlausibleInitOptions): {
       subtree: true,
       childList: true,
       attributes: true,
-      attributeFilter: ["href"],
-    },
+      attributeFilter: ["href"]
+    }
   ) => {
-    function trackClick(this: HTMLAnchorElement, event: MouseEvent) {
-      trackEvent("Outbound Link: Click", { props: { url: this.href } });
+    function trackClick (this: HTMLAnchorElement, event: MouseEvent) {
+      trackEvent(
+        "Outbound Link: Click",
+        { props: { url: this.href } }
+      );
 
       if (!(typeof process !== "undefined" && process && process.env.NODE_ENV === "test")) {
-        setTimeout(() => {
-          location.href = this.href;
-        }, 150);
+        setTimeout(
+          () => {
+            location.href = this.href;
+          },
+          150
+        );
       }
 
       event.preventDefault();
@@ -158,10 +205,13 @@ function Plausible(defaults?: PlausibleInitOptions): {
 
     const tracked: Set<HTMLAnchorElement> = new Set();
 
-    function addNode(node: Node | ParentNode) {
+    function addNode (node: Node | ParentNode) {
       if (node instanceof HTMLAnchorElement) {
         if (node.host !== location.host) {
-          node.addEventListener("click", trackClick);
+          node.addEventListener(
+            "click",
+            trackClick
+          );
           tracked.add(node);
         }
       } else if ("querySelectorAll" in node) {
@@ -169,9 +219,12 @@ function Plausible(defaults?: PlausibleInitOptions): {
       }
     }
 
-    function removeNode(node: Node | ParentNode) {
+    function removeNode (node: Node | ParentNode) {
       if (node instanceof HTMLAnchorElement) {
-        node.removeEventListener("click", trackClick);
+        node.removeEventListener(
+          "click",
+          trackClick
+        );
         tracked.delete(node);
       } else if ("querySelectorAll" in node) {
         node.querySelectorAll("a").forEach(removeNode);
@@ -195,11 +248,17 @@ function Plausible(defaults?: PlausibleInitOptions): {
     targetNode.querySelectorAll("a").forEach(addNode);
 
     // Observe mutations
-    observer.observe(targetNode, observerInit);
+    observer.observe(
+      targetNode,
+      observerInit
+    );
 
-    return function cleanup() {
+    return function cleanup () {
       tracked.forEach((a) => {
-        a.removeEventListener("click", trackClick);
+        a.removeEventListener(
+          "click",
+          trackClick
+        );
       });
       tracked.clear();
       observer.disconnect();
@@ -210,32 +269,39 @@ function Plausible(defaults?: PlausibleInitOptions): {
     trackEvent,
     trackPageview,
     enableAutoPageviews,
-    enableAutoOutboundTracking,
+    enableAutoOutboundTracking
   };
 }
 
-/***
+/**
+ **
  * COMPOSABLE: Plausible config
  */
 const plausible = Plausible({
   domain: window.location.hostname,
-  trackLocalhost: false,
+  trackLocalhost: false
 });
 
-/***
+/**
+ **
  * COMPOSABLE: useTelemetry
  */
 const useTelemetry = () => {
   const { trackEvent, enableAutoPageviews, enableAutoOutboundTracking } = plausible;
 
   const logEvent = (eventName: string, eventOptions?: Eventprops) => {
-    trackEvent(eventName, { props: eventOptions });
+    trackEvent(
+      eventName,
+      { props: eventOptions }
+    );
   };
 
   const logPageviews = () => enableAutoPageviews();
   const logOutboundlinks = () => enableAutoOutboundTracking();
 
-  return { logEvent, logPageviews, logOutboundlinks };
+  return { logEvent,
+    logPageviews,
+    logOutboundlinks };
 };
 
 export { useTelemetry };

@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-export function useClipBoard(source: string) {
+export function useClipBoard (source: string) {
   const copied = ref(false);
   const copy = async () => {
     try {
@@ -9,8 +9,12 @@ export function useClipBoard(source: string) {
     } catch (err) {
       console.error("Error " + err);
     }
-    setTimeout(() => (copied.value = false), 1500);
+    setTimeout(
+      () => copied.value = false,
+      1500
+    );
   };
 
-  return { copy, copied };
+  return { copy,
+    copied };
 }

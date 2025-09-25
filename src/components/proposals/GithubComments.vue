@@ -1,30 +1,31 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
-import * as Utility from "@/utility/index";
-
-import { useGithubDiscusser } from "@/composables/useGithubDiscusser";
-import { useGithubDiscussions } from "@/composables/useGithubDiscussions";
 
 import CommonButton from "@/components/ui/CommonButton.vue";
 import DropDown from "@/components/ui/DropDown.vue";
+import { useGithubDiscusser } from "@/composables/useGithubDiscusser";
+import { useGithubDiscussions } from "@/composables/useGithubDiscussions";
+import * as Utility from "@/utility/index";
 
 const props = defineProps<{ term: string }>();
 
 const { logout, isLoggedIn, login, username, avatar } = useGithubDiscussions();
-const { comments, refresh, postMessage, postVote, isPosting, isFailing, isLoading, ratio } = useGithubDiscusser(
-  props.term,
-);
+const { comments, refresh, postMessage, postVote, isPosting, isFailing, isLoading, ratio } = useGithubDiscusser(props.term);
 
-const sortingList = ["Popular", "Oldest", "Latest"];
+const sortingList = [
+  "Popular",
+  "Oldest",
+  "Latest"
+];
 const sortingType = ref(0);
 
 const commentInput = ref<string>("");
 
-function handleSortingChange(index: number) {
+function handleSortingChange (index: number) {
   sortingType.value = index;
 }
 
-async function createPost() {
+async function createPost () {
   if (isPosting.value) {
     return;
   }
@@ -43,7 +44,7 @@ async function createPost() {
 }
 
 const sortedComments = computed(() => {
-  let commentList = [...comments.value];
+  const commentList = [...comments.value];
 
   switch (sortingType.value) {
     // Popular

@@ -1,36 +1,47 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue";
 
-const model = defineModel<{ key: string; value: string; subspace: string }>();
+const model = defineModel<{ key: string;
+  value: string;
+  subspace: string; }>();
 const props = defineProps<{ disabled: boolean }>();
 
 const key = ref<string>("");
 const value = ref<string>("");
 const subspace = ref<string>("");
 
-watch(key, async (newValue) => {
-  if (!model.value) {
-    return;
+watch(
+  key,
+  async (newValue) => {
+    if (!model.value) {
+      return;
+    }
+
+    model.value.key = newValue;
   }
+);
 
-  model.value.key = newValue;
-});
+watch(
+  value,
+  async (newValue) => {
+    if (!model.value) {
+      return;
+    }
 
-watch(value, async (newValue) => {
-  if (!model.value) {
-    return;
+    model.value.value = newValue;
   }
+);
 
-  model.value.value = newValue;
-});
+watch(
+  subspace,
+  async (newValue) => {
+    if (!model.value) {
+      return;
+    }
 
-watch(subspace, async (newValue) => {
-  if (!model.value) {
-    return;
+    model.value.subspace = newValue;
   }
-
-  model.value.subspace = newValue;
-});
+);
 </script>
 
 <template>

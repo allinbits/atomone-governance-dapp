@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { ref, computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
+
 import { useChainData } from "@/composables/useChainData";
-import * as Utility from "@/utility/index";
 import { AllVotesQuery } from "@/gql/graphql";
+import * as Utility from "@/utility/index";
 
 const { getAllVotes, getAllVotesAsync } = useChainData();
 
@@ -10,34 +11,47 @@ const props = defineProps<{ proposalId: number }>();
 const offset = ref<number>(0);
 const limit = ref<number>(10);
 
-const votes = getAllVotes(props.proposalId, limit.value, offset.value);
+const votes = getAllVotes(
+  props.proposalId,
+  limit.value,
+  offset.value
+);
 const hasMore = computed(() => {
-  return (votes.value?.proposal_vote_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
+  return (votes.value?.proposal_votes_aggregate.aggregate?.count ?? 0) > offset.value + limit.value;
 });
-function next() {
+function next () {
   offset.value += limit.value;
 }
 
-function prev() {
-  offset.value = offset.value <= limit.value ? 0 : offset.value - limit.value;
+function prev () {
+  offset.value = offset.value <= limit.value
+    ? 0
+    : offset.value - limit.value;
 }
 
-watch(offset, async (newOffset, oldOffset) => {
-  if (newOffset != oldOffset) {
-    if (votes.value) {
-      const fetchedVotes = await getAllVotesAsync(props.proposalId, limit.value, newOffset);
-      if (fetchedVotes) {
-        votes.value = fetchedVotes;
+watch(
+  offset,
+  async (newOffset, oldOffset) => {
+    if (newOffset != oldOffset) {
+      if (votes.value) {
+        const fetchedVotes = await getAllVotesAsync(
+          props.proposalId,
+          limit.value,
+          newOffset
+        );
+        if (fetchedVotes) {
+          votes.value = fetchedVotes;
+        }
       }
     }
   }
-});
+);
 
 const filteredVotes = computed(() => {
-  return votes.value?.proposal_vote;
+  return votes.value?.proposal_votes;
 });
 
-const getTxHash = (vote: AllVotesQuery["proposal_vote"][0]) => {
+const getTxHash = (vote: AllVotesQuery["proposal_votes"][0]) => {
   if (vote.block && vote.block.transactions && vote.block.transactions.length > 0) {
     const transaction = vote.block.transactions.filter((tx) => {
       return (
@@ -122,7 +136,7 @@ const getTxHash = (vote: AllVotesQuery["proposal_vote"][0]) => {
         :class="{ 'text-light hover:opacity-75 cursor-pointer': hasMore }"
         @click="
           () => {
-            offset = Math.floor((votes?.proposal_vote_aggregate.aggregate?.count ?? 0) / limit) * limit;
+            offset = Math.floor((votes?.proposal_votes_aggregate.aggregate?.count ?? 0) / limit) * limit;
           }
         "
       />

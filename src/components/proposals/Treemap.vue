@@ -1,19 +1,22 @@
 <script lang="ts" setup>
-import { computed } from "vue";
 import { Chart, registerables } from "chart.js";
-
-import { createTypedChart } from "vue-chartjs";
 import { TreemapController, TreemapElement } from "chartjs-chart-treemap";
+import { computed } from "vue";
+import { createTypedChart } from "vue-chartjs";
 
-Chart.register(...registerables, TreemapElement);
+Chart.register(
+  ...registerables,
+  TreemapElement
+);
 
-type TokenInfo = { name: string; value: number };
+type TokenInfo = { name: string;
+  value: number; };
 
 const ColorMap = {
   yes: "#8eeefe",
   no: "#f08c8d",
   veto: "#ecb0fe",
-  abstain: "#686868",
+  abstain: "#686868"
 };
 
 const props = defineProps<{
@@ -21,7 +24,10 @@ const props = defineProps<{
   type: keyof typeof ColorMap;
 }>();
 
-const TreeMap = createTypedChart("treemap", TreemapController);
+const TreeMap = createTypedChart(
+  "treemap",
+  TreemapController
+);
 
 const dataset = computed(() => {
   return {
@@ -35,12 +41,12 @@ const dataset = computed(() => {
         groups: ["name"],
         spacing: 6,
         captions: {
-          display: true,
+          display: true
         },
         borderRadius: 12,
-        backgroundColor: ColorMap[props.type],
-      },
-    ],
+        backgroundColor: ColorMap[props.type]
+      }
+    ]
   };
 });
 
@@ -48,9 +54,9 @@ const options = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: false,
-    },
-  },
+      display: false
+    }
+  }
 };
 </script>
 <template>

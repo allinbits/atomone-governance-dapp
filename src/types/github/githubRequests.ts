@@ -1,4 +1,5 @@
 export type DiscussionRequest = {
+
   /**
    * Title of the proposal we are going to create, or read from
    *
@@ -43,6 +44,7 @@ export type DiscussionRequest = {
 };
 
 export type DiscussionCommentRequest = {
+
   /**
    * Title of the proposal we are going to create, or read from
    *
@@ -59,6 +61,7 @@ export type DiscussionCommentRequest = {
 };
 
 export type CategoryRequest = {
+
   /**
    * The repository `author/name` on GitHub
    *
@@ -75,6 +78,7 @@ export type CategoryRequest = {
 };
 
 export type PostRequest = {
+
   /**
    * The message to send
    *
@@ -91,6 +95,7 @@ export type PostRequest = {
 };
 
 export type ReactionRequest = {
+
   /**
    * What type of reaction request is this?
    *
