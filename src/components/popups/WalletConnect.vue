@@ -4,7 +4,6 @@ import { computed, Ref, ref } from "vue";
 import { bus } from "@/bus";
 import UserBalance from "@/components/helper/UserBalance.vue";
 import ConnectButton from "@/components/ui/ConnectButton.vue";
-import { useChainData } from "@/composables/useChainData";
 import { useTelemetry } from "@/composables/useTelemetry";
 import { getWalletHelp, useWallet, Wallets } from "@/composables/useWallet";
 import { shorten } from "@/utility";
