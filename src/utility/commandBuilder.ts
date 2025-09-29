@@ -57,11 +57,6 @@ export default class CommandBuilder {
     return this;
   }
 
-  withSequence (sequence: number) {
-    this.sequence = sequence;
-    return this;
-  }
-
   withFees (fees: Coin[]) {
     this.fees = fees;
     return this;
@@ -90,12 +85,6 @@ export default class CommandBuilder {
     this.command.push("--generate-only");
     this.command.push("--from");
     this.command.push(this.address);
-    this.command.push("--chain-id");
-    this.command.push(this.chainId);
-    this.command.push("--gas");
-    this.command.push("auto");
-    this.command.push("--sequence");
-    this.command.push(this.sequence.toString());
     this.command.push(">");
     this.command.push("tx.unsigned.json");
     return this.command.join(" ");
