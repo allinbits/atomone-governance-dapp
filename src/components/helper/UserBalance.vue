@@ -1,27 +1,34 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { useQuery } from "@tanstack/vue-query";
+import { computed, Ref } from "vue";
 
-import { useChainData } from "@/composables/useChainData";
+import chainConfig from "@/chain-config.json";
+import { useWallet } from "@/composables/useWallet";
 import { formatAmount } from "@/utility";
 
-const { address, denom } = defineProps<{ address: string;
-  denom: string; }>();
-const { getBalance } = useChainData();
+const { address, loggedIn } = useWallet();
+const { denom } = defineProps<{ denom: string }>();
 
-const balances = getBalance(address);
-
+const balancesFetcher = (address: Ref<string>) => fetch(`${chainConfig.rest}cosmos/bank/v1beta1/balances/${address.value}?pagination.limit=1000`).then((response) => response.json());
+const { data: balances } = useQuery({
+  queryKey: ["balances"],
+  queryFn: () => balancesFetcher(address),
+  enabled: loggedIn
+});
 const balance = computed(() => {
-  const bal = balances.value?.action_account_balance[0]?.coins?.filter((x) => x.denom == denom)[0];
-  if (bal) {
-    return bal;
+  if (balances && balances.value) {
+    return (
+      balances.value.balances.filter((x: { denom: string }) => x.denom == denom)[0] ?? { amount: "0",
+        denom: denom }
+    );
   } else {
-    return {
-      amount: "0",
-      denom
-    };
+    return { amount: "0",
+      denom: denom };
   }
 });
 </script>
 <template>
-  <span>{{ formatAmount(balance.amount, 6) }}</span>
+  <span v-if="balance">{{
+    formatAmount(balance.amount, chainConfig.currencies.find((x) => x.coinMinimalDenom == denom)?.coinDecimals ?? 6)
+  }}</span>
 </template>

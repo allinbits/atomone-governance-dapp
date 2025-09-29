@@ -197,6 +197,12 @@ export const messages = {
       FooterSection: {
         cta: "Be a part of the conversation"
       },
+      Mint: {
+        cta: "Mint Photon",
+        minted: "Minted",
+        toReceive: "You will receive:",
+        error: "Error"
+      },
       Search: {
         placeholder: "Search Proposal"
       },

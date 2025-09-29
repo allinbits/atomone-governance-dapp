@@ -1,5 +1,6 @@
 import "@/style.css";
 
+import { VueQueryPlugin } from "@tanstack/vue-query";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import { createApp, h, provide } from "vue";
 import { createI18n } from "vue-i18n";
@@ -29,6 +30,7 @@ const i18n = createI18n({
 });
 app.use(i18n);
 app.use(router);
+app.use(VueQueryPlugin);
 app.component(
   "Icon",
   IconVue

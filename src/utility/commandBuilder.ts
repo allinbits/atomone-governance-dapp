@@ -9,27 +9,42 @@ export default class CommandBuilder {
 
   private chainId: string;
 
+  private sequence: number;
+
   static Deposit () {
-    return new CommandBuilder("deposit");
+    const builder = new CommandBuilder("gov");
+    return builder.withAction("deposit");
+  }
+
+  static Mint () {
+    const builder = new CommandBuilder("photon");
+    return builder.withAction("mint");
   }
 
   static Vote () {
-    return new CommandBuilder("vote");
+    const builder = new CommandBuilder("gov");
+    return builder.withAction("vote");
   }
 
   static WeightedVote () {
-    return new CommandBuilder("weighted-vote");
+    const builder = new CommandBuilder("gov");
+    return builder.withAction("weighted-vote");
   }
 
-  constructor (action: string) {
+  constructor (module: string) {
     this.command = [];
     this.address = "";
     this.fees = [];
     this.chainId = "";
+    this.sequence = 0;
     this.command.push("atomoned");
     this.command.push("tx");
-    this.command.push("gov");
+    this.command.push(module);
+  }
+
+  withAction (action: string) {
     this.command.push(action);
+    return this;
   }
 
   withChainId (chainId: string) {
@@ -42,6 +57,11 @@ export default class CommandBuilder {
     return this;
   }
 
+  withSequence (sequence: number) {
+    this.sequence = sequence;
+    return this;
+  }
+
   withFees (fees: Coin[]) {
     this.fees = fees;
     return this;
@@ -49,6 +69,11 @@ export default class CommandBuilder {
 
   addParam (param: string) {
     this.command.push(param);
+    return this;
+  }
+
+  addAmountParam (amount: Coin) {
+    this.command.push(amount.amount + amount.denom);
     return this;
   }
 
@@ -67,6 +92,10 @@ export default class CommandBuilder {
     this.command.push(this.address);
     this.command.push("--chain-id");
     this.command.push(this.chainId);
+    this.command.push("--gas");
+    this.command.push("auto");
+    this.command.push("--sequence");
+    this.command.push(this.sequence.toString());
     this.command.push(">");
     this.command.push("tx.unsigned.json");
     return this.command.join(" ");
