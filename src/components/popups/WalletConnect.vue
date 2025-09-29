@@ -111,18 +111,6 @@ bus.on(
   }
 );
 
-const { getBalance } = useChainData();
-
-const photonBalance = computed(() => {
-  const all = getBalance(address.value);
-  const photon = all.value?.action_account_balance[0].coins.find((x) => x.denom === "uphoton");
-  if (photon) {
-    return photon.amount;
-  } else {
-    return "0";
-  }
-});
-
 const { logEvent } = useTelemetry();
 </script>
 
@@ -268,11 +256,6 @@ const { logEvent } = useTelemetry();
               <UserBalance :address="address" :denom="'uatone'" /> ATONE
               <br />
               <UserBalance :address="address" :denom="'uphoton'" /> PHOTON
-            </div>
-            <div v-if="photonBalance == '0'" class="rounded-sm text-100 text-grey-100 bg-grey-400 p-3 mt-2">
-              <a href="https://atom.one/#photon" target="_blank" rel="noopener">{{
-                $t("components.WalletConnect.noPhoton")
-              }}</a>
             </div>
             <div class="buttons">
               <ConnectButton
