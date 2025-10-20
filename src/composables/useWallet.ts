@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getSigningAtomoneClient } from "@atomone/atomone-types/atomone/client";
 import { EncodeObject, OfflineDirectSigner, OfflineSigner } from "@cosmjs/proto-signing";
@@ -174,15 +175,24 @@ const useWalletInstance = () => {
       try {
         const client = await getSigningAtomoneClient({ rpcEndpoint: chainInfo.rpc,
           signer: signer.value });
+
+        const simulate = await client.simulate(
+          address.value,
+          msgs,
+          undefined
+        );
+        const gasLimit = simulate && simulate > 0
+          ? "" + Math.ceil(simulate * 1.3)
+          : "500000";
         const result = await client.signAndBroadcast(
           address.value,
           msgs,
           {
             amount: [
-              { amount: "10000",
+              { amount: Math.ceil(Number(gasLimit) * 0.25) + "",
                 denom: chainInfo.feeCurrencies[1].coinMinimalDenom }
             ],
-            gas: "400000"
+            gas: gasLimit
           }
         );
         return result;
