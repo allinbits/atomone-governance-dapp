@@ -180,7 +180,7 @@ const useWalletInstance = () => {
           {
             amount: [
               { amount: "10000",
-                denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+                denom: chainInfo.feeCurrencies[1].coinMinimalDenom }
             ],
             gas: "400000"
           }
