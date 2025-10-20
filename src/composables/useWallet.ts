@@ -1,9 +1,11 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getSigningAtomoneClient } from "@atomone/atomone-types/atomone/client";
 import { EncodeObject, OfflineDirectSigner, OfflineSigner } from "@cosmjs/proto-signing";
 import { getOfflineSigner } from "@cosmostation/cosmos-client";
 import { OfflineAminoSigner } from "@keplr-wallet/types";
-import { computed, Ref, ref } from "vue";
+import { useQueryClient } from "@tanstack/vue-query";
+import { computed, nextTick, Ref, ref } from "vue";
 
 import chainInfo from "@/chain-config.json";
 
@@ -31,22 +33,22 @@ export const getWalletHelp = (wallet: Wallets) => {
   }
 };
 const useWalletInstance = () => {
-  const walletState = {
-    keplr: computed(() => !!window.keplr),
-    leap: computed(() => !!window.leap),
-    cosmostation: computed(() => !!window.cosmostation),
-    loggedIn: ref(false),
-    address: ref(""),
-    used: ref<Wallets | null>(null)
-  };
+  const queryClient = useQueryClient();
+  const keplr = computed(() => !!window.keplr);
+  const leap = computed(() => !!window.leap);
+  const cosmostation = computed(() => !!window.cosmostation);
+  const loggedIn = ref(false);
+  const address = ref("");
+  const used = ref<Wallets | null>(null);
+
   const signOut = () => {
-    walletState.address.value = "";
-    walletState.used.value = null;
-    walletState.loggedIn.value = false;
+    address.value = "";
+    used.value = null;
+    loggedIn.value = false;
   };
   const signer: Ref<OfflineSigner | null> = ref(null);
 
-  const connect = async (walletType: Wallets, address?: string, signal?: AbortSignal) => {
+  const connect = async (walletType: Wallets, toAddress?: string, signal?: AbortSignal) => {
     if (signal?.aborted) {
       return Promise.reject(new DOMException(
         "Aborted",
@@ -54,9 +56,9 @@ const useWalletInstance = () => {
       ));
     }
     const abortHandler = () => {
-      walletState.address.value = "";
-      walletState.used.value = null;
-      walletState.loggedIn.value = false;
+      address.value = "";
+      used.value = null;
+      loggedIn.value = false;
     };
     signal?.addEventListener(
       "abort",
@@ -68,11 +70,11 @@ const useWalletInstance = () => {
           await window.keplr?.experimentalSuggestChain(chainInfo);
           await window.keplr?.enable(chainInfo.chainId);
           if (window.getOfflineSignerOnlyAmino) {
-            walletState.address.value = (
+            address.value = (
               await window.getOfflineSignerOnlyAmino(chainInfo.chainId).getAccounts()
             )[0].address;
-            walletState.loggedIn.value = true;
-            walletState.used.value = Wallets.keplr;
+            loggedIn.value = true;
+            used.value = Wallets.keplr;
             signer.value = window.getOfflineSignerOnlyAmino(chainInfo.chainId);
             if (signal?.aborted) {
               abortHandler();
@@ -93,11 +95,11 @@ const useWalletInstance = () => {
         try {
           await window.leap?.experimentalSuggestChain(chainInfo);
           await window.leap?.enable(chainInfo.chainId);
-          walletState.address.value = (
+          address.value = (
             await window.leap.getOfflineSignerOnlyAmino(chainInfo.chainId).getAccounts()
           )[0].address;
-          walletState.loggedIn.value = true;
-          walletState.used.value = Wallets.leap;
+          loggedIn.value = true;
+          used.value = Wallets.leap;
           signer.value = window.leap.getOfflineSignerOnlyAmino(chainInfo.chainId);
           if (signal?.aborted) {
             abortHandler();
@@ -132,14 +134,14 @@ const useWalletInstance = () => {
           }
         }
         try {
-          walletState.address.value = (
+          address.value = (
             await (window.cosmostation as any).cosmos.request({
               method: "cos_requestAccount",
               params: { chainName: chainInfo.chainId }
             })
           ).address;
-          walletState.loggedIn.value = true;
-          walletState.used.value = Wallets.cosmostation;
+          loggedIn.value = true;
+          used.value = Wallets.cosmostation;
           const cosmostationSigner = (await getOfflineSigner(chainInfo.chainId)) as OfflineSigner;
           if ((cosmostationSigner as OfflineDirectSigner).signDirect) {
             const { signDirect: _signDirect, ...aminoSigner } = cosmostationSigner as OfflineDirectSigner;
@@ -160,10 +162,10 @@ const useWalletInstance = () => {
         }
         break;
       case Wallets.addressOnly:
-        if (address) {
-          walletState.address.value = address;
-          walletState.loggedIn.value = true;
-          walletState.used.value = Wallets.addressOnly;
+        if (toAddress) {
+          address.value = toAddress;
+          loggedIn.value = true;
+          used.value = Wallets.addressOnly;
         }
         break;
     }
@@ -173,15 +175,24 @@ const useWalletInstance = () => {
       try {
         const client = await getSigningAtomoneClient({ rpcEndpoint: chainInfo.rpc,
           signer: signer.value });
+
+        const simulate = await client.simulate(
+          address.value,
+          msgs,
+          undefined
+        );
+        const gasLimit = simulate && simulate > 0
+          ? "" + Math.ceil(simulate * 1.3)
+          : "500000";
         const result = await client.signAndBroadcast(
-          walletState.address.value,
+          address.value,
           msgs,
           {
             amount: [
-              { amount: "10000",
-                denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+              { amount: Math.ceil(Number(gasLimit) * 0.25) + "",
+                denom: chainInfo.feeCurrencies[1].coinMinimalDenom }
             ],
-            gas: "400000"
+            gas: gasLimit
           }
         );
         return result;
@@ -192,32 +203,41 @@ const useWalletInstance = () => {
       throw new Error("No Signer available");
     }
   };
-  const refreshAddress = () => {
-    if (walletState.used.value) {
-      if (walletState.used.value == Wallets.addressOnly) {
-        connect(
-          walletState.used.value,
-          walletState.address.value
+  const refreshAddress = async () => {
+    console.log("Wallet address changed, refreshing");
+    if (used.value) {
+      if (used.value == Wallets.addressOnly) {
+        await connect(
+          used.value,
+          address.value
         );
       } else {
-        connect(walletState.used.value);
+        await connect(used.value);
       }
     }
+    await nextTick();
+    queryClient.invalidateQueries({ queryKey: ["balances"] });
   };
   window.addEventListener(
     "cosmostation_keystorechange",
-    refreshAddress
+    () => refreshAddress()
   );
   window.addEventListener(
     "keplr_keystorechange",
-    refreshAddress
+    () => refreshAddress()
   );
   window.addEventListener(
     "leap_keystorechange",
-    refreshAddress
+    () => refreshAddress()
   );
 
-  return { ...walletState,
+
+  return { keplr,
+    leap,
+    cosmostation,
+    address,
+    loggedIn,
+    used,
     signOut,
     connect,
     sendTx };

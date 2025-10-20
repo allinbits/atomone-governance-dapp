@@ -42,6 +42,9 @@ import {
   ProposalTalliesQuery,
   ProposalTalliesQueryVariables,
   StakingDocument,
+  StakingHeightDocument,
+  StakingHeightQuery,
+  StakingHeightQueryVariables,
   StakingQuery,
   StakingQueryVariables,
   ValidatorsDocument,
@@ -186,6 +189,14 @@ export const useStakingQuery = (options?: UseQueryOptions<StakingQuery, StakingQ
   return useQuery<StakingQuery, StakingQueryVariables>(
     StakingDocument,
     {},
+    options ?? {}
+  );
+};
+
+export const useStakingHeightQuery = (variables: StakingHeightQueryVariables, options?: UseQueryOptions<StakingHeightQuery, StakingHeightQueryVariables>) => {
+  return useQuery<StakingHeightQuery, StakingHeightQueryVariables>(
+    StakingHeightDocument,
+    variables,
     options ?? {}
   );
 };
@@ -379,6 +390,13 @@ export const useLazyStakingQuery = (options?: UseQueryOptions<StakingQuery, Stak
   );
 };
 
+export const useLazyStakingHeightQuery = (variables: StakingHeightQueryVariables, options?: UseQueryOptions<StakingHeightQuery, StakingHeightQueryVariables>) => {
+  return useLazyQuery<StakingHeightQuery, StakingHeightQueryVariables>(
+    StakingDocument,
+    variables,
+    options ?? {}
+  );
+};
 export const useLazyVoteHistoryQuery = (
   variables: VoteHistoryQueryVariables,
   options?: UseQueryOptions<VoteHistoryQuery, VoteHistoryQueryVariables>

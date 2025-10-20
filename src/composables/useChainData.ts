@@ -17,6 +17,7 @@ import {
   useLazyProposalsRejectedQuery,
   useLazyProposalsSearchQuery,
   useLazyProposalTalliesQuery,
+  useLazyStakingHeightQuery,
   useLazyStakingQuery,
   useLazyValidatorsQuery,
   useLazyValsetQuery,
@@ -31,6 +32,7 @@ import {
   useProposalsRejectedQuery,
   useProposalsSearchQuery,
   useProposalTalliesQuery,
+  useStakingHeightQuery,
   useStakingQuery,
   useValidatorsQuery,
   useValsetQuery,
@@ -129,7 +131,11 @@ export const useChainData = () => {
     const { result } = useParamsQuery();
     return result;
   };
-  const getStakingStatus = () => {
+  const getStakingStatus = (height?: number) => {
+    if (height) {
+      const { result } = useStakingHeightQuery({ height });
+      return result;
+    }
     const { result } = useStakingQuery();
     return result;
   };
@@ -280,7 +286,11 @@ export const useChainData = () => {
     const result = await useLazyParamsQuery().load();
     return result;
   };
-  const getStakingStatusAsync = async () => {
+  const getStakingStatusAsync = async (height?: number) => {
+    if (height) {
+      const result = await useLazyStakingHeightQuery({ height }).load();
+      return result;
+    }
     const result = await useLazyStakingQuery().load();
     return result;
   };

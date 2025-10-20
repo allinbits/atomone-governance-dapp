@@ -65,10 +65,9 @@ export const useProposals = () => {
   const depositProposal = async (deposit: Partial<MsgDeposit>, cli: boolean = false) => {
     if (cli && deposit.amount && deposit.amount.length >= 1) {
       const command = CommandBuilder.Deposit().
-        withChainId(chainInfo.chainId).
         withFees([
           { amount: "5000",
-            denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+            denom: chainInfo.feeCurrencies[1].coinMinimalDenom }
         ]).
         withSigner(address.value).
         addParam(deposit.proposalId?.toString() ?? "0").
@@ -103,10 +102,9 @@ export const useProposals = () => {
           break;
       }
       const command = CommandBuilder.Vote().
-        withChainId(chainInfo.chainId).
         withFees([
           { amount: "5000",
-            denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+            denom: chainInfo.feeCurrencies[1].coinMinimalDenom }
         ]).
         withSigner(address.value).
         addParam(vote.proposalId?.toString() ?? "0").
@@ -158,10 +156,9 @@ export const useProposals = () => {
         }
       }
       const command = CommandBuilder.WeightedVote().
-        withChainId(chainInfo.chainId).
         withFees([
           { amount: "5000",
-            denom: chainInfo.feeCurrencies[0].coinMinimalDenom }
+            denom: chainInfo.feeCurrencies[1].coinMinimalDenom }
         ]).
         withSigner(address.value).
         addParam(voteWeighted.proposalId?.toString() ?? "0").

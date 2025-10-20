@@ -202,7 +202,9 @@ const { loggedIn } = useWallet();
 const proposal = getProposal(props.proposalId);
 const proposalTallies = getProposalTallies(props.proposalId);
 const params = getParams();
-const staking = getStakingStatus();
+const staking = props.height != 0
+  ? getStakingStatus(props.height)
+  : getStakingStatus();
 
 /*
  * const termLink = computed(() => `Link #${props.proposalId}`);

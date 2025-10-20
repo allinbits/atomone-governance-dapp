@@ -12,7 +12,7 @@ const { getProposal, getBlockHeightAsync } = useChainData();
 
 const route = useRoute();
 const proposal = getProposal(parseInt(route.params.id as string));
-const height = ref<number>(0);
+const height = ref<number | null>(null);
 
 watch(
   proposal,

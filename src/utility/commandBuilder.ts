@@ -7,33 +7,38 @@ export default class CommandBuilder {
 
   private fees: Coin[];
 
-  private chainId: string;
 
   static Deposit () {
-    return new CommandBuilder("deposit");
+    const builder = new CommandBuilder("gov");
+    return builder.withAction("deposit");
+  }
+
+  static Mint () {
+    const builder = new CommandBuilder("photon");
+    return builder.withAction("mint");
   }
 
   static Vote () {
-    return new CommandBuilder("vote");
+    const builder = new CommandBuilder("gov");
+    return builder.withAction("vote");
   }
 
   static WeightedVote () {
-    return new CommandBuilder("weighted-vote");
+    const builder = new CommandBuilder("gov");
+    return builder.withAction("weighted-vote");
   }
 
-  constructor (action: string) {
+  constructor (module: string) {
     this.command = [];
     this.address = "";
     this.fees = [];
-    this.chainId = "";
     this.command.push("atomoned");
     this.command.push("tx");
-    this.command.push("gov");
-    this.command.push(action);
+    this.command.push(module);
   }
 
-  withChainId (chainId: string) {
-    this.chainId = chainId;
+  withAction (action: string) {
+    this.command.push(action);
     return this;
   }
 
@@ -52,6 +57,11 @@ export default class CommandBuilder {
     return this;
   }
 
+  addAmountParam (amount: Coin) {
+    this.command.push(amount.amount + amount.denom);
+    return this;
+  }
+
   finish () {
     this.command.push("--fees");
     let feeString = "";
@@ -65,8 +75,6 @@ export default class CommandBuilder {
     this.command.push("--generate-only");
     this.command.push("--from");
     this.command.push(this.address);
-    this.command.push("--chain-id");
-    this.command.push(this.chainId);
     this.command.push(">");
     this.command.push("tx.unsigned.json");
     return this.command.join(" ");
