@@ -7,10 +7,6 @@ export default class CommandBuilder {
 
   private fees: Coin[];
 
-  private chainId: string;
-
-  private sequence: number;
-
   static Deposit () {
     const builder = new CommandBuilder("gov");
     return builder.withAction("deposit");
