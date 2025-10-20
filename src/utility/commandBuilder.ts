@@ -7,6 +7,7 @@ export default class CommandBuilder {
 
   private fees: Coin[];
 
+
   static Deposit () {
     const builder = new CommandBuilder("gov");
     return builder.withAction("deposit");
@@ -31,8 +32,6 @@ export default class CommandBuilder {
     this.command = [];
     this.address = "";
     this.fees = [];
-    this.chainId = "";
-    this.sequence = 0;
     this.command.push("atomoned");
     this.command.push("tx");
     this.command.push(module);
@@ -40,11 +39,6 @@ export default class CommandBuilder {
 
   withAction (action: string) {
     this.command.push(action);
-    return this;
-  }
-
-  withChainId (chainId: string) {
-    this.chainId = chainId;
     return this;
   }
 
