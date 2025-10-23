@@ -182,7 +182,7 @@ const useWalletInstance = () => {
           undefined
         );
         const gasLimit = simulate && simulate > 0
-          ? "" + Math.ceil(simulate * 1.3)
+          ? "" + Math.ceil(simulate * 1.5)
           : "500000";
         const result = await client.signAndBroadcast(
           address.value,
