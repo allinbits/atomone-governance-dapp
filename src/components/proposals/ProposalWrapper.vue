@@ -473,7 +473,7 @@ onMounted(() => title.value = `AtomOne — #${proposal.value?.proposals[0].id} $
     </div>
 
     <div class="flex mb-12 flex-col md:flex-row">
-      <div class="basic-details flex-grow md:pr-10">
+      <div class="basic-details grow md:pr-10">
         <h1 class="font-termina text-500 md:text-800 text-light mb-8 md:mb-16 pb-2">
           #{{ proposal?.proposals[0].id }}: {{ proposal?.proposals[0].title }}
         </h1>
@@ -522,13 +522,13 @@ onMounted(() => title.value = `AtomOne — #${proposal.value?.proposals[0].id} $
           <div class="text-center text-light text-300 md:text-500 mt-8 md:mt-0">
             {{ timeTo(proposal?.proposals[0].voting_end_time) }}
           </div>
-          <div class="progress-bar w-full h-2 bg-grey-200 rounded my-6">
-            <div class="link-gradient rounded h-2 w-2/12" />
+          <div class="progress-bar w-full h-2 bg-grey-200 rounded-md my-6">
+            <div class="link-gradient rounded-md h-2 w-2/12" />
           </div>
           <ProposalVote v-if="loggedIn" :proposal-id="proposal?.proposals[0].id" class="w-full" />
           <div
             v-else
-            class="justify-center px-6 py-4 rounded link-gradient text-dark text-300 text-center cursor-pointer w-full"
+            class="justify-center px-6 py-4 rounded-md link-gradient text-dark text-300 text-center cursor-pointer w-full"
             @click="
               () => {
                 bus.emit('open');
@@ -542,8 +542,8 @@ onMounted(() => title.value = `AtomOne — #${proposal.value?.proposals[0].id} $
           <div class="text-center text-light text-300 md:text-500 mt-8 md:mt-0">
             {{ timeTo(proposal?.proposals[0].deposit_end_time) }}
           </div>
-          <div class="progress-bar w-full h-2 bg-grey-200 rounded my-6">
-            <div class="link-gradient rounded h-2 w-2/12" />
+          <div class="progress-bar w-full h-2 bg-grey-200 rounded-md my-6">
+            <div class="link-gradient rounded-md h-2 w-2/12" />
           </div>
           <ProposalDeposit
             v-if="loggedIn"
@@ -554,7 +554,7 @@ onMounted(() => title.value = `AtomOne — #${proposal.value?.proposals[0].id} $
           />
           <div
             v-else
-            class="justify-center px-6 py-4 rounded link-gradient text-dark text-300 text-center cursor-pointer w-full"
+            class="justify-center px-6 py-4 rounded-md link-gradient text-dark text-300 text-center cursor-pointer w-full"
             @click="
               () => {
                 bus.emit('open');
@@ -598,7 +598,7 @@ onMounted(() => title.value = `AtomOne — #${proposal.value?.proposals[0].id} $
         <div v-if="isTabSelected('Info')" class="w-full">
           <div class="flex flex-col gap-4 md:gap-6">
             <div class="flex flex-col md:flex-row gap-4 lg:gap-6">
-              <SimpleCard class="w-full md:w-1/2 flex-grow">
+              <SimpleCard class="w-full md:w-1/2 grow">
                 <div class="flex w-full flex-wrap">
                   <div class="grow w-full lg:w-1/2 mb-10">
                     <div class="text-grey-100 text-200 mb-2">{{ $t("proposalpage.labels.proposer") }}</div>

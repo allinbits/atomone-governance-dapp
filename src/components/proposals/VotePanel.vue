@@ -51,11 +51,11 @@ const totalVoteText = computed(() => {
   <div class="flex flex-col gap-12 rounded-md bg-grey-400 p-10 pb-14 w-full">
     <!-- Upper Section -->
     <div class="flex flex-row items-center">
-      <div class="flex flex-col flex-grow">
+      <div class="flex flex-col grow">
         <span class="text-300 md:text-500 text-light mb-1"><slot name="header"></slot></span>
         <span class="text-200 md:text-300 text-grey-100">{{ totalVoteText }} <slot name="type"></slot></span>
       </div>
-      <CommonButton class="!bg-grey-200 hidden md:flex" @click="emits('onBreakdown')">{{
+      <CommonButton class="bg-grey-200! hidden md:flex" @click="emits('onBreakdown')">{{
         $t("components.VotePanel.breakdown")
       }}</CommonButton>
     </div>

@@ -174,7 +174,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
   <div class="relative">
     <div>
       <div
-        class="justify-center px-6 py-4 rounded link-gradient hover: text-dark text-300 text-center cursor-pointer"
+        class="justify-center px-6 py-4 rounded-md link-gradient hover: text-dark text-300 text-center cursor-pointer"
         @click="() => (logEvent('Click Popup ProposalVote'), toggleModal(true))"
       >
         {{ $t("components.ProposalVote.cta") }}
@@ -183,7 +183,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
 
     <ModalWrap :visible="isOpen" :is-empty="true" @back="isOpen = false">
       <div class="bg-grey-400 w-full rounded-md max-h-screen overflow-auto">
-        <div class="px-10 py-12 bg-grey-400 rounded w-screen max-w-[25rem]">
+        <div class="px-10 py-12 bg-grey-400 rounded-md w-screen max-w-[25rem]">
           <div v-show="displayState === 'pending'" class="flex flex-col gap-6 relative">
             <span class="text-gradient font-termina text-700 text-center">{{ $t("components.ProposalVote.cta") }}</span>
             <UiSwitch
@@ -236,7 +236,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
               <div v-if="!transacting" class="flex flex-col gap-4">
                 <div v-show="voteStraight || checkVoteWeighted" class="flex flex-col gap-4">
                   <button
-                    class="px-6 py-4 rounded link-gradient text-dark text-300 text-center w-full"
+                    class="px-6 py-4 rounded-md link-gradient text-dark text-300 text-center w-full"
                     @click="signVote(true)"
                   >
                     {{ $t("ui.actions.cli") }}
@@ -250,7 +250,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                   </a>
                   <button
                     v-if="used != Wallets.addressOnly"
-                    class="px-6 py-4 rounded text-light text-300 text-center w-full hover:opacity-50 duration-150 ease-in-out"
+                    class="px-6 py-4 rounded-md text-light text-300 text-center w-full hover:opacity-50 duration-150 ease-in-out"
                     @click="signVote()"
                   >
                     {{ $t("ui.actions.confirm") }}
@@ -258,7 +258,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                 </div>
 
                 <button
-                  class="px-6 py-4 rounded text-light text-300 text-center w-full hover:opacity-50 duration-150 ease-in-out"
+                  class="px-6 py-4 rounded-md text-light text-300 text-center w-full hover:opacity-50 duration-150 ease-in-out"
                   @click="toggleModal(false)"
                 >
                   {{ $t("ui.actions.cancel") }}
@@ -296,7 +296,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                 ref="CLIVote"
                 v-model="cliVoteInput"
                 readonly
-                class="w-full h-64 px-4 pb-4 pt-12 bg-grey-200 text-grey-50 rounded outline-none resize-none"
+                class="w-full h-64 px-4 pb-4 pt-12 bg-grey-200 text-grey-50 rounded-md outline-hidden resize-none"
               ></textarea>
             </div>
 
@@ -305,7 +305,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                 $t("ui.actions.back")
               }}</CommonButton>
               <button
-                class="w-full text-light bg-grey-200 hover:bg-light hover:text-dark roudned transition-colors duration-200 rounded py-4 px-6"
+                class="w-full text-light bg-grey-200 hover:bg-light hover:text-dark roudned transition-colors duration-200 rounded-md py-4 px-6"
                 @click="toggleModal(false)"
               >
                 {{ $t("ui.actions.done") }}
@@ -328,7 +328,7 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
             </UiInfo>
 
             <button
-              class="px-6 py-4 rounded text-light text-300 text-center bg-grey-200 w-full hover:opacity-50 duration-150 ease-in-out"
+              class="px-6 py-4 rounded-md text-light text-300 text-center bg-grey-200 w-full hover:opacity-50 duration-150 ease-in-out"
               @click="toggleModal(false)"
             >
               {{ $t("ui.actions.done") }}
@@ -341,12 +341,12 @@ const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
                 ref="error"
                 v-model="errorMsg"
                 readonly
-                class="w-full h-32 my-4 px-4 pb-4 pt-4 bg-grey-200 text-grey-50 rounded outline-none resize-none"
+                class="w-full h-32 my-4 px-4 pb-4 pt-4 bg-grey-200 text-grey-50 rounded-md outline-hidden resize-none"
               ></textarea>
             </UiInfo>
 
             <button
-              class="px-6 py-4 rounded text-light text-300 text-center bg-grey-200 w-full hover:opacity-50 duration-150 ease-in-out"
+              class="px-6 py-4 rounded-md text-light text-300 text-center bg-grey-200 w-full hover:opacity-50 duration-150 ease-in-out"
               @click="toggleModal(false)"
             >
               {{ $t("ui.actions.done") }}

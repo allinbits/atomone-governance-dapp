@@ -118,7 +118,7 @@ const { logEvent } = useTelemetry();
     <!-- Normal signed out button -->
     <template v-if="connectState">
       <button
-        class="justify-center px-6 py-4 rounded bg-grey-400 text-300 text-center hover:bg-light hover:text-dark duration-200"
+        class="justify-center px-6 py-4 rounded-md bg-grey-400 text-300 text-center hover:bg-light hover:text-dark duration-200"
         @click="
           () => {
             isOpen = true;
@@ -134,7 +134,7 @@ const { logEvent } = useTelemetry();
     <Transition name="fade">
       <template v-if="selectState">
         <div class="absolute right-0 top-4 z-10">
-          <div class="flex flex-col gap-6 px-8 py-6 bg-grey-300 rounded w-80 relative">
+          <div class="flex flex-col gap-6 px-8 py-6 bg-grey-300 rounded-md w-80 relative">
             <Icon
               class="absolute top-3 right-4 cursor-pointer text-light"
               icon="close"
@@ -182,7 +182,7 @@ const { logEvent } = useTelemetry();
 
       <template v-else-if="addressState">
         <div class="absolute right-0 top-4">
-          <div class="flex flex-col px-8 py-4 pt-12 bg-grey-300 rounded w-80 relative gap-4">
+          <div class="flex flex-col px-8 py-4 pt-12 bg-grey-300 rounded-md w-80 relative gap-4">
             <Icon
               class="absolute top-3 right-4 cursor-pointer text-light"
               icon="close"
@@ -199,7 +199,7 @@ const { logEvent } = useTelemetry();
             </div>
             <input
               v-model="publicAddress"
-              class="flex p-4 items-center self-stretch rounded-lg bg-grey-200 outline-none text-100 leading-4 placeholder-grey-100"
+              class="flex p-4 items-center self-stretch rounded-lg bg-grey-200 outline-hidden text-100 leading-4 placeholder-grey-100"
               :placeholder="$t('components.WalletConnect.addressPlaceholder')"
               @input="isValidAddress = publicAddress.length == 45"
             />
@@ -242,7 +242,7 @@ const { logEvent } = useTelemetry();
       <!-- Normal signed in account extended -->
       <template v-else-if="viewState">
         <div class="absolute right-0 top-4">
-          <div class="flex flex-col px-8 py-4 pt-12 bg-grey-300 rounded w-80 relative">
+          <div class="flex flex-col px-8 py-4 pt-12 bg-grey-300 rounded-md w-80 relative">
             <Icon class="absolute top-3 right-4 cursor-pointer text-light" icon="close" @click="isOpen = false" />
             <div class="flex align-center items-stretch">
               <div class="bg-gradient w-10 h-10 rounded-full mr-3"></div>
@@ -274,7 +274,7 @@ const { logEvent } = useTelemetry();
       <!-- Connection in progress -->
       <template v-else-if="connectingState">
         <div class="absolute right-0 top-4">
-          <div class="flex flex-col px-8 py-4 pt-6 bg-grey-300 rounded w-80 relative align-center items-center">
+          <div class="flex flex-col px-8 py-4 pt-6 bg-grey-300 rounded-md w-80 relative align-center items-center">
             <Icon icon="loading" :size="3" />
 
             <div class="flex flex-col text-[white] text-400 font-semibold text-center mt-4">
@@ -311,7 +311,7 @@ const { logEvent } = useTelemetry();
     <!-- Connection failed -->
     <template v-if="errorState">
       <div class="absolute right-0 top-4">
-        <div class="flex flex-col px-8 py-4 pt-6 bg-grey-300 rounded w-80 relative align-center items-center">
+        <div class="flex flex-col px-8 py-4 pt-6 bg-grey-300 rounded-md w-80 relative align-center items-center">
           <Icon icon="close" :size="3" class="text-neg-200" />
 
           <div class="flex flex-col text-[white] text-400 font-semibold text-center mt-4">

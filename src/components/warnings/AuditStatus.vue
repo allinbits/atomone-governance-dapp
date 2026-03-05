@@ -17,7 +17,7 @@ function hideSecurityLabel () {
 <template>
   <div
     v-if="isSecurityHeaderVisible"
-    class="flex flex-row justify-between items-start bg-red-200 w-full py-5 px-5 rounded text-red-400 text-300 gap-8 mb-2"
+    class="flex flex-row justify-between items-start bg-red-200 w-full py-5 px-5 rounded-md text-red-400 text-300 gap-8 mb-2"
   >
     <div class="flex flex-col gap-4">
       <span class="text-justify">{{ $t("homepage.auditStatus") }}</span>

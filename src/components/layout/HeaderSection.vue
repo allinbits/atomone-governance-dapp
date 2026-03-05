@@ -30,7 +30,7 @@ const securityLink = "https://github.com/allinbits/security/";
         }}</a>
         <MintPhoton
           v-if="Wallet.loggedIn.value"
-          class="flex-grow"
+          class="grow"
         />
         <WalletConnect class="hidden md:block" />
       </div>

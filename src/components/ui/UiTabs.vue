@@ -70,7 +70,6 @@ type Props = {
 
 const tabSelected = defineModel<string>();
 const lastTab = ref<number>(0);
-const toggler = ref<HTMLElement | null>(null);
 const tabRefs = ref<HTMLElement[]>([]);
 const line = ref<HTMLElement | null>(null);
 const tabIdx = ref<number>(0);

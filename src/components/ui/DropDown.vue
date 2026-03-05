@@ -42,7 +42,7 @@ const currentValues = computed(() => {
     </Transition>
     <div
       class="relative bg-grey-400 duration-200"
-      :class="open ? ['z-max rounded-t ease-in'] : ['rounded hover:bg-grey-200 delay-300 ease-out']"
+      :class="open ? ['z-max rounded-t ease-in'] : ['rounded-md hover:bg-grey-200 delay-300 ease-out']"
     >
       <div class="flex flex-row justify-between cursor-pointer gap-3 px-5 py-4" @click="open = !open">
         <div>{{ props.values[model] }}</div>

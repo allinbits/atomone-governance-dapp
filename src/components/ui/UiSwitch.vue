@@ -111,6 +111,8 @@ onMounted(() => setBg());
 </script>
 
 <style>
+@reference "../../style.css";
+
 .switcher {
   --mw: 0;
   --tx: 0;
