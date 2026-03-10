@@ -50,21 +50,21 @@ watch(
       v-model="key"
       placeholder="key"
       type="text"
-      class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-none border border-grey-200 focus:border-grey-100"
+      class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-hidden border border-grey-200 focus:border-grey-100"
       :disabled="props.disabled"
     />
     <input
       v-model="value"
       placeholder="value"
       type="text"
-      class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-none border border-grey-200 focus:border-grey-100"
+      class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-hidden border border-grey-200 focus:border-grey-100"
       :disabled="props.disabled"
     />
     <input
       v-model="subspace"
       placeholder="subspace"
       type="text"
-      class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-none border border-grey-200 focus:border-grey-100"
+      class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-hidden border border-grey-200 focus:border-grey-100"
       :disabled="props.disabled"
     />
   </div>

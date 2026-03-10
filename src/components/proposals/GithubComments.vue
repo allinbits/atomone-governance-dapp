@@ -96,10 +96,10 @@ onMounted(refresh);
           rows="6"
           maxlength="65536"
           :disabled="!isLoggedIn"
-          class="outline-none gap-2 h-52 p-4 border border-grey-200 bg-grey-300 rounded hover:border-grey-100 focus:border-light cursor-text placeholder:text-grey-100 items-center text-200 w-full"
+          class="outline-hidden gap-2 h-52 p-4 border border-grey-200 bg-grey-300 rounded-md hover:border-grey-100 focus:border-light cursor-text placeholder:text-grey-100 items-center text-200 w-full"
         ></textarea>
         <CommonButton
-          class="absolute right-6 bottom-6 link-gradient from-gradient-100 to-gradient-900 !text-dark hover:opacity-75"
+          class="absolute right-6 bottom-6 link-gradient from-gradient-100 to-gradient-900 text-dark! hover:opacity-75"
           @click="createPost"
         >
           {{ $t("components.GithubComments.postComment") }}
@@ -119,7 +119,7 @@ onMounted(refresh);
         min="0"
         max="1"
         step="0.01"
-        class="w-full appearance-none bg-transparent rounded-lg focus:outline-none [&::-webkit-slider-runnable-track]:bg-grey-400 [&::-webkit-slider-runnable-track]:rounded-lg cursor-pointer"
+        class="w-full appearance-none bg-transparent rounded-lg focus:outline-hidden [&::-webkit-slider-runnable-track]:bg-grey-400 [&::-webkit-slider-runnable-track]:rounded-lg cursor-pointer"
       />
       <div class="flex flex-row justify-between gap-8">
         <span class="text-grey-100">{{ $t("components.GithubComments.upvoteRatio") }}: {{ ratio }}</span>
@@ -195,10 +195,10 @@ onMounted(refresh);
         <div class="rounded-circle w-10 h-10 bg-grey-200" />
         <!-- Unloaded Content -->
         <div class="flex flex-col gap-4 w-full">
-          <div v-for="refIndex in 3" :key="refIndex" class="bg-grey-200 rounded-sm w-full h-4" />
+          <div v-for="refIndex in 3" :key="refIndex" class="bg-grey-200 rounded-md w-full h-4" />
         </div>
         <!-- Unloaded Footer -->
-        <div :key="index" class="bg-grey-200 rounded-sm w-1/4 h-4" />
+        <div :key="index" class="bg-grey-200 rounded-md w-1/4 h-4" />
       </div>
     </div>
   </div>

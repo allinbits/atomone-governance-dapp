@@ -3,7 +3,7 @@
     class="relative inline-flex items-center cursor-pointer px-6 py-4"
     :class="
       modelValue === value &&
-      'before:absolute before:left-0 before:top-0 before:w-full before:h-full before:rounded before:bg-grey-200'
+      'before:absolute before:left-0 before:top-0 before:w-full before:h-full before:rounded-md before:bg-grey-200'
     "
   >
     <span
@@ -15,7 +15,7 @@
         class="absolute z-2 flex w-full h-full bg-gradient rounded-circle scale-0 transition-transform duration-200"
         :class="
           type === 'radio'
-            ? 'peer-checked:!scale-[.8] peer-hover:scale-[.35] peer-focus-visible:scale-[.35]'
+            ? 'peer-checked:scale-[.8]! peer-hover:scale-[.35] peer-focus-visible:scale-[.35]'
             : 'peer-checked:scale-150 peer-hover:scale-[1.25] peer-focus-visible:scale-[1.25]'
         "
       ></span>

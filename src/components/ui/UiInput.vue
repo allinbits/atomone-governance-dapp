@@ -8,7 +8,7 @@
     <input
       v-model="model"
       :placeholder="placeholder"
-      class="rounded bg-grey-300 p-4 outline-none border border-transparent focus:border-light w-full"
+      class="rounded-md bg-grey-300 p-4 outline-hidden border border-transparent focus:border-light w-full"
       :class="variant === 'row' && 'max-w-32'"
       :type="type"
       :min="type === 'number' ? min : undefined"

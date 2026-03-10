@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from "node:url";
 
 import graphql from "@rollup/plugin-graphql";
+import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
@@ -17,6 +18,7 @@ export default defineConfig({
         process: true
       }
     }),
+    tailwindcss(),
     vue(),
     graphql(),
     vueDevTools()

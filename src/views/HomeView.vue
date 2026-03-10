@@ -295,7 +295,7 @@ function setTypeFilterIndex (idx: number) {
       <div class="w-1/4">
         <div
           v-if="chain_id != 'atomone-1'"
-          class="flex items-center justify-center gap-4 px-6 py-4 rounded link-gradient text-dark text-center cursor-pointer w-full font-medium"
+          class="flex items-center justify-center gap-4 px-6 py-4 rounded-md link-gradient text-dark text-center cursor-pointer w-full font-medium"
           @click="router.push({ path: '/create' })"
         >
           <Icon icon="plus" class="font-medium text-400"></Icon>

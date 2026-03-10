@@ -89,7 +89,7 @@ onMounted(refresh);
         min="0"
         max="1"
         step="0.01"
-        class="w-full appearance-none bg-transparent rounded-lg focus:outline-none [&::-webkit-slider-runnable-track]:bg-grey-400 [&::-webkit-slider-runnable-track]:rounded-lg cursor-pointer"
+        class="w-full appearance-none bg-transparent rounded-lg focus:outline-hidden [&::-webkit-slider-runnable-track]:bg-grey-400 [&::-webkit-slider-runnable-track]:rounded-lg cursor-pointer"
       />
       <div class="flex flex-row justify-between gap-8">
         <span class="text-grey-100">{{ $t("components.GithubLinks.upvoteRatio") }}: {{ ratio }}</span>
@@ -107,7 +107,7 @@ onMounted(refresh);
         v-model="linkInput"
         name="link"
         maxlength="512"
-        class="outline-none gap-2 p-4 border border-grey-200 bg-grey-300 rounded hover:border-grey-100 focus:border-light cursor-text placeholder:text-grey-100 items-center text-200 w-full"
+        class="outline-hidden gap-2 p-4 border border-grey-200 bg-grey-300 rounded-md hover:border-grey-100 focus:border-light cursor-text placeholder:text-grey-100 items-center text-200 w-full"
         type="text"
         :placeholder="inputLinkText"
         @input="verifyLinkInput()"
@@ -123,7 +123,7 @@ onMounted(refresh);
         name="context"
         maxlength="512"
         rows="6"
-        class="outline-none gap-2 p-4 border border-grey-200 bg-grey-300 rounded hover:border-grey-100 focus:border-light cursor-text placeholder:text-grey-100 items-center text-200 w-full"
+        class="outline-hidden gap-2 p-4 border border-grey-200 bg-grey-300 rounded-md hover:border-grey-100 focus:border-light cursor-text placeholder:text-grey-100 items-center text-200 w-full"
         type="text"
         :placeholder="textInputLinkText"
         @input="verifyContextInput()"
@@ -156,7 +156,7 @@ onMounted(refresh);
             </a>
 
             <!-- eslint-disable vue/no-v-html -->
-            <div class="w-full flex-grow text-grey-100 text-300 h-20" v-html="Utility.purifyHtml(linkInfo.body)" />
+            <div class="w-full grow text-grey-100 text-300 h-20" v-html="Utility.purifyHtml(linkInfo.body)" />
             <!-- eslint-enable -->
             <div class="flex flex-row justify-between gap-2 text-xs text-gray-500 w-full mt-4">
               <a :href="linkInfo.author.url" target="_blank" class="text-grey-100 text-100 hover:opacity-50">

@@ -5,7 +5,7 @@ const { link } = defineProps<{ link: string }>();
 <template>
   <router-link
     :to="link"
-    class="flex flex-col gap-14 px-8 py-6 bg-grey-300 rounded hover:bg-grey-200 ease-in-out duration-200"
+    class="flex flex-col gap-14 px-8 py-6 bg-grey-300 rounded-md hover:bg-grey-200 ease-in-out duration-200"
   >
     <div class="flex flex-row justify-end text-100">
       <slot name="header"></slot>

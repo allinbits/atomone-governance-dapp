@@ -206,7 +206,7 @@ function clearProposal () {
             v-model="title"
             :placeholder="$t('proposalcreate.title')"
             type="text"
-            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-none border border-grey-200 focus:border-grey-100"
+            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-hidden border border-grey-200 focus:border-grey-100"
             :disabled="isProcessing"
             @input="validate"
           />
@@ -217,7 +217,7 @@ function clearProposal () {
             v-model="description"
             placeholder="Proposal Description"
             type="text"
-            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 h-48 outline-none border border-grey-200 focus:border-grey-100"
+            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 h-48 outline-hidden border border-grey-200 focus:border-grey-100"
             :disabled="isProcessing"
             @input="validate"
           ></textarea>
@@ -245,7 +245,7 @@ function clearProposal () {
             v-model="blockHeight"
             :placeholder="$t('proposalcreate.blockHeight')"
             type="number"
-            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-none border border-grey-200 focus:border-grey-100"
+            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-hidden border border-grey-200 focus:border-grey-100"
             :disabled="isProcessing"
             @input="validate"
           />
@@ -254,7 +254,7 @@ function clearProposal () {
             v-model="blockInfo"
             :placeholder="$t('proposalcreate.blockInfo')"
             type="text"
-            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-none border border-grey-200 focus:border-grey-100"
+            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-hidden border border-grey-200 focus:border-grey-100"
             :disabled="isProcessing"
             @input="validate"
           />
@@ -263,7 +263,7 @@ function clearProposal () {
             v-model="upgradeName"
             :placeholder="$t('proposalcreate.upgradeName')"
             type="text"
-            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-none border border-grey-200 focus:border-grey-100"
+            class="p-4 bg-grey-400 rounded-md placeholder:text-grey-100 outline-hidden border border-grey-200 focus:border-grey-100"
             :disabled="isProcessing"
             @input="validate"
           />
