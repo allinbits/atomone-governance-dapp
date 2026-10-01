@@ -1,5 +1,5 @@
-query BlockHeight($timestamp: timestamp!) {
-  blocks(where: { timestamp: { _gte: $timestamp } }, order_by: { height: asc }, limit: 1) {
+query BlockHeight($timestamp: timestamptz!) {
+  blocks(where: { timestamp: { _gte: $timestamp } }, order_by: { timestamp: asc }, limit: 1) {
     timestamp
     height
   }
