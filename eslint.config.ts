@@ -22,7 +22,10 @@ export default defineConfigWithVueTs(
   globalIgnores([
     "**/dist/**",
     "**/dist-ssr/**",
-    "**/coverage/**"
+    "**/coverage/**",
+    "playwright/.cache/**",
+    "playwright-report/**",
+    "test-results/**"
   ]),
 
   {

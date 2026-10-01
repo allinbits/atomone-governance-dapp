@@ -8,6 +8,9 @@ const config: CodegenConfig = {
     "./src/gql/": {
       preset: "client"
     }
+  },
+  hooks: {
+    afterAllFileWrite: ["eslint --fix"]
   }
 };
 
