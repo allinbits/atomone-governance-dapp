@@ -10,12 +10,14 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v7
+    - uses: pnpm/action-setup@v6
+    - uses: actions/setup-node@v7
       with:
-        node-version: 24
+        node-version-file: .nvmrc
+        cache: pnpm
     - name: Install dependencies
-      run: npm install -g pnpm && pnpm install --frozen-lockfile 
+      run: pnpm install --frozen-lockfile
     - name: Install serve
       run: npm install -g serve
     - name: Install Playwright Browsers
@@ -29,7 +31,7 @@ jobs:
         pnpm exec playwright test
       env: 
         PLAYWRIGHT_TEST_BASE_URL: 'http://localhost:8080'
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       if: always()
       with:
         name: playwright-report
