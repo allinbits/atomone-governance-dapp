@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+  protobufjs: true
+  vue-demi: true
+overrides:
+  mermaid: ^11.14.0

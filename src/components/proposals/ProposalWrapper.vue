@@ -91,6 +91,7 @@ watch(
         }
       }));
     } catch (_e) {
+      console.error(_e);
       bus.emit("error");
     }
   }
@@ -260,10 +261,10 @@ const totalDeposit = computed(() => {
   ) ?? 0;
 });
 const minDeposit = computed(() => {
-  return params.value?.gov_params[0].params.min_deposit[0].amount;
+  return params.value?.gov_params[0].params.minDeposit[0].amount;
 });
 const depositDenom = computed(() => {
-  return params.value?.gov_params[0].params.min_deposit[0].denom;
+  return params.value?.gov_params[0].params.minDeposit[0].denom;
 });
 
 const tally_params = computed(() => {

@@ -47,7 +47,7 @@ Gives you the ability to vote on a proposal either with a single vote (YES/NO/NO
 
 ## Local deployment
 
-If you don't want to use the deployed version, you can deploy it locally. The only requirements are `node` v18+ and `pnpm`.
+If you don't want to use the deployed version, you can deploy it locally. The only requirements are `node` v24+ and `pnpm` v12 (run `corepack enable` to get the pinned version automatically).
 
 First, clone the repo using your favorite git tool.
 
