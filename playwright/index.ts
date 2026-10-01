@@ -2,6 +2,7 @@
 import "../src/style.css";
 
 import { beforeMount } from "@playwright/experimental-ct-vue/hooks";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import { createI18n } from "vue-i18n";
 
@@ -21,6 +22,7 @@ beforeMount(async ({ app }) => {
     messages
   });
   app.use(i18n);
+  app.use(VueQueryPlugin);
   app.component(
     "Icon",
     IconVue
